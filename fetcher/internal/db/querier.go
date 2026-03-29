@@ -10,8 +10,25 @@ import (
 )
 
 type Querier interface {
+	CountCards(ctx context.Context) (int64, error)
+	CountSets(ctx context.Context) (int64, error)
+	GetAllIdentifiers(ctx context.Context, arg GetAllIdentifiersParams) ([]Cardidentifier, error)
+	GetCardByName(ctx context.Context, name sql.NullString) ([]Card, error)
 	GetCardByUUID(ctx context.Context, uuid sql.NullString) (Card, error)
+	GetCardByUuid(ctx context.Context, uuid sql.NullString) (Card, error)
+	GetCardsByColor(ctx context.Context, arg GetCardsByColorParams) ([]Card, error)
+	GetCardsByManaValue(ctx context.Context, arg GetCardsByManaValueParams) ([]Card, error)
+	GetCardsByRarity(ctx context.Context, arg GetCardsByRarityParams) ([]Card, error)
+	GetCardsBySetCode(ctx context.Context, setcode sql.NullString) ([]Card, error)
+	GetIdentifierByScryfallId(ctx context.Context, scryfallid sql.NullString) (Cardidentifier, error)
+	GetIdentifierByUuid(ctx context.Context, uuid sql.NullString) (Cardidentifier, error)
+	GetIdentifiersByUuidList(ctx context.Context, arg GetIdentifiersByUuidListParams) ([]Cardidentifier, error)
+	GetSetByCode(ctx context.Context, code sql.NullString) (Set, error)
+	GetSetByName(ctx context.Context, name sql.NullString) ([]Set, error)
+	ListAllCards(ctx context.Context, arg ListAllCardsParams) ([]Card, error)
+	ListAllSets(ctx context.Context, arg ListAllSetsParams) ([]Set, error)
 	ListCards(ctx context.Context, limit int64) ([]Card, error)
+	SearchCards(ctx context.Context, arg SearchCardsParams) ([]Card, error)
 }
 
 var _ Querier = (*Queries)(nil)

@@ -10,76 +10,76 @@ import (
 
 type Card struct {
 	Artist                  sql.NullString  `json:"artist"`
-	ArtistIds               sql.NullString  `json:"artistIds"`
-	AsciiName               sql.NullString  `json:"asciiName"`
-	AttractionLights        sql.NullString  `json:"attractionLights"`
+	Artistids               sql.NullString  `json:"artistids"`
+	Asciiname               sql.NullString  `json:"asciiname"`
+	Attractionlights        sql.NullString  `json:"attractionlights"`
 	Availability            sql.NullString  `json:"availability"`
-	BoosterTypes            sql.NullString  `json:"boosterTypes"`
-	BorderColor             sql.NullString  `json:"borderColor"`
-	CardParts               sql.NullString  `json:"cardParts"`
-	ColorIdentity           sql.NullString  `json:"colorIdentity"`
-	ColorIndicator          sql.NullString  `json:"colorIndicator"`
+	Boostertypes            sql.NullString  `json:"boostertypes"`
+	Bordercolor             sql.NullString  `json:"bordercolor"`
+	Cardparts               sql.NullString  `json:"cardparts"`
+	Coloridentity           sql.NullString  `json:"coloridentity"`
+	Colorindicator          sql.NullString  `json:"colorindicator"`
 	Colors                  sql.NullString  `json:"colors"`
 	Defense                 sql.NullString  `json:"defense"`
-	DuelDeck                sql.NullString  `json:"duelDeck"`
-	EdhrecRank              sql.NullInt64   `json:"edhrecRank"`
-	EdhrecSaltiness         sql.NullFloat64 `json:"edhrecSaltiness"`
-	FaceConvertedManaCost   sql.NullFloat64 `json:"faceConvertedManaCost"`
-	FaceFlavorName          sql.NullString  `json:"faceFlavorName"`
-	FaceManaValue           sql.NullFloat64 `json:"faceManaValue"`
-	FaceName                sql.NullString  `json:"faceName"`
-	FacePrintedName         sql.NullString  `json:"facePrintedName"`
+	Dueldeck                sql.NullString  `json:"dueldeck"`
+	Edhrecrank              sql.NullInt64   `json:"edhrecrank"`
+	Edhrecsaltiness         sql.NullFloat64 `json:"edhrecsaltiness"`
+	Faceconvertedmanacost   sql.NullFloat64 `json:"faceconvertedmanacost"`
+	Faceflavorname          sql.NullString  `json:"faceflavorname"`
+	Facemanavalue           sql.NullFloat64 `json:"facemanavalue"`
+	Facename                sql.NullString  `json:"facename"`
+	Faceprintedname         sql.NullString  `json:"faceprintedname"`
 	Finishes                sql.NullString  `json:"finishes"`
-	FlavorName              sql.NullString  `json:"flavorName"`
-	FlavorText              sql.NullString  `json:"flavorText"`
-	FrameEffects            sql.NullString  `json:"frameEffects"`
-	FrameVersion            sql.NullString  `json:"frameVersion"`
+	Flavorname              sql.NullString  `json:"flavorname"`
+	Flavortext              sql.NullString  `json:"flavortext"`
+	Frameeffects            sql.NullString  `json:"frameeffects"`
+	Frameversion            sql.NullString  `json:"frameversion"`
 	Hand                    sql.NullString  `json:"hand"`
-	HasAlternativeDeckLimit sql.NullBool    `json:"hasAlternativeDeckLimit"`
-	HasContentWarning       sql.NullBool    `json:"hasContentWarning"`
-	IsAlternative           sql.NullBool    `json:"isAlternative"`
-	IsFullArt               sql.NullBool    `json:"isFullArt"`
-	IsFunny                 sql.NullBool    `json:"isFunny"`
-	IsGameChanger           sql.NullBool    `json:"isGameChanger"`
-	IsOnlineOnly            sql.NullBool    `json:"isOnlineOnly"`
-	IsOversized             sql.NullBool    `json:"isOversized"`
-	IsPromo                 sql.NullBool    `json:"isPromo"`
-	IsRebalanced            sql.NullBool    `json:"isRebalanced"`
-	IsReprint               sql.NullBool    `json:"isReprint"`
-	IsReserved              sql.NullBool    `json:"isReserved"`
-	IsStorySpotlight        sql.NullBool    `json:"isStorySpotlight"`
-	IsTextless              sql.NullBool    `json:"isTextless"`
-	IsTimeshifted           sql.NullBool    `json:"isTimeshifted"`
+	Hasalternativedecklimit sql.NullBool    `json:"hasalternativedecklimit"`
+	Hascontentwarning       sql.NullBool    `json:"hascontentwarning"`
+	Isalternative           sql.NullBool    `json:"isalternative"`
+	Isfullart               sql.NullBool    `json:"isfullart"`
+	Isfunny                 sql.NullBool    `json:"isfunny"`
+	Isgamechanger           sql.NullBool    `json:"isgamechanger"`
+	Isonlineonly            sql.NullBool    `json:"isonlineonly"`
+	Isoversized             sql.NullBool    `json:"isoversized"`
+	Ispromo                 sql.NullBool    `json:"ispromo"`
+	Isrebalanced            sql.NullBool    `json:"isrebalanced"`
+	Isreprint               sql.NullBool    `json:"isreprint"`
+	Isreserved              sql.NullBool    `json:"isreserved"`
+	Isstoryspotlight        sql.NullBool    `json:"isstoryspotlight"`
+	Istextless              sql.NullBool    `json:"istextless"`
+	Istimeshifted           sql.NullBool    `json:"istimeshifted"`
 	Keywords                sql.NullString  `json:"keywords"`
 	Language                sql.NullString  `json:"language"`
 	Layout                  sql.NullString  `json:"layout"`
-	LeadershipSkills        sql.NullString  `json:"leadershipSkills"`
+	Leadershipskills        sql.NullString  `json:"leadershipskills"`
 	Life                    sql.NullString  `json:"life"`
 	Loyalty                 sql.NullString  `json:"loyalty"`
-	ManaCost                sql.NullString  `json:"manaCost"`
-	ManaValue               sql.NullFloat64 `json:"manaValue"`
+	Manacost                sql.NullString  `json:"manacost"`
+	Manavalue               sql.NullFloat64 `json:"manavalue"`
 	Name                    sql.NullString  `json:"name"`
 	Number                  sql.NullString  `json:"number"`
-	OriginalPrintings       sql.NullString  `json:"originalPrintings"`
-	OriginalReleaseDate     sql.NullString  `json:"originalReleaseDate"`
-	OriginalText            sql.NullString  `json:"originalText"`
-	OtherFaceIds            sql.NullString  `json:"otherFaceIds"`
+	Originalprintings       sql.NullString  `json:"originalprintings"`
+	Originalreleasedate     sql.NullString  `json:"originalreleasedate"`
+	Originaltext            sql.NullString  `json:"originaltext"`
+	Otherfaceids            sql.NullString  `json:"otherfaceids"`
 	Power                   sql.NullString  `json:"power"`
-	PrintedName             sql.NullString  `json:"printedName"`
-	PrintedText             sql.NullString  `json:"printedText"`
-	PrintedType             sql.NullString  `json:"printedType"`
+	Printedname             sql.NullString  `json:"printedname"`
+	Printedtext             sql.NullString  `json:"printedtext"`
+	Printedtype             sql.NullString  `json:"printedtype"`
 	Printings               sql.NullString  `json:"printings"`
-	ProducedMana            sql.NullString  `json:"producedMana"`
-	PromoTypes              sql.NullString  `json:"promoTypes"`
+	Producedmana            sql.NullString  `json:"producedmana"`
+	Promotypes              sql.NullString  `json:"promotypes"`
 	Rarity                  sql.NullString  `json:"rarity"`
-	RebalancedPrintings     sql.NullString  `json:"rebalancedPrintings"`
-	RelatedCards            sql.NullString  `json:"relatedCards"`
-	SecurityStamp           sql.NullString  `json:"securityStamp"`
-	SetCode                 sql.NullString  `json:"setCode"`
+	Rebalancedprintings     sql.NullString  `json:"rebalancedprintings"`
+	Relatedcards            sql.NullString  `json:"relatedcards"`
+	Securitystamp           sql.NullString  `json:"securitystamp"`
+	Setcode                 sql.NullString  `json:"setcode"`
 	Side                    sql.NullString  `json:"side"`
 	Signature               sql.NullString  `json:"signature"`
-	SkuIds                  sql.NullString  `json:"skuIds"`
-	SourceProducts          sql.NullString  `json:"sourceProducts"`
+	Skuids                  sql.NullString  `json:"skuids"`
+	Sourceproducts          sql.NullString  `json:"sourceproducts"`
 	Subsets                 sql.NullString  `json:"subsets"`
 	Subtypes                sql.NullString  `json:"subtypes"`
 	Supertypes              sql.NullString  `json:"supertypes"`
@@ -92,46 +92,46 @@ type Card struct {
 	Watermark               sql.NullString  `json:"watermark"`
 }
 
-type CardForeignDatum struct {
+type Cardforeigndatum struct {
 	Uuid         sql.NullString `json:"uuid"`
-	FaceName     sql.NullString `json:"faceName"`
-	SkuIds       sql.NullString `json:"skuIds"`
-	FlavorText   sql.NullString `json:"flavorText"`
+	Facename     sql.NullString `json:"facename"`
+	Skuids       sql.NullString `json:"skuids"`
+	Flavortext   sql.NullString `json:"flavortext"`
 	Identifiers  sql.NullString `json:"identifiers"`
 	Language     sql.NullString `json:"language"`
-	MultiverseId sql.NullInt64  `json:"multiverseId"`
+	Multiverseid sql.NullInt64  `json:"multiverseid"`
 	Name         sql.NullString `json:"name"`
 	Text         sql.NullString `json:"text"`
 	Type         sql.NullString `json:"type"`
 }
 
-type CardIdentifier struct {
+type Cardidentifier struct {
 	Uuid                              sql.NullString `json:"uuid"`
-	ScryfallId                        sql.NullString `json:"scryfallId"`
-	ScryfallOracleId                  sql.NullString `json:"scryfallOracleId"`
-	ScryfallIllustrationId            sql.NullString `json:"scryfallIllustrationId"`
-	ScryfallCardBackId                sql.NullString `json:"scryfallCardBackId"`
-	McmId                             sql.NullString `json:"mcmId"`
-	McmMetaId                         sql.NullString `json:"mcmMetaId"`
-	MtgArenaId                        sql.NullString `json:"mtgArenaId"`
-	MtgoId                            sql.NullString `json:"mtgoId"`
-	MtgoFoilId                        sql.NullString `json:"mtgoFoilId"`
-	MultiverseId                      sql.NullString `json:"multiverseId"`
-	TcgplayerProductId                sql.NullString `json:"tcgplayerProductId"`
-	TcgplayerEtchedProductId          sql.NullString `json:"tcgplayerEtchedProductId"`
-	TcgplayerAlternativeFoilProductId sql.NullString `json:"tcgplayerAlternativeFoilProductId"`
-	CardKingdomId                     sql.NullString `json:"cardKingdomId"`
-	CardKingdomFoilId                 sql.NullString `json:"cardKingdomFoilId"`
-	CardKingdomEtchedId               sql.NullString `json:"cardKingdomEtchedId"`
-	CardsphereId                      sql.NullString `json:"cardsphereId"`
-	CardsphereFoilId                  sql.NullString `json:"cardsphereFoilId"`
-	DeckboxId                         sql.NullString `json:"deckboxId"`
-	MtgjsonFoilVersionId              sql.NullString `json:"mtgjsonFoilVersionId"`
-	MtgjsonNonFoilVersionId           sql.NullString `json:"mtgjsonNonFoilVersionId"`
-	MtgjsonV4Id                       sql.NullString `json:"mtgjsonV4Id"`
+	Scryfallid                        sql.NullString `json:"scryfallid"`
+	Scryfalloracleid                  sql.NullString `json:"scryfalloracleid"`
+	Scryfallillustrationid            sql.NullString `json:"scryfallillustrationid"`
+	Scryfallcardbackid                sql.NullString `json:"scryfallcardbackid"`
+	Mcmid                             sql.NullString `json:"mcmid"`
+	Mcmmetaid                         sql.NullString `json:"mcmmetaid"`
+	Mtgarenaid                        sql.NullString `json:"mtgarenaid"`
+	Mtgoid                            sql.NullString `json:"mtgoid"`
+	Mtgofoilid                        sql.NullString `json:"mtgofoilid"`
+	Multiverseid                      sql.NullString `json:"multiverseid"`
+	Tcgplayerproductid                sql.NullString `json:"tcgplayerproductid"`
+	Tcgplayeretchedproductid          sql.NullString `json:"tcgplayeretchedproductid"`
+	Tcgplayeralternativefoilproductid sql.NullString `json:"tcgplayeralternativefoilproductid"`
+	Cardkingdomid                     sql.NullString `json:"cardkingdomid"`
+	Cardkingdomfoilid                 sql.NullString `json:"cardkingdomfoilid"`
+	Cardkingdometchedid               sql.NullString `json:"cardkingdometchedid"`
+	Cardsphereid                      sql.NullString `json:"cardsphereid"`
+	Cardspherefoilid                  sql.NullString `json:"cardspherefoilid"`
+	Deckboxid                         sql.NullString `json:"deckboxid"`
+	Mtgjsonfoilversionid              sql.NullString `json:"mtgjsonfoilversionid"`
+	Mtgjsonnonfoilversionid           sql.NullString `json:"mtgjsonnonfoilversionid"`
+	Mtgjsonv4id                       sql.NullString `json:"mtgjsonv4id"`
 }
 
-type CardLegality struct {
+type Cardlegality struct {
 	Uuid            sql.NullString `json:"uuid"`
 	Alchemy         sql.NullString `json:"alchemy"`
 	Brawl           sql.NullString `json:"brawl"`
@@ -156,19 +156,19 @@ type CardLegality struct {
 	Vintage         sql.NullString `json:"vintage"`
 }
 
-type CardPurchaseUrl struct {
+type Cardpurchaseurl struct {
 	Uuid                     sql.NullString `json:"uuid"`
-	CardKingdom              sql.NullString `json:"cardKingdom"`
-	CardKingdomFoil          sql.NullString `json:"cardKingdomFoil"`
-	CardKingdomEtched        sql.NullString `json:"cardKingdomEtched"`
+	Cardkingdom              sql.NullString `json:"cardkingdom"`
+	Cardkingdomfoil          sql.NullString `json:"cardkingdomfoil"`
+	Cardkingdometched        sql.NullString `json:"cardkingdometched"`
 	Cardmarket               sql.NullString `json:"cardmarket"`
-	CardmarketFoil           sql.NullString `json:"cardmarketFoil"`
+	Cardmarketfoil           sql.NullString `json:"cardmarketfoil"`
 	Tcgplayer                sql.NullString `json:"tcgplayer"`
-	TcgplayerEtched          sql.NullString `json:"tcgplayerEtched"`
-	TcgplayerAlternativeFoil sql.NullString `json:"tcgplayerAlternativeFoil"`
+	Tcgplayeretched          sql.NullString `json:"tcgplayeretched"`
+	Tcgplayeralternativefoil sql.NullString `json:"tcgplayeralternativefoil"`
 }
 
-type CardRuling struct {
+type Cardruling struct {
 	Uuid sql.NullString `json:"uuid"`
 	Date sql.NullTime   `json:"date"`
 	Text sql.NullString `json:"text"`
@@ -176,25 +176,25 @@ type CardRuling struct {
 
 type Set struct {
 	Code             sql.NullString `json:"code"`
-	MtgoCode         sql.NullString `json:"mtgoCode"`
+	Mtgocode         sql.NullString `json:"mtgocode"`
 	Name             sql.NullString `json:"name"`
-	ReleaseDate      sql.NullString `json:"releaseDate"`
+	Releasedate      sql.NullString `json:"releasedate"`
 	Type             sql.NullString `json:"type"`
-	IsOnlineOnly     sql.NullBool   `json:"isOnlineOnly"`
-	IsFoilOnly       sql.NullBool   `json:"isFoilOnly"`
-	IsNonFoilOnly    sql.NullBool   `json:"isNonFoilOnly"`
-	ParentCode       sql.NullString `json:"parentCode"`
-	TotalSetSize     sql.NullInt64  `json:"totalSetSize"`
-	BaseSetSize      sql.NullInt64  `json:"baseSetSize"`
-	KeyruneCode      sql.NullString `json:"keyruneCode"`
-	IsPartialPreview sql.NullBool   `json:"isPartialPreview"`
-	IsForeignOnly    sql.NullBool   `json:"isForeignOnly"`
-	IsPaperOnly      sql.NullBool   `json:"isPaperOnly"`
+	Isonlineonly     sql.NullBool   `json:"isonlineonly"`
+	Isfoilonly       sql.NullBool   `json:"isfoilonly"`
+	Isnonfoilonly    sql.NullBool   `json:"isnonfoilonly"`
+	Parentcode       sql.NullString `json:"parentcode"`
+	Totalsetsize     sql.NullInt64  `json:"totalsetsize"`
+	Basesetsize      sql.NullInt64  `json:"basesetsize"`
+	Keyrunecode      sql.NullString `json:"keyrunecode"`
+	Ispartialpreview sql.NullBool   `json:"ispartialpreview"`
+	Isforeignonly    sql.NullBool   `json:"isforeignonly"`
+	Ispaperonly      sql.NullBool   `json:"ispaperonly"`
 	Languages        sql.NullString `json:"languages"`
-	TcgplayerGroupId sql.NullInt64  `json:"tcgplayerGroupId"`
-	TokenSetCode     sql.NullString `json:"tokenSetCode"`
-	McmId            sql.NullInt64  `json:"mcmId"`
-	McmName          sql.NullString `json:"mcmName"`
-	McmIdExtras      sql.NullInt64  `json:"mcmIdExtras"`
+	Tcgplayergroupid sql.NullInt64  `json:"tcgplayergroupid"`
+	Tokensetcode     sql.NullString `json:"tokensetcode"`
+	Mcmid            sql.NullInt64  `json:"mcmid"`
+	Mcmname          sql.NullString `json:"mcmname"`
+	Mcmidextras      sql.NullInt64  `json:"mcmidextras"`
 	Block            sql.NullString `json:"block"`
 }

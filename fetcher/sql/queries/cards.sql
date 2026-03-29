@@ -5,7 +5,7 @@ SELECT * FROM cards WHERE uuid = ?;
 SELECT * FROM cards WHERE name LIKE ?;
 
 -- name: GetCardsBySetCode :many
-SELECT * FROM cards WHERE setCode = ?;
+SELECT * FROM cards WHERE setcode = ?;
 
 -- name: ListAllCards :many
 SELECT * FROM cards LIMIT ? OFFSET ?;
@@ -14,7 +14,7 @@ SELECT * FROM cards LIMIT ? OFFSET ?;
 SELECT * FROM cards 
 WHERE 1=1
   AND (? IS NULL OR name LIKE ?)
-  AND (? IS NULL OR setCode = ?)
+  AND (? IS NULL OR setcode = ?)
   AND (? IS NULL OR type LIKE ?)
 LIMIT ? OFFSET ?;
 
@@ -28,4 +28,4 @@ SELECT * FROM cards WHERE colors LIKE ? LIMIT ? OFFSET ?;
 SELECT * FROM cards WHERE rarity = ? LIMIT ? OFFSET ?;
 
 -- name: GetCardsByManaValue :many
-SELECT * FROM cards WHERE manaValue = ? LIMIT ? OFFSET ?;
+SELECT * FROM cards WHERE manavalue = ? LIMIT ? OFFSET ?;

@@ -1,11 +1,11 @@
 -- name: GetIdentifierByUuid :one
-SELECT * FROM cardIdentifiers WHERE uuid = ?;
+SELECT * FROM cardidentifiers WHERE uuid = ?;
 
 -- name: GetIdentifierByScryfallId :one
-SELECT * FROM cardIdentifiers WHERE scryfallId = ?;
+SELECT * FROM cardidentifiers WHERE scryfallid = ?;
 
 -- name: GetIdentifiersByUuidList :many
-SELECT * FROM cardIdentifiers WHERE uuid IN (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+SELECT * FROM cardidentifiers WHERE uuid IN (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 -- name: GetAllIdentifiers :many
-SELECT * FROM cardIdentifiers LIMIT ? OFFSET ?;
+SELECT * FROM cardidentifiers LIMIT ? OFFSET ?;
