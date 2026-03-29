@@ -9,7 +9,6 @@ import (
 	"os"
 
 	"github.com/bfibraga/turntide/fetcher/internal/download"
-	_ "github.com/mattn/go-sqlite3"
 )
 
 const (
@@ -65,7 +64,7 @@ func ParseSaveContent(dbPath string) func(ctx context.Context) error {
 			return nil
 		}
 
-	err = os.WriteFile(dbPath, decoded, 0644)
+	  err = os.WriteFile(dbPath, decoded, 0644)
 
 		return err
 	}
