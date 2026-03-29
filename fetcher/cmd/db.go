@@ -1,29 +1,9 @@
-/*
-Copyright © 2026 Bruno Braga bf.braga@campus.fct.unl.pt
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
 package cmd
 
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/spf13/cobra"
 
@@ -41,14 +21,19 @@ var dbCmd = &cobra.Command{
 	Use:   "db",
 	Short: "Access the database through the repository pattern",
 	Long: `Database operations using the repository pattern.
-This command provides access to the cards database at /shared/resources/cards.db`,
+This command provides type-safe access to the cards database.`,
 }
 
-// dbListCmd lists all cards from the database
+// dbListCmd lists cards from the database with optional filtering
 var dbListCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List all cards from the database",
+	Short: "List cards from the database",
+	Long:  `List cards with optional filtering. Use flags to filter results.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
+		// Create context with timeout
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
 		// Initialize the repository factory
 		factory, err := repository.NewFactory(dbPath)
 		if err != nil {
@@ -56,22 +41,26 @@ var dbListCmd = &cobra.Command{
 		}
 		defer factory.Close()
 
-		// Create a card repository
+		// Create service
 		cardRepo := factory.NewCardRepository()
+		cardService := service.NewCardService(cardRepo)
 
-		// Create a service
-		svc := service.NewCardService(cardRepo)
-
-		// Get all cards with context
-		ctx := context.Background()
-		cards, err := svc.GetAllCards(ctx, &models.CardFilter{})
+		// Get all cards (limit to 20 for readability)
+		cards, err := cardService.GetAllCards(ctx, &models.CardFilter{
+			Limit: 20,
+		})
 		if err != nil {
 			return fmt.Errorf("failed to get cards: %w", err)
 		}
 
-		fmt.Printf("Found %d cards:\n", len(cards))
+		fmt.Printf("Found %d cards (showing first 20):\n\n", len(cards))
 		for _, card := range cards {
-			fmt.Printf("- %s (%s)\n", card.Name, card.SetCode)
+			fmt.Printf("Name: %s\n", card.Name)
+			fmt.Printf("  Set: %s\n", card.SetCode)
+			fmt.Printf("  Type: %s\n", card.CardType)
+			fmt.Printf("  Cost: %d\n", card.Cost)
+			fmt.Printf("  Rarity: %s\n", card.Rarity)
+			fmt.Println()
 		}
 
 		return nil
@@ -83,22 +72,96 @@ var dbCountCmd = &cobra.Command{
 	Use:   "count",
 	Short: "Count total cards in the database",
 	RunE: func(cmd *cobra.Command, args []string) error {
+		// Create context with timeout
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
 		factory, err := repository.NewFactory(dbPath)
 		if err != nil {
-			return fmt.Errorf("failed to initialize repository factory: %w", err)
+			return fmt.Errorf("failed to initialize repository: %w", err)
 		}
 		defer factory.Close()
 
 		cardRepo := factory.NewCardRepository()
+		cardService := service.NewCardService(cardRepo)
 
-		svc := service.NewCardService(cardRepo)
-		ctx := context.Background()
-		stats, err := svc.GetCardStatistics(ctx)
+		stats, err := cardService.GetCardStatistics(ctx)
 		if err != nil {
 			return fmt.Errorf("failed to get statistics: %w", err)
 		}
 
 		fmt.Printf("Total cards: %d\n", stats["total_cards"])
+		return nil
+	},
+}
+
+// dbSearchCmd searches for cards by name
+var dbSearchCmd = &cobra.Command{
+	Use:   "search [name]",
+	Short: "Search cards by name",
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		// Create context with timeout
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
+		factory, err := repository.NewFactory(dbPath)
+		if err != nil {
+			return fmt.Errorf("failed to initialize repository: %w", err)
+		}
+		defer factory.Close()
+
+		cardRepo := factory.NewCardRepository()
+		cardService := service.NewCardService(cardRepo)
+
+		cards, err := cardService.GetCardsByName(ctx, args[0])
+		if err != nil {
+			return fmt.Errorf("failed to search cards: %w", err)
+		}
+
+		fmt.Printf("Found %d cards matching '%s':\n\n", len(cards), args[0])
+		for _, card := range cards {
+			fmt.Printf("- %s (%s)\n", card.Name, card.SetCode)
+			fmt.Printf("  Rarity: %s\n", card.Rarity)
+			fmt.Printf("  Type: %s\n", card.CardType)
+			fmt.Println()
+		}
+
+		return nil
+	},
+}
+
+// dbSetCmd retrieves cards from a specific set
+var dbSetCmd = &cobra.Command{
+	Use:   "set [code]",
+	Short: "Get all cards from a specific set",
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		// Create context with timeout
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
+		factory, err := repository.NewFactory(dbPath)
+		if err != nil {
+			return fmt.Errorf("failed to initialize repository: %w", err)
+		}
+		defer factory.Close()
+
+		cardRepo := factory.NewCardRepository()
+		cardService := service.NewCardService(cardRepo)
+
+		cards, err := cardService.GetCardsBySetCode(ctx, args[0])
+		if err != nil {
+			return fmt.Errorf("failed to get cards: %w", err)
+		}
+
+		fmt.Printf("Found %d cards in set '%s'\n\n", len(cards), args[0])
+		for _, card := range cards {
+			fmt.Printf("- %s\n", card.Name)
+			fmt.Printf("  Rarity: %s\n", card.Rarity)
+			fmt.Printf("  Type: %s\n", card.CardType)
+		}
+
 		return nil
 	},
 }
@@ -110,4 +173,6 @@ func init() {
 
 	dbCmd.AddCommand(dbListCmd)
 	dbCmd.AddCommand(dbCountCmd)
+	dbCmd.AddCommand(dbSearchCmd)
+	dbCmd.AddCommand(dbSetCmd)
 }
