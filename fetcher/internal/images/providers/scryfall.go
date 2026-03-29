@@ -65,7 +65,7 @@ func QueryCardImages(cards []parsers.TurntideCardData, dbPath string, format str
 		imageCards = make([]CardImageData, 0, len(cards))
 
 		for _, card := range cards {
-			cardData, err := queryCardFromDB(db, card.Name, card.SetCode)
+			cardData, err := queryCardFromDB(db, card.Name, card.SetCode, card.CardID)
 			if err != nil {
 				return fmt.Errorf("failed to query card %s from set %s: %w", card.Name, card.SetCode, err)
 			}
@@ -87,18 +87,35 @@ func QueryCardImages(cards []parsers.TurntideCardData, dbPath string, format str
 }
 
 // queryCardFromDB retrieves card info from the database
-func queryCardFromDB(db *sql.DB, name string, setCode string) (*CardImageData, error) {
+// If cardID is provided, it will be used for more precise lookup
+func queryCardFromDB(db *sql.DB, name string, setCode string, cardID string) (*CardImageData, error) {
 	var uuid, scryfallID string
 
-	query := `
-		SELECT c.uuid, ci.scryfallId
-		FROM cards c
-		JOIN cardIdentifiers ci ON c.uuid = ci.uuid
-		WHERE c.name = ? AND c.setCode = ?
-		LIMIT 1
-	`
+	// Use collector's number (card ID) if provided for more precise lookup
+	var query string
+	var args []interface{}
 
-	err := db.QueryRow(query, name, setCode).Scan(&uuid, &scryfallID)
+	if cardID != "" {
+		query = `
+			SELECT c.uuid, ci.scryfallId
+			FROM cards c
+			JOIN cardIdentifiers ci ON c.uuid = ci.uuid
+			WHERE c.name = ? AND c.setCode = ? AND c.number = ?
+			LIMIT 1
+		`
+		args = []interface{}{name, setCode, cardID}
+	} else {
+		query = `
+			SELECT c.uuid, ci.scryfallId
+			FROM cards c
+			JOIN cardIdentifiers ci ON c.uuid = ci.uuid
+			WHERE c.name = ? AND c.setCode = ?
+			LIMIT 1
+		`
+		args = []interface{}{name, setCode}
+	}
+
+	err := db.QueryRow(query, args...).Scan(&uuid, &scryfallID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil

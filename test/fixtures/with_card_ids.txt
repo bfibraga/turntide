@@ -1,0 +1,5 @@
+Island [LRW] [288]
+Mountain [LRW] [295]
+Forest [LRW] [298]
+Swamp [LRW] [290]
+Plains [LRW] [284]
