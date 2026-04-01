@@ -1,0 +1,15 @@
+# Godot
+.godot/
+*.import
+*.export
+*.pck
+*.zip
+*.logicwiz
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local

@@ -1,0 +1,132 @@
+[gd_scene format=3 uid="uid://cw6r7dqxoo76s"]
+
+[ext_resource type="Script" uid="uid://bb50oxlatsq3p" path="res://states/state_machine.gd" id="1_kycxp"]
+[ext_resource type="Script" uid="uid://dwbc0pee0vhur" path="res://states/entered/entered.gd" id="2_j287u"]
+[ext_resource type="Script" uid="uid://15it0w4m8gpk" path="res://states/ingame/ingame.gd" id="3_5sfjl"]
+[ext_resource type="PackedScene" uid="uid://bnaxd014g5r0b" path="res://scenes/balatro_background.tscn" id="4_3hfy5"]
+[ext_resource type="PackedScene" uid="uid://b8egimx27vbxu" path="res://scenes/hand/hand.tscn" id="5_7pvxh"]
+[ext_resource type="Shader" uid="uid://sn08m4hl2hyx" path="res://shaders/fractal_background.gdshader" id="6_3hfy5"]
+[ext_resource type="Script" uid="uid://brywa3ll741ao" path="res://scripts/log/log.gd" id="6_kycxp"]
+[ext_resource type="Script" uid="uid://dlkcws6ftueah" path="res://scripts/background/fractal_background.gd" id="7_7pvxh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y3xxt"]
+shader = ExtResource("6_3hfy5")
+shader_parameter/u_speed = 1.0
+shader_parameter/u_color_low = Color(0.01, 0.41, 0.51, 1)
+shader_parameter/u_color_mid_red = Color(0.5, 0.1, 0.3, 1)
+shader_parameter/u_color_high = Color(1, 1, 1, 1)
+
+[node name="Root" type="Node" unique_id=591989958]
+
+[node name="GameStateMachine" type="Node" parent="." unique_id=1982565804 node_paths=PackedStringArray("initial_state")]
+script = ExtResource("1_kycxp")
+initial_state = NodePath("Entered")
+metadata/_custom_type_script = "uid://bb50oxlatsq3p"
+
+[node name="Entered" type="Node" parent="GameStateMachine" unique_id=498862895 node_paths=PackedStringArray("_log")]
+script = ExtResource("2_j287u")
+_log = NodePath("../../Main/Chat/Log")
+metadata/_custom_type_script = "uid://dwbc0pee0vhur"
+
+[node name="Ingame" type="Node" parent="GameStateMachine" unique_id=1947773858 node_paths=PackedStringArray("_log", "_line_edit")]
+script = ExtResource("3_5sfjl")
+_log = NodePath("../../Main/Chat/Log")
+_line_edit = NodePath("../../Main/Chat/LineEdit")
+metadata/_custom_type_script = "uid://15it0w4m8gpk"
+
+[node name="Main" type="Control" parent="." unique_id=271664144]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Balatro Background" parent="Main" unique_id=367467080 instance=ExtResource("4_3hfy5")]
+visible = false
+layout_mode = 1
+
+[node name="Fractal Background" type="ColorRect" parent="Main" unique_id=1566431021]
+material = SubResource("ShaderMaterial_y3xxt")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+script = ExtResource("7_7pvxh")
+low = Color(0.10525478, 0.14193732, 0.17251426, 1)
+mid_red = Color(0.16540122, 0.14430034, 0.15836382, 1)
+high = Color(0.30692267, 0.3069227, 0.3069227, 1)
+
+[node name="Hand" parent="Main" unique_id=90390812 instance=ExtResource("5_7pvxh")]
+layout_mode = 1
+offset_left = 355.0
+offset_top = 449.0
+
+[node name="Instructions" type="Label" parent="Main" unique_id=1859582591]
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 20.0
+offset_right = 200.0
+offset_bottom = 60.0
+grow_horizontal = 2
+text = "Hover: Center card | Click: Select | Drag: Move"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="Main" unique_id=2101358909]
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -168.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 60.0
+grow_horizontal = 0
+text = "Add Random Card"
+
+[node name="Chat" type="Control" parent="Main" unique_id=1809985503]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -182.0
+offset_right = 350.0
+grow_vertical = 0
+
+[node name="ColorRect" type="ColorRect" parent="Main/Chat" unique_id=339442343]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.49019608)
+
+[node name="Log" type="RichTextLabel" parent="Main/Chat" unique_id=440439174]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+bbcode_enabled = true
+selection_enabled = true
+script = ExtResource("6_kycxp")
+metadata/_custom_type_script = "uid://brywa3ll741ao"
+
+[node name="LineEdit" type="LineEdit" parent="Main/Chat" unique_id=378908133]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+grow_horizontal = 2
+grow_vertical = 0

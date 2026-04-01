@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bnaxd014g5r0b"]
+
+[ext_resource type="Shader" uid="uid://wv0mg0piyvke" path="res://balatro_background.gdshader" id="1_ha2op"]
+[ext_resource type="Script" uid="uid://df2pd8j4wgnnm" path="res://scripts/background/balatro_background.gd" id="2_m3soj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m3soj"]
+shader = ExtResource("1_ha2op")
+shader_parameter/spin_rotation_speed = 2.0
+shader_parameter/move_speed = 7.0
+shader_parameter/offset = Vector2(0, 0)
+shader_parameter/colour_1 = Color(0.5050284, 0.4098626, 0.9187001, 1)
+shader_parameter/colour_2 = Color(0.58431375, 0.34117648, 0.03137255, 1)
+shader_parameter/colour_3 = Color(0.086, 0.137, 0.145, 1)
+shader_parameter/contrast = 3.5
+shader_parameter/lighting = 0.4
+shader_parameter/spin_amount = 0.25
+shader_parameter/pixel_filter = 740.0
+shader_parameter/is_rotating = false
+
+[node name="Background" type="ColorRect" unique_id=367467080]
+material = SubResource("ShaderMaterial_m3soj")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_m3soj")
+background_color_1 = Color(0.8429039, 0.87978333, 0.86271685, 1)
+background_color_2 = Color(0.90388256, 0.7537693, 0.6594894, 1)

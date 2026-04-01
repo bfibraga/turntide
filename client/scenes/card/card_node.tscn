@@ -1,0 +1,105 @@
+[gd_scene format=3 uid="uid://rmcy2p4mkung"]
+
+[ext_resource type="Script" uid="uid://bkj6n7gcsi1yo" path="res://scripts/card/card.gd" id="1_ubfjn"]
+[ext_resource type="Script" uid="uid://dwe223lj5y5it" path="res://scripts/card/card_view.gd" id="2_evwgs"]
+[ext_resource type="Shader" uid="uid://cmmkabcp8y12j" path="res://shaders/cards/card_node.gdshader" id="2_hefud"]
+[ext_resource type="Shader" uid="uid://cp7ijn6q5bh8w" path="res://shaders/cards/3d_perspective.gdshader" id="2_s42fv"]
+[ext_resource type="Script" uid="uid://chemdt4pxd7yn" path="res://scripts/card/card_hover.gd" id="3_h0sjp"]
+[ext_resource type="Script" uid="uid://tku1nh3d3rte" path="res://scripts/card/controller.gd" id="5_hefud"]
+[ext_resource type="Script" uid="uid://b06mduquspyco" path="res://scripts/card/movement.gd" id="7_aim30"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s42fv"]
+resource_local_to_scene = true
+shader = ExtResource("2_s42fv")
+shader_parameter/_tilt_Scale = 0.25
+shader_parameter/_mainTint = Color(1, 1, 1, 1)
+shader_parameter/_texPos = Vector4(0, 0, 1, 1)
+shader_parameter/_zDist = 0.0
+shader_parameter/_isSecondTex = false
+shader_parameter/_secondTint = Color(1, 1, 1, 1)
+shader_parameter/_texPos2 = Vector4(0, 0, 1, 1)
+shader_parameter/_zDist2 = 0.0
+shader_parameter/_isShadows = true
+shader_parameter/_shadowOffset = Vector2(0, 0)
+shader_parameter/_shadowOffset2 = Vector2(0, 0)
+shader_parameter/_shadowCol = Color(0, 0, 0, 0.5)
+shader_parameter/_isSpecularLight = false
+shader_parameter/_speularLightIntensity = 0.3
+shader_parameter/_speularLightPower = 1.0
+shader_parameter/_mousePos = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_evwgs"]
+shader = ExtResource("2_hefud")
+shader_parameter/_cornerRadius = 65.0000030875
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_aim30"]
+load_path = "res://.godot/imported/Tidus,_Yuna's_Guardian_FIC_97b63679.jpg-d8125caf4c1f54916842bdf66dfa2e9a.ctex"
+
+[node name="Card" type="Control" unique_id=1819874517 node_paths=PackedStringArray("controller")]
+layout_mode = 3
+anchor_right = 0.24300002
+anchor_bottom = 0.586
+offset_right = 0.06399536
+offset_bottom = 0.27197266
+pivot_offset = Vector2(140, 190)
+size_flags_vertical = 4
+script = ExtResource("1_ubfjn")
+controller = NodePath("Controller")
+metadata/_edit_use_anchors_ = true
+
+[node name="View" type="SubViewportContainer" parent="." unique_id=589769416]
+material = SubResource("ShaderMaterial_s42fv")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -145.0
+offset_top = -195.0
+offset_right = 145.0
+offset_bottom = 195.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_h0sjp")
+
+[node name="SubViewport" type="SubViewport" parent="View" unique_id=748693005]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(290, 390)
+render_target_update_mode = 4
+
+[node name="TextureRect" type="TextureRect" parent="View/SubViewport" unique_id=225997858]
+material = SubResource("ShaderMaterial_evwgs")
+custom_minimum_size = Vector2(250, 350)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -175.0
+offset_right = 125.0
+offset_bottom = 175.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(125, 175)
+size_flags_horizontal = 6
+size_flags_vertical = 3
+texture = SubResource("CompressedTexture2D_aim30")
+expand_mode = 1
+stretch_mode = 4
+script = ExtResource("2_evwgs")
+
+[node name="Controller" type="Node" parent="." unique_id=1275324217 node_paths=PackedStringArray("texture_rect")]
+script = ExtResource("5_hefud")
+texture_rect = NodePath("../View/SubViewport/TextureRect")
+
+[node name="Movement" type="Node" parent="." unique_id=1649964722]
+script = ExtResource("7_aim30")
+
+[connection signal="gui_input" from="." to="Movement" method="_on_gui_input"]
+[connection signal="mouse_entered" from="." to="Movement" method="_on_mouse_enter"]
+[connection signal="mouse_exited" from="." to="Movement" method="_on_mouse_exit"]
+[connection signal="mouse_entered" from="View/SubViewport/TextureRect" to="View" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="View/SubViewport/TextureRect" to="View" method="_on_mouse_exited"]
