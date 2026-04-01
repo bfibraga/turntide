@@ -1,0 +1,5 @@
+Island [LRW]
+InvalidCard123 [ZZZ]
+Mountain [LRW]
+NonexistentCard [FAKE]
+Forest [LRW]
