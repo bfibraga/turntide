@@ -6,7 +6,9 @@ var last_state : WebSocketPeer.State = WebSocketPeer.STATE_CLOSED
 
 signal connected_to_server()
 signal connection_closed()
-signal packet_received()
+signal packet_received(packet: packets.Packet)
+signal auth_success(username: String)
+signal auth_failed(reason: String)
 
 func connect_to_url(url: String, tls_options: TLSOptions = null) -> Error:
 	var err : Error = socket.connect_to_url(url, tls_options)
@@ -62,8 +64,19 @@ func poll() -> void:
 			connection_closed.emit()
 	
 	while socket.get_ready_state() == socket.STATE_OPEN and socket.get_available_packet_count():
-		packet_received.emit(get_packet())
+		var pkt = get_packet()
+		packet_received.emit(pkt)
+		_handle_auth_packet(pkt)
 
 
 func _process(_delta: float) -> void:
 	poll()
+
+func _handle_auth_packet(packet: packets.Packet) -> void:
+	if packet.has_ok_response():
+		var resp = packet.get_ok_response()
+		auth_success.emit(resp.get_message())
+	elif packet.has_deny_response():
+		var resp = packet.get_deny_response()
+		auth_failed.emit(resp.get_reason())
+

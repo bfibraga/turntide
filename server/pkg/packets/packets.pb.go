@@ -153,6 +153,190 @@ func (x *IdMessage) GetId() uint64 {
 	return 0
 }
 
+type LoginRequestMessage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
+	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LoginRequestMessage) Reset() {
+	*x = LoginRequestMessage{}
+	mi := &file_packets_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LoginRequestMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoginRequestMessage) ProtoMessage() {}
+
+func (x *LoginRequestMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_packets_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoginRequestMessage.ProtoReflect.Descriptor instead.
+func (*LoginRequestMessage) Descriptor() ([]byte, []int) {
+	return file_packets_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *LoginRequestMessage) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *LoginRequestMessage) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+type RegisterRequestMessage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
+	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RegisterRequestMessage) Reset() {
+	*x = RegisterRequestMessage{}
+	mi := &file_packets_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RegisterRequestMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RegisterRequestMessage) ProtoMessage() {}
+
+func (x *RegisterRequestMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_packets_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RegisterRequestMessage.ProtoReflect.Descriptor instead.
+func (*RegisterRequestMessage) Descriptor() ([]byte, []int) {
+	return file_packets_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *RegisterRequestMessage) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *RegisterRequestMessage) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+type OkResponseMessage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *OkResponseMessage) Reset() {
+	*x = OkResponseMessage{}
+	mi := &file_packets_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OkResponseMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OkResponseMessage) ProtoMessage() {}
+
+func (x *OkResponseMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_packets_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OkResponseMessage.ProtoReflect.Descriptor instead.
+func (*OkResponseMessage) Descriptor() ([]byte, []int) {
+	return file_packets_proto_rawDescGZIP(), []int{5}
+}
+
+type DenyResponseMessage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Reason        string                 `protobuf:"bytes,2,opt,name=reason,proto3" json:"reason,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DenyResponseMessage) Reset() {
+	*x = DenyResponseMessage{}
+	mi := &file_packets_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DenyResponseMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DenyResponseMessage) ProtoMessage() {}
+
+func (x *DenyResponseMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_packets_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DenyResponseMessage.ProtoReflect.Descriptor instead.
+func (*DenyResponseMessage) Descriptor() ([]byte, []int) {
+	return file_packets_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *DenyResponseMessage) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
 type Packet struct {
 	state    protoimpl.MessageState `protogen:"open.v1"`
 	SenderId uint64                 `protobuf:"varint,1,opt,name=sender_id,json=senderId,proto3" json:"sender_id,omitempty"`
@@ -161,6 +345,10 @@ type Packet struct {
 	//	*Packet_Ping
 	//	*Packet_Chat
 	//	*Packet_Id
+	//	*Packet_LoginRequest
+	//	*Packet_RegisterRequest
+	//	*Packet_OkResponse
+	//	*Packet_DenyResponse
 	Msg           isPacket_Msg `protobuf_oneof:"msg"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -168,7 +356,7 @@ type Packet struct {
 
 func (x *Packet) Reset() {
 	*x = Packet{}
-	mi := &file_packets_proto_msgTypes[3]
+	mi := &file_packets_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -180,7 +368,7 @@ func (x *Packet) String() string {
 func (*Packet) ProtoMessage() {}
 
 func (x *Packet) ProtoReflect() protoreflect.Message {
-	mi := &file_packets_proto_msgTypes[3]
+	mi := &file_packets_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -193,7 +381,7 @@ func (x *Packet) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Packet.ProtoReflect.Descriptor instead.
 func (*Packet) Descriptor() ([]byte, []int) {
-	return file_packets_proto_rawDescGZIP(), []int{3}
+	return file_packets_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *Packet) GetSenderId() uint64 {
@@ -237,6 +425,42 @@ func (x *Packet) GetId() *IdMessage {
 	return nil
 }
 
+func (x *Packet) GetLoginRequest() *LoginRequestMessage {
+	if x != nil {
+		if x, ok := x.Msg.(*Packet_LoginRequest); ok {
+			return x.LoginRequest
+		}
+	}
+	return nil
+}
+
+func (x *Packet) GetRegisterRequest() *RegisterRequestMessage {
+	if x != nil {
+		if x, ok := x.Msg.(*Packet_RegisterRequest); ok {
+			return x.RegisterRequest
+		}
+	}
+	return nil
+}
+
+func (x *Packet) GetOkResponse() *OkResponseMessage {
+	if x != nil {
+		if x, ok := x.Msg.(*Packet_OkResponse); ok {
+			return x.OkResponse
+		}
+	}
+	return nil
+}
+
+func (x *Packet) GetDenyResponse() *DenyResponseMessage {
+	if x != nil {
+		if x, ok := x.Msg.(*Packet_DenyResponse); ok {
+			return x.DenyResponse
+		}
+	}
+	return nil
+}
+
 type isPacket_Msg interface {
 	isPacket_Msg()
 }
@@ -250,7 +474,23 @@ type Packet_Chat struct {
 }
 
 type Packet_Id struct {
-	Id *IdMessage `protobuf:"bytes,4,opt,name=id,proto3,oneof"` //...
+	Id *IdMessage `protobuf:"bytes,4,opt,name=id,proto3,oneof"`
+}
+
+type Packet_LoginRequest struct {
+	LoginRequest *LoginRequestMessage `protobuf:"bytes,5,opt,name=login_request,json=loginRequest,proto3,oneof"`
+}
+
+type Packet_RegisterRequest struct {
+	RegisterRequest *RegisterRequestMessage `protobuf:"bytes,6,opt,name=register_request,json=registerRequest,proto3,oneof"`
+}
+
+type Packet_OkResponse struct {
+	OkResponse *OkResponseMessage `protobuf:"bytes,7,opt,name=ok_response,json=okResponse,proto3,oneof"`
+}
+
+type Packet_DenyResponse struct {
+	DenyResponse *DenyResponseMessage `protobuf:"bytes,8,opt,name=deny_response,json=denyResponse,proto3,oneof"`
 }
 
 func (*Packet_Ping) isPacket_Msg() {}
@@ -258,6 +498,14 @@ func (*Packet_Ping) isPacket_Msg() {}
 func (*Packet_Chat) isPacket_Msg() {}
 
 func (*Packet_Id) isPacket_Msg() {}
+
+func (*Packet_LoginRequest) isPacket_Msg() {}
+
+func (*Packet_RegisterRequest) isPacket_Msg() {}
+
+func (*Packet_OkResponse) isPacket_Msg() {}
+
+func (*Packet_DenyResponse) isPacket_Msg() {}
 
 var File_packets_proto protoreflect.FileDescriptor
 
@@ -269,12 +517,26 @@ const file_packets_proto_rawDesc = "" +
 	"\vChatMessage\x12\x10\n" +
 	"\x03msg\x18\x01 \x01(\tR\x03msg\"\x1b\n" +
 	"\tIdMessage\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x04R\x02id\"\xa7\x01\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"M\n" +
+	"\x13LoginRequestMessage\x12\x1a\n" +
+	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"P\n" +
+	"\x16RegisterRequestMessage\x12\x1a\n" +
+	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\"\x13\n" +
+	"\x11OkResponseMessage\"-\n" +
+	"\x13DenyResponseMessage\x12\x16\n" +
+	"\x06reason\x18\x02 \x01(\tR\x06reason\"\xba\x03\n" +
 	"\x06Packet\x12\x1b\n" +
 	"\tsender_id\x18\x01 \x01(\x04R\bsenderId\x12)\n" +
 	"\x04ping\x18\x02 \x01(\v2\x13.shared.PingMessageH\x00R\x04ping\x12)\n" +
 	"\x04chat\x18\x03 \x01(\v2\x13.shared.ChatMessageH\x00R\x04chat\x12#\n" +
-	"\x02id\x18\x04 \x01(\v2\x11.shared.IdMessageH\x00R\x02idB\x05\n" +
+	"\x02id\x18\x04 \x01(\v2\x11.shared.IdMessageH\x00R\x02id\x12B\n" +
+	"\rlogin_request\x18\x05 \x01(\v2\x1b.shared.LoginRequestMessageH\x00R\floginRequest\x12K\n" +
+	"\x10register_request\x18\x06 \x01(\v2\x1e.shared.RegisterRequestMessageH\x00R\x0fregisterRequest\x12<\n" +
+	"\vok_response\x18\a \x01(\v2\x19.shared.OkResponseMessageH\x00R\n" +
+	"okResponse\x12B\n" +
+	"\rdeny_response\x18\b \x01(\v2\x1b.shared.DenyResponseMessageH\x00R\fdenyResponseB\x05\n" +
 	"\x03msgB\x0eZ\f/pkg/packetsb\x06proto3"
 
 var (
@@ -289,22 +551,30 @@ func file_packets_proto_rawDescGZIP() []byte {
 	return file_packets_proto_rawDescData
 }
 
-var file_packets_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_packets_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_packets_proto_goTypes = []any{
-	(*PingMessage)(nil), // 0: shared.PingMessage
-	(*ChatMessage)(nil), // 1: shared.ChatMessage
-	(*IdMessage)(nil),   // 2: shared.IdMessage
-	(*Packet)(nil),      // 3: shared.Packet
+	(*PingMessage)(nil),            // 0: shared.PingMessage
+	(*ChatMessage)(nil),            // 1: shared.ChatMessage
+	(*IdMessage)(nil),              // 2: shared.IdMessage
+	(*LoginRequestMessage)(nil),    // 3: shared.LoginRequestMessage
+	(*RegisterRequestMessage)(nil), // 4: shared.RegisterRequestMessage
+	(*OkResponseMessage)(nil),      // 5: shared.OkResponseMessage
+	(*DenyResponseMessage)(nil),    // 6: shared.DenyResponseMessage
+	(*Packet)(nil),                 // 7: shared.Packet
 }
 var file_packets_proto_depIdxs = []int32{
 	0, // 0: shared.Packet.ping:type_name -> shared.PingMessage
 	1, // 1: shared.Packet.chat:type_name -> shared.ChatMessage
 	2, // 2: shared.Packet.id:type_name -> shared.IdMessage
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	3, // 3: shared.Packet.login_request:type_name -> shared.LoginRequestMessage
+	4, // 4: shared.Packet.register_request:type_name -> shared.RegisterRequestMessage
+	5, // 5: shared.Packet.ok_response:type_name -> shared.OkResponseMessage
+	6, // 6: shared.Packet.deny_response:type_name -> shared.DenyResponseMessage
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_packets_proto_init() }
@@ -312,10 +582,14 @@ func file_packets_proto_init() {
 	if File_packets_proto != nil {
 		return
 	}
-	file_packets_proto_msgTypes[3].OneofWrappers = []any{
+	file_packets_proto_msgTypes[7].OneofWrappers = []any{
 		(*Packet_Ping)(nil),
 		(*Packet_Chat)(nil),
 		(*Packet_Id)(nil),
+		(*Packet_LoginRequest)(nil),
+		(*Packet_RegisterRequest)(nil),
+		(*Packet_OkResponse)(nil),
+		(*Packet_DenyResponse)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -323,7 +597,7 @@ func file_packets_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_packets_proto_rawDesc), len(file_packets_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

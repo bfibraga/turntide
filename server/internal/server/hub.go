@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/bfibraga/turntide/server/internal/objects"
+	"github.com/bfibraga/turntide/server/internal/server/repository"
 	"github.com/bfibraga/turntide/server/pkg/packets"
 )
 
@@ -44,15 +45,17 @@ type ClientStateHandler interface {
 
 type Hub struct {
 	Logger         *slog.Logger
+	UserRepository repository.UserRepository
 	Clients        *objects.SharedCollection[ClientInterfacer]
 	BroadcastChan  chan *packets.Packet
 	RegisterChan   chan ClientInterfacer
 	UnregisterChan chan ClientInterfacer
 }
 
-func NewHub(logger *slog.Logger) *Hub {
+func NewHub(logger *slog.Logger, userRepo repository.UserRepository) *Hub {
 	return &Hub{
 		Logger:         logger,
+		UserRepository: userRepo,
 		Clients:        objects.NewSharedCollection[ClientInterfacer](),
 		BroadcastChan:  make(chan *packets.Packet),
 		RegisterChan:   make(chan ClientInterfacer),
@@ -82,7 +85,7 @@ func (h *Hub) Serve(getNewClient func(*Hub, http.ResponseWriter, *http.Request) 
 	client, err := getNewClient(h, writer, request)
 
 	if err != nil {
-		h.Logger.Error("Failed to create client", err)
+		h.Logger.Error("Failed to create client", "error", err)
 		return
 	}
 

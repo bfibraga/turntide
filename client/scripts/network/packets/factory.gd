@@ -26,3 +26,19 @@ func new_id_msg(id: int) -> packets.Packet:
 	
 	id_msg.set_id(id)
 	return packet
+
+func new_login_request(username: String, password: String) -> packets.Packet:
+	var packet : packets.Packet = packets.Packet.new()
+	var login_msg : packets.LoginRequestMessage = packet.new_login_request()
+	
+	login_msg.set_username(username)
+	login_msg.set_password(password)
+	return packet
+
+func new_register_request(username: String, password: String) -> packets.Packet:
+	var packet : packets.Packet = packets.Packet.new()
+	var register_msg : packets.RegisterRequestMessage = packet.new_register_request()
+	
+	register_msg.set_username(username)
+	register_msg.set_password(password)
+	return packet

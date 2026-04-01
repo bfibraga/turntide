@@ -10,10 +10,12 @@ import (
 
 	"github.com/bfibraga/turntide/server/internal/server"
 	"github.com/bfibraga/turntide/server/internal/server/clients"
+	"github.com/bfibraga/turntide/server/internal/server/repository"
 )
 
 var (
-	port = flag.Int("port", 4000, "port to listen on")
+	port   = flag.Int("port", 4000, "port to listen on")
+	dbPath = flag.String("db-path", repository.DefaultDatabasePath, "path to the server database")
 )
 
 func main() {
@@ -32,7 +34,17 @@ func main() {
 
 	slog.SetDefault(logger)
 
-	hub := server.NewHub(logger)
+	// Initialize database and repository
+	repoFactory, err := repository.NewFactory(*dbPath, logger)
+	if err != nil {
+		logger.Error("failed to initialize database", "error", err)
+		os.Exit(1)
+	}
+	defer repoFactory.Close()
+
+	userRepo := repoFactory.NewUserRepository()
+
+	hub := server.NewHub(logger, userRepo)
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		hub.Serve(clients.NewWebSocketClient, w, r)
@@ -42,7 +54,7 @@ func main() {
 	go hub.Run()
 
 	addr := fmt.Sprintf(":%d", *port)
-	err := http.ListenAndServe(addr, nil)
+	err = http.ListenAndServe(addr, nil)
 	if err != nil {
 		logger.Error("failed to start server", "error", err)
 		os.Exit(1)
