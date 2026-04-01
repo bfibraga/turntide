@@ -1,1 +1,5 @@
-shared/resources/*
+shared/resources/bin/*
+!shared/resources/bin/.gitkeep
+
+shared/resources/printings/*
+!shared/resources/printings/.gitkeep

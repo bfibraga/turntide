@@ -81,13 +81,13 @@ func (s *CardService) GetCardsByManaValue(ctx context.Context, manaValue float64
 }
 
 // GetCardStatistics returns statistics about the cards in the database
-func (s *CardService) GetCardStatistics(ctx context.Context) (map[string]interface{}, error) {
+func (s *CardService) GetCardStatistics(ctx context.Context) (map[string]any, error) {
 	count, err := s.cardRepo.Count(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get card count: %w", err)
 	}
 
-	stats := map[string]interface{}{
+	stats := map[string]any{
 		"total_cards": count,
 	}
 

@@ -9,6 +9,7 @@ import (
 
 	"github.com/bfibraga/turntide/fetcher/internal/images/providers"
 	"github.com/bfibraga/turntide/fetcher/internal/parsers"
+	"github.com/bfibraga/turntide/fetcher/internal/repository"
 	"github.com/spf13/cobra"
 )
 
@@ -23,26 +24,31 @@ var imagesCmd = &cobra.Command{
 	Use:   "images",
 	Short: "Download card printings",
 	Long:  `Download card printings from Scryfall.`,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		cardData, err := parseDecklist(args)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-			os.Exit(1)
+			return err
 		}
 
-		// Set default output directory if not specified
 		if output == "" {
 			output = "card_images"
 		}
 
-		// Download images from Scryfall
-		err = providers.ScryfallDownload(cardData, "shared/resources/cards.db", output, format)
+		factory, err := repository.NewFactory(dbPath)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-			os.Exit(1)
+			return fmt.Errorf("failed to initialize repository factory: %w", err)
+		}
+		defer factory.Close()
+
+		cardRepo := factory.NewCardRepository()
+
+		err = providers.ScryfallDownload(cardData, cardRepo, output, format)
+		if err != nil {
+			return err
 		}
 
 		fmt.Printf("Successfully downloaded images to %s\n", output)
+		return nil
 	},
 }
 

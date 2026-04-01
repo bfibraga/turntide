@@ -56,6 +56,12 @@ type CardRepository interface {
 	// GetByManaValue retrieves cards with a specific mana value
 	GetByManaValue(ctx context.Context, manaValue float64, limit int32, offset int32) ([]*models.Card, error)
 
+	// GetByNameSetCodeAndNumber retrieves a card by name, set code, and collector number
+	GetByNameSetCodeAndNumber(ctx context.Context, name, setCode, number string) (*models.CardWithScryfallID, error)
+
+	// GetByNameAndSetCode retrieves a card by name and set code (first match)
+	GetByNameAndSetCode(ctx context.Context, name, setCode string) (*models.CardWithScryfallID, error)
+
 	// Close closes the underlying database connection
 	Close() error
 }

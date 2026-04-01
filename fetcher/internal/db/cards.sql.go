@@ -31,7 +31,7 @@ func (q *Queries) GetCardByName(ctx context.Context, name sql.NullString) ([]Car
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Card{}
+	var items []Card
 	for rows.Next() {
 		var i Card
 		if err := rows.Scan(
@@ -228,9 +228,9 @@ SELECT artist, artistids, asciiname, attractionlights, availability, boostertype
 `
 
 type GetCardsByColorParams struct {
-	Colors sql.NullString `json:"colors"`
-	Limit  int64          `json:"limit"`
-	Offset int64          `json:"offset"`
+	Colors sql.NullString
+	Limit  int64
+	Offset int64
 }
 
 func (q *Queries) GetCardsByColor(ctx context.Context, arg GetCardsByColorParams) ([]Card, error) {
@@ -239,7 +239,7 @@ func (q *Queries) GetCardsByColor(ctx context.Context, arg GetCardsByColorParams
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Card{}
+	var items []Card
 	for rows.Next() {
 		var i Card
 		if err := rows.Scan(
@@ -343,9 +343,9 @@ SELECT artist, artistids, asciiname, attractionlights, availability, boostertype
 `
 
 type GetCardsByManaValueParams struct {
-	Manavalue sql.NullFloat64 `json:"manavalue"`
-	Limit     int64           `json:"limit"`
-	Offset    int64           `json:"offset"`
+	Manavalue sql.NullFloat64
+	Limit     int64
+	Offset    int64
 }
 
 func (q *Queries) GetCardsByManaValue(ctx context.Context, arg GetCardsByManaValueParams) ([]Card, error) {
@@ -354,7 +354,7 @@ func (q *Queries) GetCardsByManaValue(ctx context.Context, arg GetCardsByManaVal
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Card{}
+	var items []Card
 	for rows.Next() {
 		var i Card
 		if err := rows.Scan(
@@ -458,9 +458,9 @@ SELECT artist, artistids, asciiname, attractionlights, availability, boostertype
 `
 
 type GetCardsByRarityParams struct {
-	Rarity sql.NullString `json:"rarity"`
-	Limit  int64          `json:"limit"`
-	Offset int64          `json:"offset"`
+	Rarity sql.NullString
+	Limit  int64
+	Offset int64
 }
 
 func (q *Queries) GetCardsByRarity(ctx context.Context, arg GetCardsByRarityParams) ([]Card, error) {
@@ -469,7 +469,7 @@ func (q *Queries) GetCardsByRarity(ctx context.Context, arg GetCardsByRarityPara
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Card{}
+	var items []Card
 	for rows.Next() {
 		var i Card
 		if err := rows.Scan(
@@ -578,7 +578,7 @@ func (q *Queries) GetCardsBySetCode(ctx context.Context, setcode sql.NullString)
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Card{}
+	var items []Card
 	for rows.Next() {
 		var i Card
 		if err := rows.Scan(
@@ -682,8 +682,8 @@ SELECT artist, artistids, asciiname, attractionlights, availability, boostertype
 `
 
 type ListAllCardsParams struct {
-	Limit  int64 `json:"limit"`
-	Offset int64 `json:"offset"`
+	Limit  int64
+	Offset int64
 }
 
 func (q *Queries) ListAllCards(ctx context.Context, arg ListAllCardsParams) ([]Card, error) {
@@ -692,7 +692,7 @@ func (q *Queries) ListAllCards(ctx context.Context, arg ListAllCardsParams) ([]C
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Card{}
+	var items []Card
 	for rows.Next() {
 		var i Card
 		if err := rows.Scan(
@@ -801,14 +801,14 @@ LIMIT ? OFFSET ?
 `
 
 type SearchCardsParams struct {
-	Column1 interface{}    `json:"column_1"`
-	Name    sql.NullString `json:"name"`
-	Column3 interface{}    `json:"column_3"`
-	Setcode sql.NullString `json:"setcode"`
-	Column5 interface{}    `json:"column_5"`
-	Type    sql.NullString `json:"type"`
-	Limit   int64          `json:"limit"`
-	Offset  int64          `json:"offset"`
+	Column1 interface{}
+	Name    sql.NullString
+	Column3 interface{}
+	Setcode sql.NullString
+	Column5 interface{}
+	Type    sql.NullString
+	Limit   int64
+	Offset  int64
 }
 
 func (q *Queries) SearchCards(ctx context.Context, arg SearchCardsParams) ([]Card, error) {
@@ -826,7 +826,7 @@ func (q *Queries) SearchCards(ctx context.Context, arg SearchCardsParams) ([]Car
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Card{}
+	var items []Card
 	for rows.Next() {
 		var i Card
 		if err := rows.Scan(

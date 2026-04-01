@@ -2,7 +2,6 @@ package providers
 
 import (
 	"context"
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -11,10 +10,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	_ "github.com/mattn/go-sqlite3"
-
 	"github.com/bfibraga/turntide/fetcher/internal/download"
+	"github.com/bfibraga/turntide/fetcher/internal/models"
 	"github.com/bfibraga/turntide/fetcher/internal/parsers"
+	"github.com/bfibraga/turntide/fetcher/internal/repository"
 )
 
 const (
@@ -44,28 +43,30 @@ var (
 )
 
 // ScryfallDownload downloads card images from Scryfall
-func ScryfallDownload(cards []parsers.TurntideCardData, dbPath string, outputDir string, format string) error {
+func ScryfallDownload(cards []parsers.TurntideCardData, cardRepo repository.CardRepository, outputDir string, format string) error {
 	return download.NewDownloadProviderBuilder().
 		WithSteps(
-			QueryCardImages(cards, dbPath, format),
+			QueryCardImages(cards, cardRepo, format),
 			DownloadImages(outputDir),
 		).
 		Download()
 }
 
 // QueryCardImages queries the database for Scryfall IDs and builds download list
-func QueryCardImages(cards []parsers.TurntideCardData, dbPath string, format string) func(ctx context.Context) error {
+func QueryCardImages(cards []parsers.TurntideCardData, cardRepo repository.CardRepository, format string) func(ctx context.Context) error {
 	return func(ctx context.Context) error {
-		db, err := sql.Open("sqlite3", dbPath)
-		if err != nil {
-			return fmt.Errorf("failed to open database: %w", err)
-		}
-		defer db.Close()
-
 		imageCards = make([]CardImageData, 0, len(cards))
 
 		for _, card := range cards {
-			cardData, err := queryCardFromDB(db, card.Name, card.SetCode, card.CardID)
+			var cardData *models.CardWithScryfallID
+			var err error
+
+			if card.CardID != "" {
+				cardData, err = cardRepo.GetByNameSetCodeAndNumber(ctx, card.Name, card.SetCode, card.CardID)
+			} else {
+				cardData, err = cardRepo.GetByNameAndSetCode(ctx, card.Name, card.SetCode)
+			}
+
 			if err != nil {
 				return fmt.Errorf("failed to query card %s from set %s: %w", card.Name, card.SetCode, err)
 			}
@@ -75,60 +76,19 @@ func QueryCardImages(cards []parsers.TurntideCardData, dbPath string, format str
 				continue
 			}
 
-			// Build image URL based on format preference
 			imageURL := buildScryfallImageURL(cardData.ScryfallID, format)
-			cardData.ImageURL = imageURL
 
-			imageCards = append(imageCards, *cardData)
+			imageCards = append(imageCards, CardImageData{
+				Name:       cardData.Name,
+				SetCode:    cardData.SetCode,
+				UUID:       cardData.UUID,
+				ScryfallID: cardData.ScryfallID,
+				ImageURL:   imageURL,
+			})
 		}
 
 		return nil
 	}
-}
-
-// queryCardFromDB retrieves card info from the database
-// If cardID is provided, it will be used for more precise lookup
-func queryCardFromDB(db *sql.DB, name string, setCode string, cardID string) (*CardImageData, error) {
-	var uuid, scryfallID string
-
-	// Use collector's number (card ID) if provided for more precise lookup
-	var query string
-	var args []interface{}
-
-	if cardID != "" {
-		query = `
-			SELECT c.uuid, ci.scryfallId
-			FROM cards c
-			JOIN cardIdentifiers ci ON c.uuid = ci.uuid
-			WHERE c.name = ? AND c.setCode = ? AND c.number = ?
-			LIMIT 1
-		`
-		args = []interface{}{name, setCode, cardID}
-	} else {
-		query = `
-			SELECT c.uuid, ci.scryfallId
-			FROM cards c
-			JOIN cardIdentifiers ci ON c.uuid = ci.uuid
-			WHERE c.name = ? AND c.setCode = ?
-			LIMIT 1
-		`
-		args = []interface{}{name, setCode}
-	}
-
-	err := db.QueryRow(query, args...).Scan(&uuid, &scryfallID)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, nil
-		}
-		return nil, err
-	}
-
-	return &CardImageData{
-		Name:       name,
-		SetCode:    setCode,
-		UUID:       uuid,
-		ScryfallID: scryfallID,
-	}, nil
 }
 
 // buildScryfallImageURL constructs the Scryfall API URL for the card

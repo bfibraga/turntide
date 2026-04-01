@@ -47,7 +47,7 @@ func NewSQLiteCardRepository(conn *sql.DB) *SQLiteCardRepository {
 // GetByUuid implements CardRepository.GetByUuid
 func (r *SQLiteCardRepository) GetByUuid(ctx context.Context, uuid string) (*models.Card, error) {
 	nsUuid := sql.NullString{String: uuid, Valid: uuid != ""}
-	dbCard, err := r.queries.GetCardByUuid(ctx, nsUuid)
+	dbCard, err := r.queries.GetCardByUUID(ctx, nsUuid)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, fmt.Errorf("card not found")
@@ -171,6 +171,37 @@ func (r *SQLiteCardRepository) GetByManaValue(ctx context.Context, manaValue flo
 		return nil, fmt.Errorf("failed to get cards by mana value: %w", err)
 	}
 	return models.ToCards(dbCards), nil
+}
+
+// GetByNameSetCodeAndNumber implements CardRepository.GetByNameSetCodeAndNumber
+func (r *SQLiteCardRepository) GetByNameSetCodeAndNumber(ctx context.Context, name, setCode, number string) (*models.CardWithScryfallID, error) {
+	row, err := r.queries.GetCardByNameSetCodeAndNumber(ctx, db.GetCardByNameSetCodeAndNumberParams{
+		Name:    sql.NullString{String: name, Valid: name != ""},
+		Setcode: sql.NullString{String: setCode, Valid: setCode != ""},
+		Number:  sql.NullString{String: number, Valid: number != ""},
+	})
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, fmt.Errorf("failed to get card: %w", err)
+	}
+	return models.ToCardWithScryfallID(row), nil
+}
+
+// GetByNameAndSetCode implements CardRepository.GetByNameAndSetCode
+func (r *SQLiteCardRepository) GetByNameAndSetCode(ctx context.Context, name, setCode string) (*models.CardWithScryfallID, error) {
+	row, err := r.queries.GetCardByNameAndSetCode(ctx, db.GetCardByNameAndSetCodeParams{
+		Name:    sql.NullString{String: name, Valid: name != ""},
+		Setcode: sql.NullString{String: setCode, Valid: setCode != ""},
+	})
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		return nil, fmt.Errorf("failed to get card: %w", err)
+	}
+	return models.ToCardWithScryfallIDFromRow(row), nil
 }
 
 // Close implements CardRepository.Close

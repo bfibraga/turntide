@@ -65,7 +65,7 @@ func (q *Queries) GetSetByName(ctx context.Context, name sql.NullString) ([]Set,
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Set{}
+	var items []Set
 	for rows.Next() {
 		var i Set
 		if err := rows.Scan(
@@ -110,8 +110,8 @@ SELECT code, mtgocode, name, releasedate, type, isonlineonly, isfoilonly, isnonf
 `
 
 type ListAllSetsParams struct {
-	Limit  int64 `json:"limit"`
-	Offset int64 `json:"offset"`
+	Limit  int64
+	Offset int64
 }
 
 func (q *Queries) ListAllSets(ctx context.Context, arg ListAllSetsParams) ([]Set, error) {
@@ -120,7 +120,7 @@ func (q *Queries) ListAllSets(ctx context.Context, arg ListAllSetsParams) ([]Set
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Set{}
+	var items []Set
 	for rows.Next() {
 		var i Set
 		if err := rows.Scan(

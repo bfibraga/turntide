@@ -3,8 +3,11 @@ module github.com/bfibraga/turntide
 go 1.26.1
 
 require (
+	github.com/golang-jwt/jwt/v5 v5.3.1
+	github.com/gorilla/websocket v1.5.3
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/viper v1.21.0
+	google.golang.org/protobuf v1.36.11
 )
 
 require (

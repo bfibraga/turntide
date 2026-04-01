@@ -14,6 +14,8 @@ type Querier interface {
 	CountSets(ctx context.Context) (int64, error)
 	GetAllIdentifiers(ctx context.Context, arg GetAllIdentifiersParams) ([]Cardidentifier, error)
 	GetCardByName(ctx context.Context, name sql.NullString) ([]Card, error)
+	GetCardByNameAndSetCode(ctx context.Context, arg GetCardByNameAndSetCodeParams) (GetCardByNameAndSetCodeRow, error)
+	GetCardByNameSetCodeAndNumber(ctx context.Context, arg GetCardByNameSetCodeAndNumberParams) (GetCardByNameSetCodeAndNumberRow, error)
 	GetCardByUUID(ctx context.Context, uuid sql.NullString) (Card, error)
 	GetCardByUuid(ctx context.Context, uuid sql.NullString) (Card, error)
 	GetCardsByColor(ctx context.Context, arg GetCardsByColorParams) ([]Card, error)

@@ -32,6 +32,7 @@ import (
 // Card represents a card entity from the database
 type Card struct {
 	ID        int       `db:"id"`
+	UUID      string    `db:"uuid"`
 	Name      string    `db:"name"`
 	SetCode   string    `db:"set_code"`
 	CardType  string    `db:"card_type"`
@@ -43,6 +44,15 @@ type Card struct {
 	ImageURL  string    `db:"image_url"`
 	CreatedAt time.Time `db:"created_at"`
 	UpdatedAt time.Time `db:"updated_at"`
+}
+
+// CardWithScryfallID represents a card with its Scryfall identifier
+type CardWithScryfallID struct {
+	UUID       string
+	Name       string
+	SetCode    string
+	Number     string
+	ScryfallID string
 }
 
 // CardFilter represents query filters for cards
@@ -76,6 +86,7 @@ func ToCard(dbCard db.Card) *Card {
 	}
 
 	return &Card{
+		UUID:      dbCard.Uuid.String,
 		Name:      dbCard.Name.String,
 		SetCode:   dbCard.Setcode.String,
 		CardType:  dbCard.Type.String,
@@ -94,6 +105,28 @@ func ToCards(dbCards []db.Card) []*Card {
 		cards = append(cards, ToCard(dbCard))
 	}
 	return cards
+}
+
+// ToCardWithScryfallID converts a GetCardByNameSetCodeAndNumberRow to CardWithScryfallID
+func ToCardWithScryfallID(row db.GetCardByNameSetCodeAndNumberRow) *CardWithScryfallID {
+	return &CardWithScryfallID{
+		UUID:       row.Uuid.String,
+		Name:       row.Name.String,
+		SetCode:    row.Setcode.String,
+		Number:     row.Number.String,
+		ScryfallID: row.Scryfallid.String,
+	}
+}
+
+// ToCardWithScryfallIDFromRow converts a GetCardByNameAndSetCodeRow to CardWithScryfallID
+func ToCardWithScryfallIDFromRow(row db.GetCardByNameAndSetCodeRow) *CardWithScryfallID {
+	return &CardWithScryfallID{
+		UUID:       row.Uuid.String,
+		Name:       row.Name.String,
+		SetCode:    row.Setcode.String,
+		Number:     row.Number.String,
+		ScryfallID: row.Scryfallid.String,
+	}
 }
 
 // ToSet converts a db.Set to a domain Set

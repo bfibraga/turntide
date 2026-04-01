@@ -15,8 +15,8 @@ SELECT uuid, scryfallid, scryfalloracleid, scryfallillustrationid, scryfallcardb
 `
 
 type GetAllIdentifiersParams struct {
-	Limit  int64 `json:"limit"`
-	Offset int64 `json:"offset"`
+	Limit  int64
+	Offset int64
 }
 
 func (q *Queries) GetAllIdentifiers(ctx context.Context, arg GetAllIdentifiersParams) ([]Cardidentifier, error) {
@@ -25,7 +25,7 @@ func (q *Queries) GetAllIdentifiers(ctx context.Context, arg GetAllIdentifiersPa
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Cardidentifier{}
+	var items []Cardidentifier
 	for rows.Next() {
 		var i Cardidentifier
 		if err := rows.Scan(
@@ -64,6 +64,74 @@ func (q *Queries) GetAllIdentifiers(ctx context.Context, arg GetAllIdentifiersPa
 		return nil, err
 	}
 	return items, nil
+}
+
+const getCardByNameAndSetCode = `-- name: GetCardByNameAndSetCode :one
+SELECT c.uuid, c.name, c.setcode, c.number, ci.scryfallid
+FROM cards c
+JOIN cardidentifiers ci ON c.uuid = ci.uuid
+WHERE c.name = ? AND c.setcode = ?
+LIMIT 1
+`
+
+type GetCardByNameAndSetCodeParams struct {
+	Name    sql.NullString
+	Setcode sql.NullString
+}
+
+type GetCardByNameAndSetCodeRow struct {
+	Uuid       sql.NullString
+	Name       sql.NullString
+	Setcode    sql.NullString
+	Number     sql.NullString
+	Scryfallid sql.NullString
+}
+
+func (q *Queries) GetCardByNameAndSetCode(ctx context.Context, arg GetCardByNameAndSetCodeParams) (GetCardByNameAndSetCodeRow, error) {
+	row := q.db.QueryRowContext(ctx, getCardByNameAndSetCode, arg.Name, arg.Setcode)
+	var i GetCardByNameAndSetCodeRow
+	err := row.Scan(
+		&i.Uuid,
+		&i.Name,
+		&i.Setcode,
+		&i.Number,
+		&i.Scryfallid,
+	)
+	return i, err
+}
+
+const getCardByNameSetCodeAndNumber = `-- name: GetCardByNameSetCodeAndNumber :one
+SELECT c.uuid, c.name, c.setcode, c.number, ci.scryfallid
+FROM cards c
+JOIN cardidentifiers ci ON c.uuid = ci.uuid
+WHERE c.name = ? AND c.setcode = ? AND c.number = ?
+`
+
+type GetCardByNameSetCodeAndNumberParams struct {
+	Name    sql.NullString
+	Setcode sql.NullString
+	Number  sql.NullString
+}
+
+type GetCardByNameSetCodeAndNumberRow struct {
+	Uuid       sql.NullString
+	Name       sql.NullString
+	Setcode    sql.NullString
+	Number     sql.NullString
+	Scryfallid sql.NullString
+}
+
+func (q *Queries) GetCardByNameSetCodeAndNumber(ctx context.Context, arg GetCardByNameSetCodeAndNumberParams) (GetCardByNameSetCodeAndNumberRow, error) {
+	row := q.db.QueryRowContext(ctx, getCardByNameSetCodeAndNumber, arg.Name, arg.Setcode, arg.Number)
+	var i GetCardByNameSetCodeAndNumberRow
+	err := row.Scan(
+		&i.Uuid,
+		&i.Name,
+		&i.Setcode,
+		&i.Number,
+		&i.Scryfallid,
+	)
+	return i, err
 }
 
 const getIdentifierByScryfallId = `-- name: GetIdentifierByScryfallId :one
@@ -141,16 +209,16 @@ SELECT uuid, scryfallid, scryfalloracleid, scryfallillustrationid, scryfallcardb
 `
 
 type GetIdentifiersByUuidListParams struct {
-	Uuid    sql.NullString `json:"uuid"`
-	Uuid_2  sql.NullString `json:"uuid_2"`
-	Uuid_3  sql.NullString `json:"uuid_3"`
-	Uuid_4  sql.NullString `json:"uuid_4"`
-	Uuid_5  sql.NullString `json:"uuid_5"`
-	Uuid_6  sql.NullString `json:"uuid_6"`
-	Uuid_7  sql.NullString `json:"uuid_7"`
-	Uuid_8  sql.NullString `json:"uuid_8"`
-	Uuid_9  sql.NullString `json:"uuid_9"`
-	Uuid_10 sql.NullString `json:"uuid_10"`
+	Uuid    sql.NullString
+	Uuid_2  sql.NullString
+	Uuid_3  sql.NullString
+	Uuid_4  sql.NullString
+	Uuid_5  sql.NullString
+	Uuid_6  sql.NullString
+	Uuid_7  sql.NullString
+	Uuid_8  sql.NullString
+	Uuid_9  sql.NullString
+	Uuid_10 sql.NullString
 }
 
 func (q *Queries) GetIdentifiersByUuidList(ctx context.Context, arg GetIdentifiersByUuidListParams) ([]Cardidentifier, error) {
@@ -170,7 +238,7 @@ func (q *Queries) GetIdentifiersByUuidList(ctx context.Context, arg GetIdentifie
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Cardidentifier{}
+	var items []Cardidentifier
 	for rows.Next() {
 		var i Cardidentifier
 		if err := rows.Scan(
