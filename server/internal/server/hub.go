@@ -64,6 +64,8 @@ func NewHub(logger *slog.Logger, userRepo repository.UserRepository) *Hub {
 }
 
 func (h *Hub) Run() {
+	h.Logger.Info("Initializing database")
+	
 	h.Logger.Info("Waiting for connections...")
 	for {
 		select {

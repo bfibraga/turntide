@@ -78,10 +78,6 @@ func NewFactory(dbPath string, logger *slog.Logger) (*Factory, error) {
 
 	var err error
 
-	/*if !os.IsNotExist(err) {
-	return nil, fmt.Errorf("failed to access database: %w", err)
-	}*/
-
 	logger.Debug("Creating database directory", "path", dbPath)
 
 	// Create database with schema if it doesn't exist
