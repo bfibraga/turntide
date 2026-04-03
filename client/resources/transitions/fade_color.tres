@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="TransitionConfig" format=3 uid="uid://qtt40lxvhfo6"]
+
+[ext_resource type="Script" uid="uid://bu53rffhg6kn3" path="res://resources/transitions/transition_config.gd" id="1_1frle"]
+
+[resource]
+script = ExtResource("1_1frle")
+fade_color = Color(0, 0.79607844, 0, 1)
+metadata/_custom_type_script = "uid://bu53rffhg6kn3"
