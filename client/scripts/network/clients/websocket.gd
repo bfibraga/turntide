@@ -7,8 +7,6 @@ var last_state : WebSocketPeer.State = WebSocketPeer.STATE_CLOSED
 signal connected_to_server()
 signal connection_closed()
 signal packet_received(packet: packets.Packet)
-signal auth_success(username: String)
-signal auth_failed(reason: String)
 
 func connect_to_url(url: String, tls_options: TLSOptions = null) -> Error:
 	var err : Error = socket.connect_to_url(url, tls_options)
@@ -19,9 +17,6 @@ func connect_to_url(url: String, tls_options: TLSOptions = null) -> Error:
 	return OK
 
 func send(packet: packets.Packet) -> Error:
-	#var sender_id : int = GameManager.client_id
-	#packet.set_sender_id(sender_id)
-	
 	var data : PackedByteArray = packet.to_bytes()
 	return socket.send(data)
 
@@ -66,17 +61,6 @@ func poll() -> void:
 	while socket.get_ready_state() == socket.STATE_OPEN and socket.get_available_packet_count():
 		var pkt = get_packet()
 		packet_received.emit(pkt)
-		_handle_auth_packet(pkt)
-
 
 func _process(_delta: float) -> void:
 	poll()
-
-func _handle_auth_packet(packet: packets.Packet) -> void:
-	if packet.has_ok_response():
-		var resp = packet.get_ok_response()
-		auth_success.emit(resp.get_message())
-	elif packet.has_deny_response():
-		var resp = packet.get_deny_response()
-		auth_failed.emit(resp.get_reason())
-

@@ -6,7 +6,7 @@ func new_chat_msg(msg: String) -> packets.Packet:
 	var packet : packets.Packet = packets.Packet.new()
 	var chat_msg : packets.ChatMessage = packet.new_chat()
 	
-	packet.set_sender_id(GameManager.client_id)
+	packet.set_sender_id(Global.client_id)
 	
 	chat_msg.set_msg(msg)
 	return packet
@@ -15,7 +15,7 @@ func new_ping_msg(timestamp: int) -> packets.Packet:
 	var packet : packets.Packet = packets.Packet.new()
 	var ping_msg : packets.PingMessage = packet.new_ping()
 	
-	packet.set_sender_id(GameManager.client_id)
+	packet.set_sender_id(Global.client_id)
 	
 	ping_msg.set_timestamp(timestamp)
 	return packet
