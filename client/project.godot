@@ -11,17 +11,18 @@ config_version=5
 [application]
 
 config/name="Turntide Client"
-run/main_scene="uid://cw6r7dqxoo76s"
+run/main_scene="uid://c74205nfbvbkq"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/stretch_mode=0
 boot_splash/use_filter=false
 
 [autoload]
 
-GameManager="*uid://cfdx1jjlqadh2"
-CardFactory="*res://scripts/card/card_factory.gd"
+Global="*uid://cg33kihswuayp"
 PacketFactory="*uid://buqxsmypo5gce"
 WS="*uid://d07d5mlkr1hfa"
+CardFactory="*res://scripts/card/card_factory.gd"
+TransitionManager="*res://scripts/utils/transition_manager.gd"
 
 [debug]
 

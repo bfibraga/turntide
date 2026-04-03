@@ -1,5 +1,6 @@
 extends ColorRect
 
+@export_category("Colors")
 @export var background_color_1 : Color = Color("8169ea")
 @export var background_color_2 : Color = Color("955708")
 @export var background_color_3 : Color = Color("162325")

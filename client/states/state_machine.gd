@@ -1,6 +1,8 @@
 class_name StateMachine
 extends Node
 
+signal state_changed(from: State, to: State)
+
 @export var initial_state : State
 
 var current_state : State = null
@@ -39,4 +41,4 @@ func on_state_transition(state: State, new_state_name: String) -> void:
 	new_state.enter()
 	
 	current_state = new_state
-	
+	state_changed.emit(state, new_state)

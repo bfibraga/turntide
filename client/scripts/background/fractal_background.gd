@@ -1,5 +1,4 @@
 # Credits to https://godotshaders.com/shader/warped-fractal-noise/
-@tool
 extends ColorRect
 
 @export_category("Misc")
