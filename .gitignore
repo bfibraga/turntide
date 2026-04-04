@@ -3,3 +3,6 @@ shared/resources/bin/*
 
 shared/resources/printings/*
 !shared/resources/printings/.gitkeep
+
+# Worktrees for isolated development
+.worktrees/
