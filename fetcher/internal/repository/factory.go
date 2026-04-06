@@ -31,7 +31,7 @@ import (
 
 const (
 	// DefaultDatabasePath is the default path to the shared database
-	DefaultDatabasePath = "/shared/resources/cards.db"
+	DefaultDatabasePath = "./shared/resources/cards.db"
 )
 
 // Factory provides a centralized way to create repository instances

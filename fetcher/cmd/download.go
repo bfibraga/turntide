@@ -48,15 +48,15 @@ var downloadCmd = &cobra.Command{
 	Short: "Download card data from a repository",
 	Long:  `Download card database files from various providers.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := validate(args); err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-			os.Exit(1)
-		}
+		/*if err := validate(args); err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(ExitInvalidUsage)
+		}*/
 
 		err := getProvider()(DbPath)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-			os.Exit(1)
+			os.Exit(ExitNetworkError)
 		}
 
 		fmt.Printf("Successfully downloaded \n")

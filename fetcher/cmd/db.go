@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -29,28 +30,24 @@ var dbListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List cards from the database",
 	Long:  `List cards with optional filtering. Use flags to filter results.`,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		// Create context with timeout
+	Run: func(cmd *cobra.Command, args []string) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
-		// Initialize the repository factory
 		factory, err := repository.NewFactory(dbPath)
 		if err != nil {
-			return fmt.Errorf("failed to initialize repository factory: %w", err)
+			fmt.Fprintf(os.Stderr, "Error: failed to initialize repository factory: %v\n", err)
+			os.Exit(ExitConfigError)
 		}
 		defer factory.Close()
 
-		// Create service
 		cardRepo := factory.NewCardRepository()
 		cardService := service.NewCardService(cardRepo)
 
-		// Get all cards (limit to 20 for readability)
-		cards, err := cardService.GetAllCards(ctx, &models.CardFilter{
-			Limit: 20,
-		})
+		cards, err := cardService.GetAllCards(ctx, &models.CardFilter{Limit: 20})
 		if err != nil {
-			return fmt.Errorf("failed to get cards: %w", err)
+			fmt.Fprintf(os.Stderr, "Error: failed to get cards: %v\n", err)
+			os.Exit(ExitGeneralError)
 		}
 
 		fmt.Printf("Found %d cards (showing first 20):\n\n", len(cards))
@@ -62,8 +59,6 @@ var dbListCmd = &cobra.Command{
 			fmt.Printf("  Rarity: %s\n", card.Rarity)
 			fmt.Println()
 		}
-
-		return nil
 	},
 }
 
@@ -71,14 +66,14 @@ var dbListCmd = &cobra.Command{
 var dbCountCmd = &cobra.Command{
 	Use:   "count",
 	Short: "Count total cards in the database",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		// Create context with timeout
+	Run: func(cmd *cobra.Command, args []string) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
 		factory, err := repository.NewFactory(dbPath)
 		if err != nil {
-			return fmt.Errorf("failed to initialize repository: %w", err)
+			fmt.Fprintf(os.Stderr, "Error: failed to initialize repository: %v\n", err)
+			os.Exit(ExitConfigError)
 		}
 		defer factory.Close()
 
@@ -87,11 +82,11 @@ var dbCountCmd = &cobra.Command{
 
 		stats, err := cardService.GetCardStatistics(ctx)
 		if err != nil {
-			return fmt.Errorf("failed to get statistics: %w", err)
+			fmt.Fprintf(os.Stderr, "Error: failed to get statistics: %v\n", err)
+			os.Exit(ExitGeneralError)
 		}
 
 		fmt.Printf("Total cards: %d\n", stats["total_cards"])
-		return nil
 	},
 }
 
@@ -100,14 +95,14 @@ var dbSearchCmd = &cobra.Command{
 	Use:   "search [name]",
 	Short: "Search cards by name",
 	Args:  cobra.ExactArgs(1),
-	RunE: func(cmd *cobra.Command, args []string) error {
-		// Create context with timeout
+	Run: func(cmd *cobra.Command, args []string) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
 		factory, err := repository.NewFactory(dbPath)
 		if err != nil {
-			return fmt.Errorf("failed to initialize repository: %w", err)
+			fmt.Fprintf(os.Stderr, "Error: failed to initialize repository: %v\n", err)
+			os.Exit(ExitConfigError)
 		}
 		defer factory.Close()
 
@@ -116,7 +111,13 @@ var dbSearchCmd = &cobra.Command{
 
 		cards, err := cardService.GetCardsByName(ctx, args[0])
 		if err != nil {
-			return fmt.Errorf("failed to search cards: %w", err)
+			fmt.Fprintf(os.Stderr, "Error: failed to search cards: %v\n", err)
+			os.Exit(ExitGeneralError)
+		}
+
+		if len(cards) == 0 {
+			fmt.Fprintf(os.Stderr, "Error: no cards found matching '%s'\n", args[0])
+			os.Exit(ExitNotFound)
 		}
 
 		fmt.Printf("Found %d cards matching '%s':\n\n", len(cards), args[0])
@@ -126,8 +127,6 @@ var dbSearchCmd = &cobra.Command{
 			fmt.Printf("  Type: %s\n", card.CardType)
 			fmt.Println()
 		}
-
-		return nil
 	},
 }
 
@@ -136,14 +135,14 @@ var dbSetCmd = &cobra.Command{
 	Use:   "set [code]",
 	Short: "Get all cards from a specific set",
 	Args:  cobra.ExactArgs(1),
-	RunE: func(cmd *cobra.Command, args []string) error {
-		// Create context with timeout
+	Run: func(cmd *cobra.Command, args []string) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
 		factory, err := repository.NewFactory(dbPath)
 		if err != nil {
-			return fmt.Errorf("failed to initialize repository: %w", err)
+			fmt.Fprintf(os.Stderr, "Error: failed to initialize repository: %v\n", err)
+			os.Exit(ExitConfigError)
 		}
 		defer factory.Close()
 
@@ -152,7 +151,13 @@ var dbSetCmd = &cobra.Command{
 
 		cards, err := cardService.GetCardsBySetCode(ctx, args[0])
 		if err != nil {
-			return fmt.Errorf("failed to get cards: %w", err)
+			fmt.Fprintf(os.Stderr, "Error: failed to get cards: %v\n", err)
+			os.Exit(ExitGeneralError)
+		}
+
+		if len(cards) == 0 {
+			fmt.Fprintf(os.Stderr, "Error: no cards found in set '%s'\n", args[0])
+			os.Exit(ExitNotFound)
 		}
 
 		fmt.Printf("Found %d cards in set '%s'\n\n", len(cards), args[0])
@@ -161,8 +166,6 @@ var dbSetCmd = &cobra.Command{
 			fmt.Printf("  Rarity: %s\n", card.Rarity)
 			fmt.Printf("  Type: %s\n", card.CardType)
 		}
-
-		return nil
 	},
 }
 
