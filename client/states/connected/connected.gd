@@ -16,13 +16,21 @@ func _ready() -> void:
 	# Connect to server
 	var url : String = UrlBuilder.ws().host("localhost").port(4000).path("ws").build()
 	WS.connect_to_url(url)
+	
+	RepositoryFactory.new_card_repository()
+	Global.card_repository.open()
+	
+	var count: int = Global.card_repository.count_cards()
+	
+	Global.logger.info("Total of cards: %d" % count)
 
 func _on_ws_connected_to_server() -> void:
 	logger.success("Connected to server")
-	self.Transitioned.emit(self, "login")
+	self.Transitioned.emit(self, LoginState.Name())
 
 func _on_ws_connection_closed() -> void:
 	logger.error("Connection closed")
+	self.Transitioned.emit(self, ClosedState.Name())
 
 func _on_ws_packet_received(packet: packets.Packet) -> void:
 	var sender_id : int = packet.get_sender_id()
