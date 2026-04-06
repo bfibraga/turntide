@@ -1,6 +1,7 @@
 class_name CardView extends Control
 
 var metadata: CardMetadata
+var foil_overlay: FoilOverlay
 
 @onready var card_texture: CardTexture = $SubViewportContainer/SubViewport/TextureRect
 
@@ -22,6 +23,21 @@ func _ready():
 	else:
 		self.modulate = Color(0.3, 0.3, 0.3) # Darken while loading
 		Global.printings_manager.request_download(metadata)
+	
+	# 3. Setup foil layer
+	_setup_foil_layer()
+
+func _setup_foil_layer() -> void:
+	var foil_scene = preload("res://scenes/card/foil/foil_layer.tscn")
+	var foil_instance = foil_scene.instantiate()
+	foil_instance.size = Vector2(250, 350)
+	
+	foil_overlay = foil_instance.get_node("FoilOverlay")
+	
+	$SubViewportContainer.add_child(foil_instance)
+	
+	if metadata.foil_type > 0:
+		foil_overlay.foil_type = metadata.foil_type
 
 func _on_image_became_available(key: String, path: String):
 	var my_key = Global.printings_manager._make_key(metadata.uuid, metadata.setcode, metadata.number)
