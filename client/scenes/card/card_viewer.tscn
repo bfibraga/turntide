@@ -1,0 +1,94 @@
+[gd_scene format=3 uid="uid://die2458ml2aad"]
+
+[ext_resource type="Script" uid="uid://bnjait6ce8evs" path="res://card_viewer.gd" id="1_hs2gs"]
+[ext_resource type="PackedScene" uid="uid://pgd2yhn11go0" path="res://scenes/fractal_background.tscn" id="2_37t42"]
+[ext_resource type="Script" uid="uid://nv5mq1l585aj" path="res://scripts/utils/search_line_edit.gd" id="3_3157e"]
+
+[node name="Card Viewer" type="Control" unique_id=1100113074]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hs2gs")
+
+[node name="Fractal Background" parent="." unique_id=1618489495 instance=ExtResource("2_37t42")]
+layout_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=615853635]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Header" type="HBoxContainer" parent="VBoxContainer" unique_id=639454208]
+layout_mode = 2
+size_flags_vertical = 0
+alignment = 1
+
+[node name="CardName" type="LineEdit" parent="VBoxContainer/Header" unique_id=1083811287]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Card Name "
+expand_to_text_length = true
+script = ExtResource("3_3157e")
+metadata/_custom_type_script = "uid://nv5mq1l585aj"
+
+[node name="Set" type="LineEdit" parent="VBoxContainer/Header" unique_id=927897093]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Set Code"
+expand_to_text_length = true
+
+[node name="Page" type="SpinBox" parent="VBoxContainer/Header" unique_id=1088731111]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 10.0
+value = 10.0
+rounded = true
+alignment = 1
+update_on_text_changed = true
+prefix = "Page"
+
+[node name="Total" type="SpinBox" parent="VBoxContainer/Header" unique_id=1112656889]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 10.0
+value = 10.0
+rounded = true
+alignment = 1
+update_on_text_changed = true
+prefix = "Total"
+
+[node name="Back" type="Button" parent="VBoxContainer/Header" unique_id=152788252]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Back"
+
+[node name="Main" type="HSplitContainer" parent="VBoxContainer" unique_id=2100763760]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Card List" type="ScrollContainer" parent="VBoxContainer/Main" unique_id=1441078337]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Grid" type="GridContainer" parent="VBoxContainer/Main/Card List" unique_id=1971123125]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 3
+
+[node name="Card Details" type="Control" parent="VBoxContainer/Main" unique_id=314318673]
+layout_mode = 2
+size_flags_horizontal = 3

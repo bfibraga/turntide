@@ -1,5 +1,4 @@
-extends TextureRect
-class_name CardTexture
+class_name CardTexture extends TextureRect
 
 signal mouse_entered_view
 signal mouse_exited_view

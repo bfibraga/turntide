@@ -2,8 +2,12 @@ extends Node
 class_name CardData
 
 @export_category("Card Metadata")
-@export_file_path(".png") var image_path: String = ""
+@export_file_path(".jpg") var image_path: String = ""
 @export var card_name: String = ""
+
+func _init(card_name: String = "", image_path: String = "") -> void:
+	self.card_name = card_name
+	self.image_path = image_path
 
 func with_image_path(image_path: String) -> CardData:
 	self.image_path = image_path

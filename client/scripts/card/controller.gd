@@ -1,31 +1,8 @@
-extends Node
 class_name CardController
+extends Node
 
-@export var texture_rect : CardTexture
-
-func set_printing(image_path: String) -> void:
-	if image_path.is_empty():
-		return
-	
-	var image : Image = Image.new()
-	var err : Error = image.load(image_path)
-	if err != OK:
-		push_error("Failed to load card image: " + image_path)
-		return
-	
-	texture_rect.texture = ImageTexture.create_from_image(image)
-
-func set_selected(selected: bool) -> void:
-	texture_rect.set_selected(selected)
-
-func get_card_size() -> Vector2:
-	return texture_rect.card_size
-	
-func get_hover_offset() -> Vector2:
-	return texture_rect.hover_offset
-
-func is_hovered() -> bool:
-	return texture_rect.is_hovered if texture_rect else false
+@export_category("Card components")
+@export var view: CardView
 
 func load_random_image() -> void:
 	var printings_dir: String = "../shared/resources/printings"
@@ -58,5 +35,5 @@ func load_random_image() -> void:
 	
 	print(card_data.image_path)
 	
-	self.set_printing(card_data.image_path)
+	view.set_printing(card_data.image_path)
 	
