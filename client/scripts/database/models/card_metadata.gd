@@ -13,6 +13,7 @@ var text: String = ""
 var power: String = ""
 var toughness: String = ""
 var scryfall_id: String = ""
+var foil_type: int = 0
 
 func _init(
 	uuid: String = "",
@@ -27,6 +28,7 @@ func _init(
 	power: String = "",
 	toughness: String = "",
 	scryfall_id: String = "",
+	foil_type: int = 0,
 ) -> void:
 	self.uuid = uuid 
 	self.name = name 
@@ -39,7 +41,8 @@ func _init(
 	self.text = text 
 	self.power = power 
 	self.toughness = toughness 
-	self.scryfall_id = scryfall_id 
+	self.scryfall_id = scryfall_id
+	self.foil_type = foil_type 
 
 static func from_dict(data: Dictionary) -> CardMetadata:
 	return CardMetadata.new(
@@ -55,6 +58,7 @@ static func from_dict(data: Dictionary) -> CardMetadata:
 		#data.get("power", ""),
 		#data.get("toughness", ""),
 		#data.get("scryfall_id", ""),
+		data.get("foil_type", 0),
 	)
 
 func to_dict() -> Dictionary:
@@ -71,6 +75,7 @@ func to_dict() -> Dictionary:
 		"power": self.power,
 		"toughness": self.toughness,
 		"scryfall_id": self.scryfall_id,
+		"foil_type": self.foil_type,
 	}
 
 func to_turntide_format() -> String:
