@@ -20,6 +20,9 @@
 [ext_resource type="Script" uid="uid://4ny6b5n0ehhl" path="res://scenes/card_viewer_state.gd" id="14_kea5x"]
 [ext_resource type="PackedScene" uid="uid://die2458ml2aad" path="res://scenes/card/card_viewer.tscn" id="15_13gk1"]
 [ext_resource type="PackedScene" uid="uid://c8vc88wmrkyyc" path="res://scenes/log/chat.tscn" id="15_twqac"]
+[ext_resource type="Script" uid="uid://deck_builder_state_script" path="res://states/deck_builder/deck_builder_state.gd" id="16_deck_builder"]
+[ext_resource type="PackedScene" uid="uid://deck_builder_scene" path="res://scenes/deck_builder/deck_builder.tscn" id="17_deck_builder"]
+[ext_resource type="Resource" uid="uid://deck_builder_transition" path="res://resources/transitions/fade_color.tres" id="18_deck_builder"]
 
 [node name="GameController" type="Node" unique_id=532916498 node_paths=PackedStringArray("gui_state_machine")]
 script = ExtResource("1_oy6oc")
@@ -67,6 +70,12 @@ script = ExtResource("12_1m60t")
 packed_scene = ExtResource("11_py7vm")
 transition_config = null
 metadata/_custom_type_script = "uid://15it0w4m8gpk"
+
+[node name="DeckBuilder" type="Node" parent="GameStateMachine" unique_id=999999999]
+script = ExtResource("16_deck_builder")
+packed_scene = ExtResource("17_deck_builder")
+transition_config = ExtResource("18_deck_builder")
+metadata/_custom_type_script = "uid://deck_builder_state_script"
 
 [node name="ContentContainer" type="Node" parent="." unique_id=1199902843]
 

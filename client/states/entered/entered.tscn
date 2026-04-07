@@ -38,6 +38,10 @@ text = "Play"
 layout_mode = 2
 text = "View Cards"
 
+[node name="Deck Builder" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1234567890]
+layout_mode = 2
+text = "Deck Builder"
+
 [node name="Settings" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1857328258]
 layout_mode = 2
 text = "Settings"

@@ -1,0 +1,128 @@
+[gd_scene format=3 uid="uid://deck_builder_scene"]
+
+[ext_resource type="Script" uid="uid://deck_builder_script" path="res://scripts/deck/deck_builder.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://fractal_bg" path="res://scenes/fractal_background.tscn" id="1_bg"]
+
+[node name="DeckBuilder" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Fractal Background" parent="." instance=ExtResource("1_bg")]
+layout_mode = 1
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftPanel" type="PanelContainer" parent="HSplitContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DeckList" type="VBoxContainer" parent="HSplitContainer/LeftPanel"]
+layout_mode = 2
+
+[node name="Header" type="Label" parent="HSplitContainer/LeftPanel/DeckList"]
+layout_mode = 2
+text = "My Decks"
+
+[node name="NewDeckButton" type="Button" parent="HSplitContainer/LeftPanel/DeckList"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "+ New Deck"
+
+[node name="DeckListScroll" type="ScrollContainer" parent="HSplitContainer/LeftPanel/DeckList"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DeckListVBox" type="VBoxContainer" parent="HSplitContainer/LeftPanel/DeckList/DeckListScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MiddlePanel" type="PanelContainer" parent="HSplitContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DeckEditor" type="VBoxContainer" parent="HSplitContainer/MiddlePanel"]
+layout_mode = 2
+
+[node name="DeckNameEdit" type="LineEdit" parent="HSplitContainer/MiddlePanel/DeckEditor"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Deck Name"
+
+[node name="FormatSelect" type="OptionButton" parent="HSplitContainer/MiddlePanel/DeckEditor"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CardCountLabel" type="Label" parent="HSplitContainer/MiddlePanel/DeckEditor"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0 cards"
+
+[node name="CardsScroll" type="ScrollContainer" parent="HSplitContainer/MiddlePanel/DeckEditor"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CardsList" type="VBoxContainer" parent="HSplitContainer/MiddlePanel/DeckEditor/CardsScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="HSplitContainer/MiddlePanel/DeckEditor"]
+layout_mode = 2
+
+[node name="DeleteButton" type="Button" parent="HSplitContainer/MiddlePanel/DeckEditor/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Delete"
+
+[node name="SaveButton" type="Button" parent="HSplitContainer/MiddlePanel/DeckEditor/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save"
+
+[node name="RightPanel" type="PanelContainer" parent="HSplitContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CardSearch" type="VBoxContainer" parent="HSplitContainer/RightPanel"]
+layout_mode = 2
+
+[node name="SearchHeader" type="Label" parent="HSplitContainer/RightPanel/CardSearch"]
+layout_mode = 2
+text = "Search Cards"
+
+[node name="NameFilter" type="LineEdit" parent="HSplitContainer/RightPanel/CardSearch"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Card Name"
+
+[node name="SetFilter" type="LineEdit" parent="HSplitContainer/RightPanel/CardSearch"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Set Code"
+
+[node name="SearchButton" type="Button" parent="HSplitContainer/RightPanel/CardSearch"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Search"
+
+[node name="SearchResultsScroll" type="ScrollContainer" parent="HSplitContainer/RightPanel/CardSearch"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SearchResultsGrid" type="GridContainer" parent="HSplitContainer/RightPanel/CardSearch/SearchResultsScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 3
