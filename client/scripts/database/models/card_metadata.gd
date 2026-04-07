@@ -58,7 +58,6 @@ static func from_dict(data: Dictionary) -> CardMetadata:
 		#data.get("power", ""),
 		#data.get("toughness", ""),
 		#data.get("scryfall_id", ""),
-		data.get("foil_type", 0),
 	)
 
 func to_dict() -> Dictionary:

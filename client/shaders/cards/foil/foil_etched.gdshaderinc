@@ -1,3 +1,5 @@
+#include "foil_common.gdshaderinc"
+
 void etched_foil(in vec2 uv, in float time, out vec3 foil_color, out float foil_mask) {
     vec2 center = uv - 0.5;
     float dist = length(center);

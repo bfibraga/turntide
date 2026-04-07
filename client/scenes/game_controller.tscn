@@ -10,7 +10,6 @@
 [ext_resource type="Resource" uid="uid://c3uhp2d3506i6" path="res://resources/transitions/slide_left.tres" id="6_vi7lc"]
 [ext_resource type="Script" uid="uid://bad2xr0gwfbv1" path="res://states/connected/register_state.gd" id="7_kea5x"]
 [ext_resource type="PackedScene" uid="uid://df5pqld7y87h" path="res://states/connected/register.tscn" id="8_13gk1"]
-[ext_resource type="Resource" uid="uid://qtt40lxvhfo6" path="res://resources/transitions/fade_color.tres" id="9_endrn"]
 [ext_resource type="Script" uid="uid://dwbc0pee0vhur" path="res://states/entered/entered_state.gd" id="10_shnkw"]
 [ext_resource type="PackedScene" uid="uid://dlowcgku3wn2o" path="res://states/entered/entered.tscn" id="11_25rj4"]
 [ext_resource type="PackedScene" uid="uid://r85jixs0mei4" path="res://states/ingame/ingame.tscn" id="11_py7vm"]
@@ -20,9 +19,9 @@
 [ext_resource type="Script" uid="uid://4ny6b5n0ehhl" path="res://scenes/card_viewer_state.gd" id="14_kea5x"]
 [ext_resource type="PackedScene" uid="uid://die2458ml2aad" path="res://scenes/card/card_viewer.tscn" id="15_13gk1"]
 [ext_resource type="PackedScene" uid="uid://c8vc88wmrkyyc" path="res://scenes/log/chat.tscn" id="15_twqac"]
-[ext_resource type="Script" uid="uid://deck_builder_state_script" path="res://states/deck_builder/deck_builder_state.gd" id="16_deck_builder"]
-[ext_resource type="PackedScene" uid="uid://deck_builder_scene" path="res://scenes/deck_builder/deck_builder.tscn" id="17_deck_builder"]
-[ext_resource type="Resource" uid="uid://deck_builder_transition" path="res://resources/transitions/fade_color.tres" id="18_deck_builder"]
+[ext_resource type="Script" uid="uid://cv0luil08eb3q" path="res://states/deck_builder/deck_builder_state.gd" id="16_deck_builder"]
+[ext_resource type="PackedScene" path="res://scenes/deck_builder/deck_builder.tscn" id="17_deck_builder"]
+[ext_resource type="Resource" uid="uid://qtt40lxvhfo6" path="res://resources/transitions/fade_color.tres" id="18_deck_builder"]
 
 [node name="GameController" type="Node" unique_id=532916498 node_paths=PackedStringArray("gui_state_machine")]
 script = ExtResource("1_oy6oc")
@@ -52,7 +51,7 @@ metadata/_custom_type_script = "uid://c06xj1g5oewu4"
 [node name="Register" type="Node" parent="GameStateMachine" unique_id=1423894975]
 script = ExtResource("7_kea5x")
 packed_scene = ExtResource("8_13gk1")
-transition_config = ExtResource("9_endrn")
+transition_config = ExtResource("18_deck_builder")
 metadata/_custom_type_script = "uid://c06xj1g5oewu4"
 
 [node name="Entered" type="Node" parent="GameStateMachine" unique_id=1344573301]
@@ -75,7 +74,6 @@ metadata/_custom_type_script = "uid://15it0w4m8gpk"
 script = ExtResource("16_deck_builder")
 packed_scene = ExtResource("17_deck_builder")
 transition_config = ExtResource("18_deck_builder")
-metadata/_custom_type_script = "uid://deck_builder_state_script"
 
 [node name="ContentContainer" type="Node" parent="." unique_id=1199902843]
 

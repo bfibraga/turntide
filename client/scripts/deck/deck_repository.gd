@@ -1,24 +1,3 @@
-/*
-Copyright © 2026 Bruno Braga bf.braga@campus.fct.unl.pt
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
 class_name DeckRepository
 extends RefCounted
 
@@ -49,7 +28,7 @@ func _get_file_path(deck_name: String) -> String:
 	safe_name = safe_name.replace("/", "").replace("\\", "")
 	return "user://%s/%s%s" % [DECKS_DIR, safe_name, FILE_EXTENSION]
 
-func save(deck: Deck) -> bool:
+func save(deck: DeckCard.Deck) -> bool:
 	var path: String = _get_file_path(deck.name)
 	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
 	
@@ -64,7 +43,7 @@ func save(deck: Deck) -> bool:
 	_deck_cache[deck.name] = deck
 	return true
 
-func load(deck_name: String) -> Deck:
+func load(deck_name: String) -> DeckCard.Deck:
 	if _deck_cache.has(deck_name):
 		return _deck_cache[deck_name]
 	
@@ -84,7 +63,7 @@ func load(deck_name: String) -> Deck:
 		push_error("Failed to parse deck JSON: " + json.get_error_message())
 		return null
 	
-	var deck: Deck = Deck.from_dict(json.data)
+	var deck: DeckCard.Deck = DeckCard.Deck.from_dict(json.data)
 	_deck_cache[deck.name] = deck
 	return deck
 

@@ -1,6 +1,8 @@
 shader_type canvas_item;
 
 #include "res://shaders/cards/foil/foil_common.gdshaderinc"
+#include "res://shaders/cards/foil/foil_regular.gdshaderinc"
+#include "res://shaders/cards/foil/foil_etched.gdshaderinc"
 
 uniform int foil_type : hint_range(0, 2) = 0;
 uniform float shimmer_speed : hint_range(0.1, 5.0) = 1.0;
@@ -11,7 +13,7 @@ void fragment() {
     
     if (foil_type == 0) {
         COLOR = texColor;
-        return;
+        discard;
     }
     
     vec2 uv = UV;
@@ -20,10 +22,8 @@ void fragment() {
     float foil_mask = 0.0;
     
     if (foil_type == 1) {
-        #include "res://shaders/cards/foil/foil_regular.gdshaderinc"
         regular_foil(uv, time, foil_color, foil_mask);
     } else if (foil_type == 2) {
-        #include "res://shaders/cards/foil/foil_etched.gdshaderinc"
         etched_foil(uv, time, foil_color, foil_mask);
     }
     

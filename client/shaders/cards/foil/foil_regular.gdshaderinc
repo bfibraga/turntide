@@ -1,3 +1,5 @@
+#include "foil_common.gdshaderinc"
+
 void regular_foil(in vec2 uv, in float time, out vec3 foil_color, out float foil_mask) {
     float hue = uv.x + uv.y * 0.5 + time * 0.1;
     hue = fract(hue);

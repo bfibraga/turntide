@@ -37,7 +37,7 @@ func search_cards(
 	SELECT * FROM {0}
 	WHERE 1=1
 		AND (:name is NULL OR name LIKE :name)
-		AND (:setcode IS NULL OR setcode = :setcode)
+		AND (:setcode IS NULL OR setcode LIKE :setcode)
 	ORDER BY {0}.name ASC
 	LIMIT :limit 
 	OFFSET :offset

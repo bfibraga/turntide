@@ -39,34 +39,14 @@ expand_to_text_length = true
 script = ExtResource("3_3157e")
 metadata/_custom_type_script = "uid://nv5mq1l585aj"
 
-[node name="Set" type="LineEdit" parent="VBoxContainer/Header" unique_id=927897093]
+[node name="Set" type="LineEdit" parent="VBoxContainer/Header" unique_id=885066875]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Set Code"
 expand_to_text_length = true
-
-[node name="Page" type="SpinBox" parent="VBoxContainer/Header" unique_id=1088731111]
-unique_name_in_owner = true
-layout_mode = 2
-min_value = 1.0
-max_value = 10.0
-value = 10.0
-rounded = true
-alignment = 1
-update_on_text_changed = true
-prefix = "Page"
-
-[node name="Total" type="SpinBox" parent="VBoxContainer/Header" unique_id=1112656889]
-unique_name_in_owner = true
-layout_mode = 2
-min_value = 1.0
-max_value = 10.0
-value = 10.0
-rounded = true
-alignment = 1
-update_on_text_changed = true
-prefix = "Total"
+script = ExtResource("3_3157e")
+metadata/_custom_type_script = "uid://nv5mq1l585aj"
 
 [node name="Back" type="Button" parent="VBoxContainer/Header" unique_id=152788252]
 unique_name_in_owner = true
@@ -92,3 +72,27 @@ columns = 3
 [node name="Card Details" type="Control" parent="VBoxContainer/Main" unique_id=314318673]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="Footer" type="HBoxContainer" parent="VBoxContainer" unique_id=1054671219]
+layout_mode = 2
+alignment = 1
+
+[node name="Previous" type="Button" parent="VBoxContainer/Footer" unique_id=1746941151]
+unique_name_in_owner = true
+layout_mode = 2
+text = "<"
+
+[node name="Container" type="CenterContainer" parent="VBoxContainer/Footer" unique_id=1331347550]
+layout_mode = 2
+
+[node name="Page Number" type="Label" parent="VBoxContainer/Footer/Container" unique_id=217513152]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Next" type="Button" parent="VBoxContainer/Footer" unique_id=1523449536]
+unique_name_in_owner = true
+layout_mode = 2
+text = ">"

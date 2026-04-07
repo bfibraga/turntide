@@ -29,25 +29,48 @@ var current_deck: Deck = null
 @onready var format_select: OptionButton = $"%FormatSelect"
 @onready var card_count_label: Label = $"%CardCountLabel"
 @onready var cards_list: VBoxContainer = $"%CardsList"
-@onready var name_filter: LineEdit = $"%NameFilter"
-@onready var set_filter: LineEdit = $"%SetFilter"
-@onready var search_button: Button = $"%SearchButton"
+
+@onready var name_filter: LineEdit = $"%CardName"
+@onready var set_filter: LineEdit = $"%Set"
 @onready var search_results_grid: GridContainer = $"%SearchResultsGrid"
+@onready var page_number_label: Label = $"%Page Number"
+
+@onready var previous_button: Button = $"%Previous"
+@onready var next_button: Button = $"%Next"
+@onready var back_button: Button = $"%Back"
 
 var deck_list: Array[String] = []
 var search_results: Array[CardMetadata] = []
+var current_page: int = 1
+var total_pages: int = 1
+var page_size: int = 20
+var search_name: String = ""
+var search_set: String = ""
 
 func _ready() -> void:
+	RepositoryFactory.new_card_repository()
+	Global.card_repository.open()
+	
 	deck_service = DeckService.new(Global.card_repository)
 	_setup_format_dropdown()
 	_load_deck_list()
 	_connect_signals()
+	_perform_search()
 
 func _connect_signals() -> void:
 	$"%NewDeckButton".pressed.connect(_on_new_deck_pressed)
 	$"%SaveButton".pressed.connect(_on_save_pressed)
-	$"%DeleteButton".pressed._pressed.connect(_on_delete_pressed)
-	search_button.pressed.connect(_on_search_pressed)
+	$"%DeleteButton".pressed.connect(_on_delete_pressed)
+	
+	back_button.pressed.connect(_on_back_pressed)
+	previous_button.pressed.connect(_on_previous_pressed)
+	next_button.pressed.connect(_on_next_pressed)
+	
+	if name_filter is SearchLineEdit:
+		(name_filter as SearchLineEdit).executed_search.connect(_on_name_search_executed)
+	if set_filter is SearchLineEdit:
+		(set_filter as SearchLineEdit).executed_search.connect(_on_set_search_executed)
+	
 	deck_name_edit.text_changed.connect(_on_deck_name_changed)
 	format_select.item_selected.connect(_on_format_selected)
 
@@ -140,6 +163,9 @@ func _on_delete_pressed() -> void:
 		_load_deck_list()
 		_update_deck_editor()
 
+func _on_back_pressed() -> void:
+	Global.game_controller.transition_gui("Entered")
+
 func _on_deck_name_changed(new_text: String) -> void:
 	if current_deck != null:
 		current_deck.name = new_text
@@ -148,17 +174,35 @@ func _on_format_selected(index: int) -> void:
 	if current_deck != null:
 		current_deck.format = format_select.get_item_text(index)
 
-func _on_search_pressed() -> void:
-	var query: Dictionary = {}
-	if not name_filter.text.is_empty():
-		query["name"] = name_filter.text
-	if not set_filter.text.is_empty():
-		query["setcode"] = set_filter.text
-	query["page"] = 1
-	query["page_size"] = 20
+func _on_name_search_executed(text: String) -> void:
+	search_name = text
+	current_page = 1
+	_perform_search()
+
+func _on_set_search_executed(text: String) -> void:
+	search_set = text
+	current_page = 1
+	_perform_search()
+
+func _perform_search() -> void:
+	var query: Dictionary[String, Variant] = {}
+	
+	if not search_name.is_empty():
+		query["name"] = search_name
+	if not search_set.is_empty():
+		query["setcode"] = search_set
+	
+	query["page"] = current_page
+	query["page_size"] = page_size
 	
 	search_results = Global.card_repository.search_cards(query)
+	
+	total_pages = max(1, ceil(float(search_results.size()) / float(page_size)))
+	if search_results.size() == 0:
+		total_pages = 1
+	
 	_update_search_results()
+	_update_pagination()
 
 func _update_search_results() -> void:
 	for child in search_results_grid.get_children():
@@ -169,6 +213,21 @@ func _update_search_results() -> void:
 		button.text = card.name
 		button.pressed.connect(_on_card_result_clicked.bind(card.uuid))
 		search_results_grid.add_child(button)
+
+func _update_pagination() -> void:
+	page_number_label.text = str(current_page)
+	previous_button.disabled = current_page <= 1
+	next_button.disabled = current_page >= total_pages
+
+func _on_previous_pressed() -> void:
+	if current_page > 1:
+		current_page -= 1
+		_perform_search()
+
+func _on_next_pressed() -> void:
+	if current_page < total_pages:
+		current_page += 1
+		_perform_search()
 
 func _on_card_result_clicked(card_uuid: String) -> void:
 	if current_deck != null:

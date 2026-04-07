@@ -4,7 +4,10 @@
 [ext_resource type="Shader" uid="uid://cp7ijn6q5bh8w" path="res://shaders/cards/3d_perspective.gdshader" id="2_yntjh"]
 [ext_resource type="Script" uid="uid://chemdt4pxd7yn" path="res://scripts/card/card_hover.gd" id="3_3dsjj"]
 [ext_resource type="Shader" uid="uid://cmmkabcp8y12j" path="res://shaders/cards/card_node.gdshader" id="4_6vl1k"]
+[ext_resource type="Texture2D" uid="uid://bsdvhdnxicqae" path="res://resources/sprites/back_card.png" id="5_6vl1k"]
 [ext_resource type="Script" uid="uid://dwe223lj5y5it" path="res://scripts/card/card_texture.gd" id="5_cx6ix"]
+[ext_resource type="Shader" uid="uid://cokvgrbf4l1j8" path="res://shaders/cards/foil/foil_base.gdshader" id="6_3dsjj"]
+[ext_resource type="Script" uid="uid://c7txq56l6rjy5" path="res://scripts/card/foil_overlay.gd" id="7_6vl1k"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_s42fv"]
 resource_local_to_scene = true
@@ -30,8 +33,12 @@ shader_parameter/_mousePos = Vector2(0, 0)
 shader = ExtResource("4_6vl1k")
 shader_parameter/_cornerRadius = 65.0000030875
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_aim30"]
-load_path = "res://.godot/imported/Tidus,_Yuna's_Guardian_FIC_97b63679.jpg-d8125caf4c1f54916842bdf66dfa2e9a.ctex"
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cx6ix"]
+resource_local_to_scene = true
+shader = ExtResource("6_3dsjj")
+shader_parameter/foil_type = 1
+shader_parameter/shimmer_speed = 1.0
+shader_parameter/foil_intensity = 0.8
 
 [node name="View" type="Control" unique_id=1111885400]
 layout_mode = 3
@@ -70,10 +77,21 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(125, 175)
 size_flags_horizontal = 4
-texture = SubResource("CompressedTexture2D_aim30")
+texture = ExtResource("5_6vl1k")
 expand_mode = 1
 stretch_mode = 4
 script = ExtResource("5_cx6ix")
+
+[node name="FoilOverlay" type="ColorRect" parent="SubViewportContainer/SubViewport" unique_id=1178126225]
+visible = false
+material = SubResource("ShaderMaterial_cx6ix")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("7_6vl1k")
+metadata/_custom_type_script = "uid://c7txq56l6rjy5"
 
 [connection signal="mouse_entered" from="SubViewportContainer/SubViewport/TextureRect" to="SubViewportContainer" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="SubViewportContainer/SubViewport/TextureRect" to="SubViewportContainer" method="_on_mouse_exited"]
