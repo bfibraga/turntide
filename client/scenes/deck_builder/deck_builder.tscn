@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://pgd2yhn11go0" path="res://scenes/fractal_background.tscn" id="1_bg"]
 [ext_resource type="Script" uid="uid://bbamj3vvsp44e" path="res://scripts/deck/deck_builder.gd" id="1_script"]
-[ext_resource type="Script" uid="uid://nv5mq1l585aj" path="res://scripts/utils/search_line_edit.gd" id="2_search"]
+[ext_resource type="Script" uid="uid://nv5mq1l585aj" path="res://scripts/utils/search_line_edit.gd" id="3_mbyxj"]
 
 [node name="DeckBuilder" type="Control" unique_id=2111896427]
 layout_mode = 3
@@ -16,161 +16,123 @@ script = ExtResource("1_script")
 [node name="Fractal Background" parent="." unique_id=1258931789 instance=ExtResource("1_bg")]
 layout_mode = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=615853635]
+[node name="HSplitContainer" type="HSplitContainer" parent="." unique_id=1725595014]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-alignment = 1
+split_offsets = PackedInt32Array(0, 0)
 
-[node name="Header" type="HBoxContainer" parent="VBoxContainer" unique_id=639454208]
-layout_mode = 2
-size_flags_vertical = 0
-alignment = 1
-
-[node name="CardName" type="LineEdit" parent="VBoxContainer/Header" unique_id=1083811287]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "Card Name "
-expand_to_text_length = true
-script = ExtResource("2_search")
-metadata/_custom_type_script = "uid://nv5mq1l585aj"
-
-[node name="Set" type="LineEdit" parent="VBoxContainer/Header" unique_id=885066875]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-placeholder_text = "Set Code"
-expand_to_text_length = true
-script = ExtResource("2_search")
-metadata/_custom_type_script = "uid://nv5mq1l585aj"
-
-[node name="Back" type="Button" parent="VBoxContainer/Header" unique_id=152788252]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Back"
-
-[node name="Main" type="HSplitContainer" parent="VBoxContainer" unique_id=2100763760]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Search Results" type="ScrollContainer" parent="VBoxContainer/Main" unique_id=1441078337]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="SearchResultsGrid" type="GridContainer" parent="VBoxContainer/Main/Search Results" unique_id=1971123125]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-columns = 3
-
-[node name="Card Details" type="Control" parent="VBoxContainer/Main" unique_id=314318673]
+[node name="LeftPanel" type="PanelContainer" parent="HSplitContainer" unique_id=2100826069]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Footer" type="HBoxContainer" parent="VBoxContainer" unique_id=1054671219]
-layout_mode = 2
-alignment = 1
-
-[node name="Previous" type="Button" parent="VBoxContainer/Footer" unique_id=1746941151]
-unique_name_in_owner = true
-layout_mode = 2
-text = "<"
-
-[node name="Container" type="CenterContainer" parent="VBoxContainer/Footer" unique_id=1331347550]
+[node name="DeckList" type="VBoxContainer" parent="HSplitContainer/LeftPanel" unique_id=1848421962]
 layout_mode = 2
 
-[node name="Page Number" type="Label" parent="VBoxContainer/Footer/Container" unique_id=217513152]
-unique_name_in_owner = true
-layout_mode = 2
-text = "0"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Next" type="Button" parent="VBoxContainer/Footer" unique_id=1523449536]
-unique_name_in_owner = true
-layout_mode = 2
-text = ">"
-
-[node name="LeftPanel" type="PanelContainer" parent="." unique_id=2100826069]
-visible = false
-layout_mode = 1
-anchors_preset = 0
-offset_left = 10.0
-offset_top = 10.0
-offset_right = 210.0
-offset_bottom = 590.0
-
-[node name="DeckList" type="VBoxContainer" parent="LeftPanel" unique_id=1848421962]
-layout_mode = 2
-
-[node name="Header" type="Label" parent="LeftPanel/DeckList" unique_id=191069992]
+[node name="Header" type="Label" parent="HSplitContainer/LeftPanel/DeckList" unique_id=191069992]
 layout_mode = 2
 text = "My Decks"
 
-[node name="NewDeckButton" type="Button" parent="LeftPanel/DeckList" unique_id=102659363]
+[node name="NewDeckButton" type="Button" parent="HSplitContainer/LeftPanel/DeckList" unique_id=102659363]
 unique_name_in_owner = true
 layout_mode = 2
 text = "+ New Deck"
 
-[node name="DeckListScroll" type="ScrollContainer" parent="LeftPanel/DeckList" unique_id=506289600]
+[node name="DeckListScroll" type="ScrollContainer" parent="HSplitContainer/LeftPanel/DeckList" unique_id=506289600]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="DeckListVBox" type="VBoxContainer" parent="LeftPanel/DeckList/DeckListScroll" unique_id=398990929]
+[node name="DeckListVBox" type="VBoxContainer" parent="HSplitContainer/LeftPanel/DeckList/DeckListScroll" unique_id=398990929]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="MiddlePanel" type="PanelContainer" parent="." unique_id=941655076]
-visible = false
-layout_mode = 1
-anchors_preset = 0
-offset_left = 220.0
-offset_top = 10.0
-offset_right = 780.0
-offset_bottom = 590.0
+[node name="MiddlePanel" type="PanelContainer" parent="HSplitContainer" unique_id=941655076]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="DeckEditor" type="VBoxContainer" parent="MiddlePanel" unique_id=793242563]
+[node name="DeckEditor" type="VBoxContainer" parent="HSplitContainer/MiddlePanel" unique_id=793242563]
 layout_mode = 2
 
-[node name="DeckNameEdit" type="LineEdit" parent="MiddlePanel/DeckEditor" unique_id=416745447]
+[node name="DeckNameEdit" type="LineEdit" parent="HSplitContainer/MiddlePanel/DeckEditor" unique_id=416745447]
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Deck Name"
 
-[node name="FormatSelect" type="OptionButton" parent="MiddlePanel/DeckEditor" unique_id=1727182053]
+[node name="FormatSelect" type="OptionButton" parent="HSplitContainer/MiddlePanel/DeckEditor" unique_id=1727182053]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="CardCountLabel" type="Label" parent="MiddlePanel/DeckEditor" unique_id=278433650]
+[node name="CardCountLabel" type="Label" parent="HSplitContainer/MiddlePanel/DeckEditor" unique_id=278433650]
 unique_name_in_owner = true
 layout_mode = 2
 text = "0 cards"
 
-[node name="CardsScroll" type="ScrollContainer" parent="MiddlePanel/DeckEditor" unique_id=1545340119]
+[node name="CardsScroll" type="ScrollContainer" parent="HSplitContainer/MiddlePanel/DeckEditor" unique_id=1545340119]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="CardsList" type="VBoxContainer" parent="MiddlePanel/DeckEditor/CardsScroll" unique_id=953676157]
+[node name="CardsList" type="VBoxContainer" parent="HSplitContainer/MiddlePanel/DeckEditor/CardsScroll" unique_id=953676157]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Actions" type="HBoxContainer" parent="MiddlePanel/DeckEditor" unique_id=2014010080]
+[node name="Actions" type="HBoxContainer" parent="HSplitContainer/MiddlePanel/DeckEditor" unique_id=2014010080]
 layout_mode = 2
 
-[node name="DeleteButton" type="Button" parent="MiddlePanel/DeckEditor/Actions" unique_id=463436613]
+[node name="DeleteButton" type="Button" parent="HSplitContainer/MiddlePanel/DeckEditor/Actions" unique_id=463436613]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Delete"
 
-[node name="SaveButton" type="Button" parent="MiddlePanel/DeckEditor/Actions" unique_id=1735618850]
+[node name="SaveButton" type="Button" parent="HSplitContainer/MiddlePanel/DeckEditor/Actions" unique_id=1735618850]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Save"
+
+[node name="RightPanel" type="PanelContainer" parent="HSplitContainer" unique_id=942895061]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CardSearch" type="VBoxContainer" parent="HSplitContainer/RightPanel" unique_id=940511659]
+layout_mode = 2
+
+[node name="SearchHeader" type="Label" parent="HSplitContainer/RightPanel/CardSearch" unique_id=722291098]
+layout_mode = 2
+text = "Search Cards"
+
+[node name="NameFilter" type="LineEdit" parent="HSplitContainer/RightPanel/CardSearch" unique_id=523018664]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Card Name"
+script = ExtResource("3_mbyxj")
+metadata/_custom_type_script = "uid://nv5mq1l585aj"
+
+[node name="SetFilter" type="LineEdit" parent="HSplitContainer/RightPanel/CardSearch" unique_id=459823657]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Set Code"
+script = ExtResource("3_mbyxj")
+metadata/_custom_type_script = "uid://nv5mq1l585aj"
+
+[node name="SearchButton" type="Button" parent="HSplitContainer/RightPanel/CardSearch" unique_id=795278858]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Search"
+
+[node name="SearchResultsScroll" type="ScrollContainer" parent="HSplitContainer/RightPanel/CardSearch" unique_id=1078289877]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SearchResultsGrid" type="FlowContainer" parent="HSplitContainer/RightPanel/CardSearch/SearchResultsScroll" unique_id=1920075569]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+alignment = 1

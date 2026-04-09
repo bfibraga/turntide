@@ -62,12 +62,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Grid" type="GridContainer" parent="VBoxContainer/Main/Card List" unique_id=1971123125]
+[node name="Grid" type="FlowContainer" parent="VBoxContainer/Main/Card List" unique_id=136783085]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-columns = 3
+alignment = 1
+last_wrap_alignment = 1
 
 [node name="Card Details" type="Control" parent="VBoxContainer/Main" unique_id=314318673]
 layout_mode = 2
