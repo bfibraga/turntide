@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://pgd2yhn11go0" path="res://scenes/fractal_background.tscn" id="2_ll2wp"]
 [ext_resource type="PackedScene" uid="uid://b8egimx27vbxu" path="res://scenes/hand/hand.tscn" id="3_ube6o"]
+[ext_resource type="Script" path="res://states/ingame/mouse_tracker.gd" id="4_ku7qw"]
 
 [node name="Main" type="Control" unique_id=1006834727]
 layout_mode = 3
@@ -10,6 +11,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="MouseTracker" type="Node" parent="."]
+script = ExtResource("4_ku7qw")
 
 [node name="Fractal Background" parent="." unique_id=1618489495 instance=ExtResource("2_ll2wp")]
 layout_mode = 1

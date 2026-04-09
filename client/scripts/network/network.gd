@@ -22,3 +22,6 @@ class RegisterRequestMessage extends _packets.RegisterRequestMessage:
 
 class DenyResponseMessage extends _packets.DenyResponseMessage:
 	pass
+
+class PlayerMessage extends _packets.PlayerMessage:
+	pass

@@ -42,3 +42,16 @@ func new_register_request(username: String, password: String) -> packets.Packet:
 	register_msg.set_username(username)
 	register_msg.set_password(password)
 	return packet
+
+func new_player_msg(mouse_x: float, mouse_y: float, player_name: String = "", player_id: int = 0) -> packets.Packet:
+	var packet : packets.Packet = packets.Packet.new()
+	var player_msg : packets.PlayerMessage = packet.new_player()
+	
+	if player_id == 0:
+		player_id = Global.client_id
+	packet.set_sender_id(player_id)
+	
+	player_msg.set_mouse_x(mouse_x)
+	player_msg.set_mouse_y(mouse_y)
+	
+	return packet
