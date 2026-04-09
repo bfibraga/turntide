@@ -26,11 +26,12 @@ static func get_display_name(format: Format) -> String:
 		Format.CUSTOM: return "Custom"
 		_: return "Unknown"
 
-static func get_all_display_names() -> Array[String]:
-	var names: Array[String] = []
-	for format in Format.keys():
-		names.append(get_display_name(Format[format]))
-	return names
+static func get_all_display_names() -> PackedStringArray:	
+	return Format.keys().map(
+		func(format) -> String: 
+			return get_display_name(Format[format])
+	) as PackedStringArray
+	
 
 static func from_string(str: String) -> Format:
 	var upper: String = str.to_upper().replace(" ", "_")
