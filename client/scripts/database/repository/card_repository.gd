@@ -1,5 +1,5 @@
 class_name CardRepository
-extends Repository
+extends SQLRepository
 
 const _table_name : String = "cards"
 const DEFAULT_DB_PATH : String = "res://../shared/resources/cards.db"
@@ -34,19 +34,23 @@ func search_cards(
 	var offset: int = (search_params.get("page", 1) - 1) * limit
 
 	var query: String = """
-	SELECT * FROM {0}
+	SELECT * FROM {table_name}
 	WHERE 1=1
 		AND (:name is NULL OR name LIKE :name)
 		AND (:setcode IS NULL OR setcode LIKE :setcode)
-	ORDER BY {0}.name ASC
+		AND (:uuid IS NULL OR uuid LIKE :uuid)
+	ORDER BY {table_name}.name ASC
 	LIMIT :limit 
 	OFFSET :offset
 	;
-	""".format([_table_name])
+	""".format({
+		"table_name": _table_name
+	})
 
 	var query_params : Dictionary[String, Variant] = {
 		"name": _escape_string(search_params.get("name")),
 		"setcode": _escape_string(search_params.get("setcode")),
+		"uuid": _escape_string(search_params.get("uuid")),
 		"limit": limit,
 		"offset": offset,
 	}
@@ -62,7 +66,7 @@ func search_cards(
 		var metadata : CardMetadata = CardMetadata.from_dict(data)
 		result.append(metadata)
 		
-	return result
+	return result	
 
 func _escape_string(value: Variant) -> Variant:
 	if !value or value is not String or value.is_empty():
