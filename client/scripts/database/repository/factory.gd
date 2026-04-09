@@ -4,7 +4,10 @@ func new_card_repository(path: String = CardRepository.DEFAULT_DB_PATH) -> Repos
 	var db : SQLite = SQLite.new()
 	db.path = path
 	
-	var repo : CardRepository = CardRepository.new(db)
-	Global.card_repository = repo
+	var repo : CardRepository = CardRepository.new(db)	
+	return repo
+
+func new_deck_repository(path: String = DeckRepository.DECKS_DIR) -> Repository:
+	var repo: DeckRepository = DeckRepository.new()
 	
 	return repo
