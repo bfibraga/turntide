@@ -4,5 +4,7 @@ shared/resources/bin/*
 shared/resources/printings/*
 !shared/resources/printings/.gitkeep
 
+shared/resources/*.db
+
 # Worktrees for isolated development
 .worktrees/
