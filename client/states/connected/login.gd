@@ -46,7 +46,8 @@ func _on_login_pressed() -> void:
 	WS.send(packet)
 
 func _on_register_pressed() -> void:
-	Global.game_controller.transition_gui(RegisterState.Name())
+	#Global.game_controller.transition_gui(RegisterState.Name())
+	pass
 
 func _on_username_submitted(_new_text: String) -> void:
 	_on_login_pressed()
@@ -57,7 +58,7 @@ func _on_password_submitted(_new_text: String) -> void:
 func _on_auth_success(username: String) -> void:
 	password_input.text = ""
 	logger.success("Welcome back, %s" % username)
-	Global.game_controller.transition_gui(EnteredState.Name())
+	#Global.game_controller.transition_gui(EnteredState.Name())
 
 func _on_auth_failed(reason: String) -> void:
 	error_label.text = "Login failed: " + reason

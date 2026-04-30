@@ -1,4 +1,4 @@
-extends Node
+class_name TransitionManager extends Node
 
 ## Signal emitted when transition completes
 signal transition_completed

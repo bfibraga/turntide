@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"flag"
 	"fmt"
 	"log/slog"
@@ -8,14 +9,16 @@ import (
 	"os"
 	"runtime/debug"
 
+	_ "github.com/mattn/go-sqlite3"
+
 	"github.com/bfibraga/turntide/server/internal/server"
 	"github.com/bfibraga/turntide/server/internal/server/clients"
-	"github.com/bfibraga/turntide/server/internal/server/repository"
+	"github.com/bfibraga/turntide/server/internal/server/user"
 )
 
 var (
 	port   = flag.Int("port", 4000, "port to listen on")
-	dbPath = flag.String("db-path", repository.DefaultDatabasePath, "path to the server database")
+	dbPath = flag.String("db-path", "shared/resources/server.db", "path to the server database")
 )
 
 func main() {
@@ -34,17 +37,19 @@ func main() {
 
 	slog.SetDefault(logger)
 
-	// Initialize database and repository
-	repoFactory, err := repository.NewFactory(*dbPath, logger)
+	conn, err := sql.Open("sqlite3", *dbPath)
 	if err != nil {
-		logger.Error("failed to initialize database", "error", err)
+		logger.Error("failed to open database", "error", err)
 		os.Exit(1)
 	}
-	defer repoFactory.Close()
+	defer conn.Close()
 
-	userRepo := repoFactory.NewUserRepository()
+	userRepo := user.NewSQLiteUserRepository(conn)
+	userService := user.NewService(userRepo)
 
-	hub := server.NewHub(logger, userRepo)
+	defer userRepo.Close()
+
+	hub := server.NewHub(logger, userService)
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		hub.Serve(clients.NewWebSocketClient, w, r)

@@ -14,6 +14,9 @@ func _init(path: String) -> void:
 		push_error("Executable command not found!")
 
 func execute_async(arguments: PackedStringArray) -> void:
+	if _thread:
+		_thread.wait_to_finish()
+	
 	_thread = Thread.new()
 	_thread.start(_run_command.bind(arguments))
 

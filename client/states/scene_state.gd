@@ -9,4 +9,5 @@ func enter_scene() -> void:
 		push_error("Packed scene not registered in state %s" % self.Name())
 		return
 	
-	TransitionManager.transition_to(packed_scene, transition_config)
+	#if Global.transition_manager: 
+	Global.transition_manager.transition_to(packed_scene, transition_config)

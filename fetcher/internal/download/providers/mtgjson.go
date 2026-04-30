@@ -22,13 +22,13 @@ var (
 func MTGJSONDownload(dbPath string) error {
 	return download.NewDownloadProviderBuilder().
 		WithSteps(
-			HttpRequest(AllPrintingsURL),
-			ParseSaveContent(dbPath),
+			httpRequest(AllPrintingsURL),
+			parseSaveContent(dbPath),
 		).
 		Download()
 }
 
-func HttpRequest(url string) func(ctx context.Context) error {
+func httpRequest(url string) func(ctx context.Context) error {
 	return func(ctx context.Context) error {
 		req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 		if err != nil {
@@ -52,7 +52,7 @@ func HttpRequest(url string) func(ctx context.Context) error {
 	}
 }
 
-func ParseSaveContent(dbPath string) func(ctx context.Context) error {
+func parseSaveContent(dbPath string) func(ctx context.Context) error {
 	return func(ctx context.Context) error {
 		decoded, err := decodeGzip()
 		if err != nil {
@@ -64,7 +64,7 @@ func ParseSaveContent(dbPath string) func(ctx context.Context) error {
 			return nil
 		}
 
-	  err = os.WriteFile(dbPath, decoded, 0644)
+		err = os.WriteFile(dbPath, decoded, 0644)
 
 		return err
 	}

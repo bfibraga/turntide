@@ -12,5 +12,15 @@ func _ready() -> void:
 	if state_machine:
 		state_machine.state_changed.connect(_on_state_changed)
 
+	self.gui_input.connect(_on_gui_input)
+
 func _on_state_changed(_from: State, to: State) -> void:
 	state_label.text = "State: %s" % to.Name()
+
+func _on_gui_input(event: InputEvent) -> void:
+	print("Gui input") 
+	
+	if event.is_action_released("ui_toggle_debug"):
+		self.visible = not self.visible
+	
+	pass

@@ -45,7 +45,8 @@ func new_register_request(username: String, password: String) -> packets.Packet:
 
 func new_player_msg(mouse_x: float, mouse_y: float, player_name: String = "", player_id: int = 0) -> packets.Packet:
 	var packet : packets.Packet = packets.Packet.new()
-	var player_msg : packets.PlayerMessage = packet.new_player()
+	#var player_msg : packets.Player = PacketFactory.new_player()
+	var player_msg : packets.Packet = PacketFactory.new_chat()
 	
 	if player_id == 0:
 		player_id = Global.client_id

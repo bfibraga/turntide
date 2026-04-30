@@ -55,7 +55,7 @@ func _on_fetcher_finished(_output: Array, exit_code: int, metadata: CardMetadata
 	_active_fetcher = null  # Release reference
 	
 	if exit_code != 0:
-		push_error("FetcherCLI failed for card: ", metadata.name)
+		push_error("FetcherCLI failed for card %s, error code: %d" % [metadata.name, exit_code])
 		return
 	
 	# Use WorkerThreadPool to process the "Post-Download" logic

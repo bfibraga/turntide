@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://c74205nfbvbkq"]
 
 [ext_resource type="Script" uid="uid://bink4udqx5ooi" path="res://scripts/game_controller.gd" id="1_oy6oc"]
-[ext_resource type="Script" uid="uid://bb50oxlatsq3p" path="res://states/state_machine.gd" id="2_twqac"]
+[ext_resource type="Script" uid="uid://byiuvyakhj5fc" path="res://scripts/utils/transition_manager.gd" id="2_shnkw"]
 [ext_resource type="Script" uid="uid://bfppetk35xjpo" path="res://states/connected/connected.gd" id="3_25rj4"]
+[ext_resource type="Script" uid="uid://cams541rpbis3" path="res://states/scene_state_machine.gd" id="3_shnkw"]
 [ext_resource type="Script" uid="uid://ckwpv8qfylam6" path="res://states/closed/closed_state.gd" id="3_wksuf"]
 [ext_resource type="PackedScene" uid="uid://li7tg4dxthlq" path="res://states/closed/close.tscn" id="4_wf0ff"]
 [ext_resource type="Script" uid="uid://ck6yrhsphc51c" path="res://states/connected/login_state.gd" id="4_wksuf"]
@@ -11,16 +12,10 @@
 [ext_resource type="Script" uid="uid://bad2xr0gwfbv1" path="res://states/connected/register_state.gd" id="7_kea5x"]
 [ext_resource type="PackedScene" uid="uid://df5pqld7y87h" path="res://states/connected/register.tscn" id="8_13gk1"]
 [ext_resource type="Script" uid="uid://dwbc0pee0vhur" path="res://states/entered/entered_state.gd" id="10_shnkw"]
-[ext_resource type="PackedScene" uid="uid://dlowcgku3wn2o" path="res://states/entered/entered.tscn" id="11_25rj4"]
-[ext_resource type="PackedScene" uid="uid://r85jixs0mei4" path="res://states/ingame/ingame.tscn" id="11_py7vm"]
-[ext_resource type="Script" uid="uid://15it0w4m8gpk" path="res://states/ingame/ingame.gd" id="12_1m60t"]
 [ext_resource type="Script" uid="uid://djtvn14k7bmpo" path="res://scripts/debug/debug_menu.gd" id="13_fpu5w"]
 [ext_resource type="Script" uid="uid://c87m1aifkgnss" path="res://scripts/debug/fps_counter.gd" id="14_3d517"]
-[ext_resource type="Script" uid="uid://4ny6b5n0ehhl" path="res://scenes/card_viewer_state.gd" id="14_kea5x"]
-[ext_resource type="PackedScene" uid="uid://die2458ml2aad" path="res://scenes/card/card_viewer.tscn" id="15_13gk1"]
+[ext_resource type="PackedScene" uid="uid://b8gd3m7b136nk" path="res://scenes/main.tscn" id="14_py7vm"]
 [ext_resource type="PackedScene" uid="uid://c8vc88wmrkyyc" path="res://scenes/log/chat.tscn" id="15_twqac"]
-[ext_resource type="Script" uid="uid://cv0luil08eb3q" path="res://states/deck_builder/deck_builder_state.gd" id="16_deck_builder"]
-[ext_resource type="PackedScene" path="res://scenes/deck_builder/deck_builder.tscn" id="17_deck_builder"]
 [ext_resource type="Resource" uid="uid://qtt40lxvhfo6" path="res://resources/transitions/fade_color.tres" id="18_deck_builder"]
 
 [node name="GameController" type="Node" unique_id=532916498 node_paths=PackedStringArray("gui_state_machine")]
@@ -28,8 +23,14 @@ script = ExtResource("1_oy6oc")
 gui_state_machine = NodePath("GameStateMachine")
 metadata/_custom_type_script = "uid://bink4udqx5ooi"
 
-[node name="GameStateMachine" type="Node" parent="." unique_id=1500622133 node_paths=PackedStringArray("initial_state")]
-script = ExtResource("2_twqac")
+[node name="TransitionManager" type="Node" parent="." unique_id=1444275203 node_paths=PackedStringArray("content_container")]
+script = ExtResource("2_shnkw")
+content_container = NodePath("../ContentContainer")
+metadata/_custom_type_script = "uid://byiuvyakhj5fc"
+
+[node name="GameStateMachine" type="Node" parent="." unique_id=1500622133 node_paths=PackedStringArray("transition_manager", "initial_state")]
+script = ExtResource("3_shnkw")
+transition_manager = NodePath("../TransitionManager")
 initial_state = NodePath("Connected")
 metadata/_custom_type_script = "uid://bb50oxlatsq3p"
 
@@ -56,46 +57,25 @@ metadata/_custom_type_script = "uid://c06xj1g5oewu4"
 
 [node name="Entered" type="Node" parent="GameStateMachine" unique_id=1344573301]
 script = ExtResource("10_shnkw")
-packed_scene = ExtResource("11_25rj4")
+packed_scene = ExtResource("14_py7vm")
 metadata/_custom_type_script = "uid://dwbc0pee0vhur"
-
-[node name="CardViewer" type="Node" parent="GameStateMachine" unique_id=996146864]
-script = ExtResource("14_kea5x")
-packed_scene = ExtResource("15_13gk1")
-metadata/_custom_type_script = "uid://c06xj1g5oewu4"
-
-[node name="Ingame" type="Node" parent="GameStateMachine" unique_id=1295167910]
-script = ExtResource("12_1m60t")
-packed_scene = ExtResource("11_py7vm")
-transition_config = null
-metadata/_custom_type_script = "uid://15it0w4m8gpk"
-
-[node name="DeckBuilder" type="Node" parent="GameStateMachine" unique_id=999999999]
-script = ExtResource("16_deck_builder")
-packed_scene = ExtResource("17_deck_builder")
-transition_config = ExtResource("18_deck_builder")
 
 [node name="ContentContainer" type="Node" parent="." unique_id=1199902843]
 
 [node name="Debug Menu" type="Control" parent="." unique_id=1947856106 node_paths=PackedStringArray("state_machine")]
 z_index = 4096
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = -1152.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
+size_flags_horizontal = 0
+size_flags_vertical = 0
 script = ExtResource("13_fpu5w")
 enabled = true
 state_machine = NodePath("../GameStateMachine")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Debug Menu" unique_id=1129383513]
 layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_right = 253.0
-grow_vertical = 2
+offset_right = 250.0
+offset_bottom = 50.0
 
 [node name="FPSCounter" type="Label" parent="Debug Menu/VBoxContainer" unique_id=140213354]
 layout_mode = 2
@@ -108,6 +88,9 @@ layout_mode = 2
 text = "State: "
 
 [node name="Chat" parent="Debug Menu/VBoxContainer" unique_id=980046070 instance=ExtResource("15_twqac")]
+visible = false
 z_index = 4096
 z_as_relative = false
+custom_minimum_size = Vector2(250, 200)
 layout_mode = 2
+size_flags_vertical = 8

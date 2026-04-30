@@ -1,7 +1,7 @@
 package components
 
 import (
-	"github.com/bfibraga/turntide/server/internal/objects"
+	"github.com/bfibraga/turntide/server/internal/server/objects"
 )
 
 type ClientRegistry struct {

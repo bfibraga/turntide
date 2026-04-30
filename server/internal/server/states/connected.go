@@ -5,21 +5,21 @@ import (
 	"log/slog"
 
 	"github.com/bfibraga/turntide/server/internal/server"
-	"github.com/bfibraga/turntide/server/internal/server/repository"
+	"github.com/bfibraga/turntide/server/internal/server/user"
 	"github.com/bfibraga/turntide/server/internal/server/validation"
 	"github.com/bfibraga/turntide/server/pkg/packets"
 )
 
 type Connected struct {
-	client         server.ClientInterfacer
-	userRepository repository.UserRepository
-	logger         *slog.Logger
+	client      server.ClientInterfacer
+	userService *user.Service
+	logger      *slog.Logger
 }
 
-func NewConnected(logger *slog.Logger, userRepository repository.UserRepository) *Connected {
+func NewConnected(logger *slog.Logger, userService *user.Service) *Connected {
 	return &Connected{
-		logger:         logger,
-		userRepository: userRepository,
+		logger:      logger,
+		userService: userService,
 	}
 }
 
@@ -59,7 +59,7 @@ func (c *Connected) handleLogin(senderId uint64, packet *packets.Packet_LoginReq
 	password := packet.LoginRequest.Password
 
 	// Verify password
-	verified, err := c.userRepository.VerifyPassword(ctx, username, password)
+	verified, err := c.userService.VerifyPassword(ctx, username, password)
 	if err != nil {
 		c.logger.Error("failed to verify password", "username", username, "error", err)
 		c.client.SocketSend(packets.NewDenyResponse("authentication failed"))
@@ -99,7 +99,7 @@ func (c *Connected) handleRegister(senderId uint64, packet *packets.Packet_Regis
 	}
 
 	// Create user
-	user, err := c.userRepository.Create(ctx, username, password)
+	err := c.userService.CreateUser(ctx, username, password)
 	if err != nil {
 		c.logger.Error("failed to create user", "username", username, "error", err)
 		c.client.SocketSend(packets.NewDenyResponse("registration failed"))
@@ -107,7 +107,7 @@ func (c *Connected) handleRegister(senderId uint64, packet *packets.Packet_Regis
 	}
 
 	// Registration successful
-	c.logger.Info("user registered", "username", username, "user_id", user.ID)
+	c.logger.Info("user registered", "username", username)
 	c.client.SocketSend(packets.NewOkResponse())
 	c.client.SetState(NewAuthenticated(c.logger, username))
 }

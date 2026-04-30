@@ -25,5 +25,3 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_m3soj")
-background_color_1 = Color(0.8429039, 0.87978333, 0.86271685, 1)
-background_color_2 = Color(0.90388256, 0.7537693, 0.6594894, 1)
