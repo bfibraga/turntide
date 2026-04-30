@@ -3,7 +3,6 @@ package components
 import (
 	"testing"
 
-	"github.com/bfibraga/turntide/server/internal/server"
 	"github.com/bfibraga/turntide/server/pkg/packets"
 )
 
@@ -20,7 +19,7 @@ func (m *mockClient) PassToPeer(message packets.Msg, peerId uint64)     {}
 func (m *mockClient) Broadcast(message packets.Msg)                    {}
 func (m *mockClient) ReadPump()                                        {}
 func (m *mockClient) WritePump()                                       {}
-func (m *mockClient) SetState(state server.ClientStateHandler)          {}
+func (m *mockClient) SetState(state ClientStateHandler)                {}
 func (m *mockClient) Close()                                           {}
 
 func TestAddClient(t *testing.T) {
@@ -64,7 +63,7 @@ func TestForEach(t *testing.T) {
 	registry.Add(client2)
 
 	count := 0
-	registry.ForEach(func(id uint64, c server.ClientInterfacer) {
+	registry.ForEach(func(id uint64, c ClientInterfacer) {
 		count++
 	})
 

@@ -50,7 +50,7 @@ func (c *WebSocketClient) Id() uint64 {
 func (c *WebSocketClient) Initialize(id uint64) {
 	c.id = id
 	c.logger = c.hub.Logger.With("client_id", id)
-	c.SetState(states.NewConnected(c.logger, c.hub.UserRepository))
+	c.SetState(states.NewConnected(c.logger, c.hub.UserService))
 	c.logger.Debug("Sent ID to client")
 }
 
@@ -73,13 +73,13 @@ func (c *WebSocketClient) SocketSendAs(senderId uint64, msg packets.Msg) {
 }
 
 func (c *WebSocketClient) PassToPeer(message packets.Msg, senderId uint64) {
-	if peer, exists := c.hub.Clients.Get(senderId); exists {
+	if peer, exists := c.hub.Registry.Get(senderId); exists {
 		peer.ProcessPacket(c.id, message)
 	}
 }
 
 func (c *WebSocketClient) Broadcast(message packets.Msg) {
-	c.hub.BroadcastChan <- packets.NewPacket(c.id, message)
+	c.hub.Broker.Broadcast(c.id, message)
 }
 
 func (c *WebSocketClient) ReadPump() {
@@ -167,7 +167,7 @@ func (c *WebSocketClient) SetState(state server.ClientStateHandler) {
 func (c *WebSocketClient) Close() {
 	c.logger.Info("Closing client connection")
 
-	c.hub.UnregisterChan <- c
+	c.hub.Broker.Unregister(c)
 	c.conn.Close()
 	c.SetState(nil)
 	if _, closed := <-c.sendChan; !closed {

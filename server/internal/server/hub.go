@@ -4,43 +4,37 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/bfibraga/turntide/server/internal/objects"
+	"github.com/bfibraga/turntide/server/internal/server/components"
 	"github.com/bfibraga/turntide/server/internal/server/user"
-	"github.com/bfibraga/turntide/server/pkg/packets"
 )
 
 type Hub struct {
-	Logger         *slog.Logger
-	UserService    *user.Service
-	Clients        *objects.SharedCollection[ClientInterfacer]
-	BroadcastChan  chan *packets.Packet
-	RegisterChan   chan ClientInterfacer
-	UnregisterChan chan ClientInterfacer
+	Logger      *slog.Logger
+	UserService *user.Service
+	Registry    *components.ClientRegistry
+	Broker      *components.MessageBroker
 }
 
 func NewHub(logger *slog.Logger, userService *user.Service) *Hub {
 	return &Hub{
-		Logger:         logger,
-		UserService:    userService,
-		Clients:        objects.NewSharedCollection[ClientInterfacer](),
-		BroadcastChan:  make(chan *packets.Packet),
-		RegisterChan:   make(chan ClientInterfacer),
-		UnregisterChan: make(chan ClientInterfacer),
+		Logger:      logger,
+		UserService: userService,
+		Registry:    components.NewClientRegistry(),
+		Broker:      components.NewMessageBroker(),
 	}
 }
 
 func (h *Hub) Run() {
-	h.Logger.Info("Initializing database")
-
 	h.Logger.Info("Waiting for connections...")
 	for {
 		select {
-		case client := <-h.RegisterChan:
-			client.Initialize(h.Clients.Add(client))
-		case client := <-h.UnregisterChan:
-			h.Clients.Delete(client.Id())
-		case packet := <-h.BroadcastChan:
-			h.Clients.ForEach(func(id uint64, client ClientInterfacer) {
+		case client := <-h.Broker.RegisterChan:
+			id := h.Registry.Add(client)
+			client.Initialize(id)
+		case client := <-h.Broker.UnregisterChan:
+			h.Registry.Delete(client.Id())
+		case packet := <-h.Broker.BroadcastChan:
+			h.Registry.ForEach(func(id uint64, client ClientInterfacer) {
 				if id != packet.SenderId {
 					client.ProcessPacket(packet.SenderId, packet.Msg)
 				}
@@ -57,7 +51,7 @@ func (h *Hub) Serve(getNewClient func(*Hub, http.ResponseWriter, *http.Request) 
 		return
 	}
 
-	h.RegisterChan <- client
+	h.Broker.Register(client)
 
 	h.Logger.Info("New client connected", "address", request.RemoteAddr)
 
