@@ -1,5 +1,7 @@
 extends Control
 
+signal transition_requested(state_name: String)
+
 @export var state_machine: StateMachine
 
 @onready var play_button: Button = $%Play
@@ -18,16 +20,10 @@ func _on_play_button_pressed() -> void:
 	pass
 
 func _on_decks_button_pressed() -> void:
-	state_machine.current_state.Transitioned.emit(
-		state_machine.current_state,
-		CardViewerState.Name()
-	)
+	transition_requested.emit(DeckBuilderState.Name())
 
 func _on_account_button_pressed() -> void:
-	state_machine.current_state.Transitioned.emit(
-		state_machine.current_state,
-		DeckBuilderState.Name()
-	)
+	transition_requested.emit(CardViewerState.Name())
 
 func _on_settings_button_pressed() -> void:
 	pass

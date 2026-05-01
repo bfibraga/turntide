@@ -1,6 +1,5 @@
 extends Node
 
-var game_controller: GameController
 var transition_manager: TransitionManager
 var logger: Log
 var card_repository: CardRepository

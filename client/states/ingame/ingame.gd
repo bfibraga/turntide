@@ -11,18 +11,16 @@ static func Name() -> String:
 	return "Ingame"
 
 func _init() -> void:
-	transition_config = preload("res://resources/transitions/slide_left.tres")
 	packed_scene = preload("res://states/ingame/ingame.tscn")
 
 func enter() -> void:
+	super.enter()
 	WS.connection_closed.connect(_on_ws_connection_closed)
 	WS.packet_received.connect(_on_ws_packet_received)
 	
 	#if mouse_tracker:
 	#	mouse_tracker.mouse_position_changed.connect(_on_mouse_position_changed)
 	#	mouse_tracker.viewport = get_viewport()
-
-	self.enter_scene()
 
 func _on_ws_connection_closed() -> void:
 	logger.error("Connection closed")

@@ -8,15 +8,17 @@
 [ext_resource type="PackedScene" uid="uid://li7tg4dxthlq" path="res://states/closed/close.tscn" id="4_wf0ff"]
 [ext_resource type="Script" uid="uid://ck6yrhsphc51c" path="res://states/connected/login_state.gd" id="4_wksuf"]
 [ext_resource type="PackedScene" uid="uid://dw64jlmj7t5t" path="res://states/connected/login.tscn" id="5_wf0ff"]
-[ext_resource type="Resource" uid="uid://c3uhp2d3506i6" path="res://resources/transitions/slide_left.tres" id="6_vi7lc"]
 [ext_resource type="Script" uid="uid://bad2xr0gwfbv1" path="res://states/connected/register_state.gd" id="7_kea5x"]
 [ext_resource type="PackedScene" uid="uid://df5pqld7y87h" path="res://states/connected/register.tscn" id="8_13gk1"]
 [ext_resource type="Script" uid="uid://dwbc0pee0vhur" path="res://states/entered/entered_state.gd" id="10_shnkw"]
 [ext_resource type="Script" uid="uid://djtvn14k7bmpo" path="res://scripts/debug/debug_menu.gd" id="13_fpu5w"]
+[ext_resource type="Script" uid="uid://4ny6b5n0ehhl" path="res://scenes/card_viewer_state.gd" id="13_vi7lc"]
 [ext_resource type="Script" uid="uid://c87m1aifkgnss" path="res://scripts/debug/fps_counter.gd" id="14_3d517"]
+[ext_resource type="PackedScene" uid="uid://die2458ml2aad" path="res://scenes/card/card_viewer.tscn" id="14_kea5x"]
 [ext_resource type="PackedScene" uid="uid://b8gd3m7b136nk" path="res://scenes/main.tscn" id="14_py7vm"]
+[ext_resource type="Script" uid="uid://cv0luil08eb3q" path="res://states/deck_builder/deck_builder_state.gd" id="15_13gk1"]
 [ext_resource type="PackedScene" uid="uid://c8vc88wmrkyyc" path="res://scenes/log/chat.tscn" id="15_twqac"]
-[ext_resource type="Resource" uid="uid://qtt40lxvhfo6" path="res://resources/transitions/fade_color.tres" id="18_deck_builder"]
+[ext_resource type="PackedScene" uid="uid://cpjp8o5nseqhm" path="res://scenes/deck_builder/deck_builder.tscn" id="16_endrn"]
 
 [node name="GameController" type="Node" unique_id=532916498 node_paths=PackedStringArray("gui_state_machine")]
 script = ExtResource("1_oy6oc")
@@ -34,31 +36,43 @@ transition_manager = NodePath("../TransitionManager")
 initial_state = NodePath("Connected")
 metadata/_custom_type_script = "uid://bb50oxlatsq3p"
 
-[node name="Closed" type="Node" parent="GameStateMachine" unique_id=1668683729]
+[node name="Closed" type="Node" parent="GameStateMachine" unique_id=1668683729 node_paths=PackedStringArray("transition_manager")]
 script = ExtResource("3_wksuf")
 packed_scene = ExtResource("4_wf0ff")
+transition_manager = NodePath("../../TransitionManager")
 metadata/_custom_type_script = "uid://ckwpv8qfylam6"
 
 [node name="Connected" type="Node" parent="GameStateMachine" unique_id=183445432]
 script = ExtResource("3_25rj4")
 metadata/_custom_type_script = "uid://bfppetk35xjpo"
 
-[node name="Login" type="Node" parent="GameStateMachine" unique_id=1723029804]
+[node name="Login" type="Node" parent="GameStateMachine" unique_id=1723029804 node_paths=PackedStringArray("transition_manager")]
 script = ExtResource("4_wksuf")
 packed_scene = ExtResource("5_wf0ff")
-transition_config = ExtResource("6_vi7lc")
+transition_manager = NodePath("../../TransitionManager")
 metadata/_custom_type_script = "uid://c06xj1g5oewu4"
 
-[node name="Register" type="Node" parent="GameStateMachine" unique_id=1423894975]
+[node name="Register" type="Node" parent="GameStateMachine" unique_id=1423894975 node_paths=PackedStringArray("transition_manager")]
 script = ExtResource("7_kea5x")
 packed_scene = ExtResource("8_13gk1")
-transition_config = ExtResource("18_deck_builder")
+transition_manager = NodePath("../../TransitionManager")
 metadata/_custom_type_script = "uid://c06xj1g5oewu4"
 
 [node name="Entered" type="Node" parent="GameStateMachine" unique_id=1344573301]
 script = ExtResource("10_shnkw")
 packed_scene = ExtResource("14_py7vm")
 metadata/_custom_type_script = "uid://dwbc0pee0vhur"
+
+[node name="CardViewer" type="Node" parent="GameStateMachine" unique_id=197616734 node_paths=PackedStringArray("transition_manager")]
+script = ExtResource("13_vi7lc")
+packed_scene = ExtResource("14_kea5x")
+transition_manager = NodePath("")
+metadata/_custom_type_script = "uid://c06xj1g5oewu4"
+
+[node name="DeckBuilder" type="Node" parent="GameStateMachine" unique_id=875932080 node_paths=PackedStringArray("transition_manager")]
+script = ExtResource("15_13gk1")
+packed_scene = ExtResource("16_endrn")
+transition_manager = NodePath("")
 
 [node name="ContentContainer" type="Node" parent="." unique_id=1199902843]
 

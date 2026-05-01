@@ -2,6 +2,8 @@ extends Control
 
 const packets := preload("res://scripts/network/packets/packets.gd")
 
+signal transition_requested(state_name: String)
+
 @onready var logger : Log = Global.logger
 
 @onready var username_input: LineEdit = $%UsernameInput
@@ -46,8 +48,7 @@ func _on_login_pressed() -> void:
 	WS.send(packet)
 
 func _on_register_pressed() -> void:
-	#Global.game_controller.transition_gui(RegisterState.Name())
-	pass
+	transition_requested.emit(RegisterState.Name())
 
 func _on_username_submitted(_new_text: String) -> void:
 	_on_login_pressed()
@@ -58,7 +59,7 @@ func _on_password_submitted(_new_text: String) -> void:
 func _on_auth_success(username: String) -> void:
 	password_input.text = ""
 	logger.success("Welcome back, %s" % username)
-	#Global.game_controller.transition_gui(EnteredState.Name())
+	transition_requested.emit(EnteredState.Name())
 
 func _on_auth_failed(reason: String) -> void:
 	error_label.text = "Login failed: " + reason

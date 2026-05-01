@@ -1,6 +1,8 @@
 class_name CardViewer
 extends Control
 
+signal transition_requested(state_name: String)
+
 @export var page : int = 1
 @export var page_size : int = 10
 
@@ -75,4 +77,4 @@ func _on_next_button_pressed() -> void:
 	page_number_label.text = "%d" % [page]
 	
 func _on_back_button_pressed() -> void:
-	Global.game_controller.transition_gui(EnteredState.Name())
+	transition_requested.emit(EnteredState.Name())
