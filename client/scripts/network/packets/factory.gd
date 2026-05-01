@@ -20,11 +20,50 @@ func new_ping_msg(timestamp: int) -> packets.Packet:
 	ping_msg.set_timestamp(timestamp)
 	return packet
 
-func new_id_msg(id: int) -> packets.Packet:
+func new_lobby_create_req(name: String, format: String, max_players: int, is_private: bool, password: String = "") -> packets.Packet:
 	var packet : packets.Packet = packets.Packet.new()
-	var id_msg : packets.IdMessage = packet.new_id()
-	
-	id_msg.set_id(id)
+	var msg : packets.LobbyCreateRequest = packet.new_lobby_create_request()
+	packet.set_sender_id(Global.client_id)
+	msg.set_name(name)
+	msg.set_format(format)
+	msg.set_max_players(max_players)
+	msg.set_is_private(is_private)
+	if password != "":
+		msg.set_password(password)
+	return packet
+
+func new_lobby_join_req(lobby_id: int, password: String = "") -> packets.Packet:
+	var packet : packets.Packet = packets.Packet.new()
+	var msg : packets.LobbyJoinRequest = packet.new_lobby_join_request()
+	packet.set_sender_id(Global.client_id)
+	msg.set_lobby_id(lobby_id)
+	if password != "":
+		msg.set_password(password)
+	return packet
+
+func new_lobby_leave_req() -> packets.Packet:
+	var packet : packets.Packet = packets.Packet.new()
+	var msg = packet.new_lobby_leave_request()
+	packet.set_sender_id(Global.client_id)
+	return packet
+
+func new_lobby_ready_req(ready: bool) -> packets.Packet:
+	var packet : packets.Packet = packets.Packet.new()
+	var msg = packet.new_lobby_ready_request()
+	packet.set_sender_id(Global.client_id)
+	msg.set_ready(ready)
+	return packet
+
+func new_lobby_start_req() -> packets.Packet:
+	var packet : packets.Packet = packets.Packet.new()
+	var msg = packet.new_lobby_start_request()
+	packet.set_sender_id(Global.client_id)
+	return packet
+
+func new_lobby_list_req() -> packets.Packet:
+	var packet : packets.Packet = packets.Packet.new()
+	var msg = packet.new_lobby_list_request()
+	packet.set_sender_id(Global.client_id)
 	return packet
 
 func new_login_request(username: String, password: String) -> packets.Packet:
