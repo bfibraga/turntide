@@ -82,6 +82,19 @@ func (c *WebSocketClient) Broadcast(message packets.Msg) {
 	c.hub.Broker.Broadcast(c.id, message)
 }
 
+func (c *WebSocketClient) BroadcastToLobby(lobbyID uint64, msg packets.Msg) {
+	if lobby, ok := c.hub.Lobbies.FindLobby(lobbyID); ok {
+		for clientID := range lobby.Players {
+			if clientID == c.id {
+				continue // don't send to self
+			}
+			if peer, exists := c.hub.Registry.Get(clientID); exists {
+				peer.ProcessPacket(c.id, msg)
+			}
+		}
+	}
+}
+
 func (c *WebSocketClient) ReadPump() {
 	defer func() {
 		c.logger.Info("read pump exited")
