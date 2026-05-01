@@ -1,6 +1,7 @@
 extends Control
 
 const packets := preload("res://scripts/network/packets/packets.gd")
+const LobbyBrowserState := preload("res://states/lobby/browser.gd")
 
 signal transition_requested(state_name: String)
 
@@ -59,7 +60,7 @@ func _on_password_submitted(_new_text: String) -> void:
 func _on_auth_success(username: String) -> void:
 	password_input.text = ""
 	logger.success("Welcome back, %s" % username)
-	transition_requested.emit(EnteredState.Name())
+	transition_requested.emit(LobbyBrowserState.Name())
 
 func _on_auth_failed(reason: String) -> void:
 	error_label.text = "Login failed: " + reason

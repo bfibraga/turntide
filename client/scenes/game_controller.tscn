@@ -19,6 +19,10 @@
 [ext_resource type="Script" uid="uid://cv0luil08eb3q" path="res://states/deck_builder/deck_builder_state.gd" id="15_13gk1"]
 [ext_resource type="PackedScene" uid="uid://c8vc88wmrkyyc" path="res://scenes/log/chat.tscn" id="15_twqac"]
 [ext_resource type="PackedScene" uid="uid://cpjp8o5nseqhm" path="res://scenes/deck_builder/deck_builder.tscn" id="16_endrn"]
+[ext_resource type="Script" uid="uid://cjo1qke7v7muw" path="res://states/lobby/browser.gd" id="17_lobby_browser"]
+[ext_resource type="PackedScene" uid="uid://bx8g72k9pmyq" path="res://scenes/lobby_browser.tscn" id="18_lobby_browser_scene"]
+[ext_resource type="Script" uid="uid://dmr7f2h3k9ln" path="res://states/lobby/in_lobby.gd" id="19_in_lobby"]
+[ext_resource type="PackedScene" uid="uid://by9h3k1qm5rt" path="res://scenes/lobby_room.tscn" id="20_lobby_room_scene"]
 
 [node name="GameController" type="Node" unique_id=532916498 node_paths=PackedStringArray("gui_state_machine")]
 script = ExtResource("1_oy6oc")
@@ -73,6 +77,18 @@ metadata/_custom_type_script = "uid://c06xj1g5oewu4"
 script = ExtResource("15_13gk1")
 packed_scene = ExtResource("16_endrn")
 transition_manager = NodePath("")
+
+[node name="LobbyBrowser" type="Node" parent="GameStateMachine" unique_id=1234567890 node_paths=PackedStringArray("transition_manager")]
+script = ExtResource("17_lobby_browser")
+packed_scene = ExtResource("18_lobby_browser_scene")
+transition_manager = NodePath("../../TransitionManager")
+metadata/_custom_type_script = "uid://lobby_browser_state"
+
+[node name="InLobby" type="Node" parent="GameStateMachine" unique_id=1234567891 node_paths=PackedStringArray("transition_manager")]
+script = ExtResource("19_in_lobby")
+packed_scene = ExtResource("20_lobby_room_scene")
+transition_manager = NodePath("../../TransitionManager")
+metadata/_custom_type_script = "uid://in_lobby_state"
 
 [node name="ContentContainer" type="Node" parent="." unique_id=1199902843]
 
