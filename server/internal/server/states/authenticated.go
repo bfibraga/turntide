@@ -25,21 +25,22 @@ import (
 	"log/slog"
 
 	"github.com/bfibraga/turntide/server/internal/server"
+	"github.com/bfibraga/turntide/server/internal/server/components"
 	"github.com/bfibraga/turntide/server/pkg/packets"
 )
 
-// Authenticated represents a client that has been authenticated
 type Authenticated struct {
-	client   server.ClientInterfacer
-	username string
-	logger   *slog.Logger
+	client      server.ClientInterfacer
+	username    string
+	logger      *slog.Logger
+	lobbyReg    *components.LobbyRegistry
 }
 
-// NewAuthenticated creates a new Authenticated state
-func NewAuthenticated(logger *slog.Logger, username string) *Authenticated {
+func NewAuthenticated(logger *slog.Logger, username string, lobbyReg *components.LobbyRegistry) *Authenticated {
 	return &Authenticated{
 		logger:   logger,
 		username: username,
+		lobbyReg: lobbyReg,
 	}
 }
 
@@ -62,14 +63,78 @@ func (a *Authenticated) OnEnter() {
 func (a *Authenticated) HandleMessage(senderId uint64, message packets.Msg) {
 	a.logger.Debug("received message from authenticated client", "sender_id", senderId, "message_type", message)
 
-	// Allow all game messages in authenticated state
-	if senderId == a.client.Id() {
-		a.client.Broadcast(message)
-	} else {
-		a.client.SocketSendAs(senderId, message)
+	switch msg := message.(type) {
+	case *packets.Packet_LobbyListRequest:
+		a.handleLobbyList()
+	case *packets.Packet_LobbyCreateRequest:
+		a.handleCreateLobby(senderId, msg.LobbyCreateRequest)
+	case *packets.Packet_LobbyJoinRequest:
+		a.handleJoinLobby(senderId, msg.LobbyJoinRequest)
+	default:
+		// Ignore other messages in authenticated state
 	}
 }
 
+func (a *Authenticated) handleLobbyList() {
+	lobbies := a.lobbyReg.ListPublicLobbies()
+
+	var lobbyInfos []*packets.LobbyInfo
+	for _, l := range lobbies {
+		lobbyInfos = append(lobbyInfos, &packets.LobbyInfo{
+			Id:            l.ID,
+			Name:          l.Name,
+			Format:        l.Format,
+			CurrentPlayers: int32(l.CurrentPlayers),
+			MaxPlayers:    int32(l.MaxPlayers),
+			HostUsername:  l.HostUsername,
+			IsPrivate:     l.IsPrivate,
+		})
+	}
+
+	a.client.SocketSend(&packets.Packet_LobbyListResponse{
+		LobbyListResponse: &packets.LobbyListResponse{
+			Lobbies: lobbyInfos,
+		},
+	})
+}
+
+func (a *Authenticated) handleCreateLobby(senderId uint64, msg *packets.LobbyCreateRequest) {
+	var password string
+	if msg.Password != nil {
+		password = *msg.Password
+	}
+
+	lobby := a.lobbyReg.CreateLobby(
+		senderId,
+		a.username,
+		msg.Name,
+		msg.Format,
+		int(msg.MaxPlayers),
+		msg.IsPrivate,
+		password,
+	)
+
+	// Transition to InLobby state
+	a.client.SetState(NewInLobby(a.logger, a.lobbyReg, a.client, lobby.ID, a.username))
+}
+
+func (a *Authenticated) handleJoinLobby(senderId uint64, msg *packets.LobbyJoinRequest) {
+	var password string
+	if msg.Password != nil {
+		password = *msg.Password
+	}
+
+	err := a.lobbyReg.JoinLobby(msg.LobbyId, senderId, a.username, password)
+	if err != nil {
+		a.logger.Error("failed to join lobby", "error", err)
+		a.client.SocketSend(packets.NewDenyResponse(err.Error()))
+		return
+	}
+
+	// Transition to InLobby state
+	a.client.SetState(NewInLobby(a.logger, a.lobbyReg, a.client, msg.LobbyId, a.username))
+}
+
 func (a *Authenticated) OnExit() {
-	a.logger.Info("client disconnected", "username", a.username)
+	a.logger.Info("client leaving authenticated state", "username", a.username)
 }

@@ -5,6 +5,7 @@ import (
 	"log/slog"
 
 	"github.com/bfibraga/turntide/server/internal/server"
+	"github.com/bfibraga/turntide/server/internal/server/components"
 	"github.com/bfibraga/turntide/server/internal/server/user"
 	"github.com/bfibraga/turntide/server/internal/server/validation"
 	"github.com/bfibraga/turntide/server/pkg/packets"
@@ -14,12 +15,14 @@ type Connected struct {
 	client      server.ClientInterfacer
 	userService *user.Service
 	logger      *slog.Logger
+	lobbyReg    *components.LobbyRegistry
 }
 
-func NewConnected(logger *slog.Logger, userService *user.Service) *Connected {
+func NewConnected(logger *slog.Logger, userService *user.Service, lobbyReg *components.LobbyRegistry) *Connected {
 	return &Connected{
 		logger:      logger,
 		userService: userService,
+		lobbyReg:    lobbyReg,
 	}
 }
 
@@ -75,7 +78,7 @@ func (c *Connected) handleLogin(senderId uint64, packet *packets.Packet_LoginReq
 	// Authentication successful
 	c.logger.Info("user logged in", "username", username)
 	c.client.SocketSend(packets.NewOkResponse())
-	c.client.SetState(NewAuthenticated(c.logger, username))
+	c.client.SetState(NewAuthenticated(c.logger, username, c.lobbyReg))
 }
 
 func (c *Connected) handleRegister(senderId uint64, packet *packets.Packet_RegisterRequest) {
@@ -109,7 +112,7 @@ func (c *Connected) handleRegister(senderId uint64, packet *packets.Packet_Regis
 	// Registration successful
 	c.logger.Info("user registered", "username", username)
 	c.client.SocketSend(packets.NewOkResponse())
-	c.client.SetState(NewAuthenticated(c.logger, username))
+	c.client.SetState(NewAuthenticated(c.logger, username, c.lobbyReg))
 }
 
 func (c *Connected) OnExit() {
