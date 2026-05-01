@@ -13,6 +13,7 @@ type Hub struct {
 	UserService *user.Service
 	Registry    *components.ClientRegistry
 	Broker      *components.MessageBroker
+	Lobbies     *components.LobbyRegistry
 }
 
 func NewHub(logger *slog.Logger, userService *user.Service) *Hub {
@@ -21,6 +22,7 @@ func NewHub(logger *slog.Logger, userService *user.Service) *Hub {
 		UserService: userService,
 		Registry:    components.NewClientRegistry(),
 		Broker:      components.NewMessageBroker(),
+		Lobbies:     components.NewLobbyRegistry(),
 	}
 }
 
