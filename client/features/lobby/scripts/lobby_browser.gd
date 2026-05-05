@@ -1,7 +1,5 @@
 extends Control
 
-signal transition_requested(state_name: String)
-
 const LobbyItemScene: PackedScene = preload("res://features/lobby/scenes/lobby_item.tscn")
 const packets := preload("res://core/network/packets/packets.gd")
 
@@ -16,7 +14,8 @@ func _ready() -> void:
 	create_button.pressed.connect(_on_create_button_pressed)
 	extensible_scroll_container.vertical_threshold_reached.connect(func() -> void: print("Reached vertical threshold"))
 	extensible_scroll_container.horizontal_threshold_reached.connect(func() -> void: print("Reached horizontal threshold"))
-	
+
+func _enter_tree() -> void:
 	var packet: packets.Packet = PacketFactory.new_lobby_list_req()
 	WS.send(packet)
 	

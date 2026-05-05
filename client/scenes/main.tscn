@@ -1,19 +1,19 @@
 [gd_scene format=3 uid="uid://b8gd3m7b136nk"]
 
 [ext_resource type="Script" uid="uid://cjo1qke7v7muw" path="res://core/autoloads/main.gd" id="1_choun"]
-[ext_resource type="PackedScene" uid="uid://bnaxd014g5r0b" path="res://scenes/balatro_background.tscn" id="1_o5qli"]
-[ext_resource type="PackedScene" uid="uid://do3uhx7r3fxyl" path="res://scenes/transition_manager.tscn" id="2_ya4ey"]
+[ext_resource type="PackedScene" uid="uid://bnaxd014g5r0b" path="res://features/background/scenes/balatro_background.tscn" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://do3uhx7r3fxyl" path="res://features/background/scenes/transition_manager.tscn" id="2_ya4ey"]
 [ext_resource type="Script" uid="uid://bb50oxlatsq3p" path="res://core/state_machine/state_machine.gd" id="3_ya4ey"]
 [ext_resource type="Script" uid="uid://c06xj1g5oewu4" path="res://core/state_machine/scene_state.gd" id="4_eb6dy"]
-[ext_resource type="PackedScene" uid="uid://cv7y4lfcoaaa8" path="res://scenes/settings.tscn" id="5_trceg"]
-[ext_resource type="Script" uid="uid://bv643nch74fxm" path="res://core/state_machine/lobby/browser.gd" id="6_a8y0u"]
-[ext_resource type="PackedScene" uid="uid://dmybuixer6c68" path="res://features/lobby/scenes/lobby_browser.tscn" id="7_jkv2x"]
-[ext_resource type="Script" uid="uid://cdm54pqc6k6av" path="res://core/state_machine/lobby/in_lobby.gd" id="8_jbj1t"]
-[ext_resource type="PackedScene" uid="uid://bhsjcwk4ki45f" path="res://features/lobby/scenes/lobby_room.tscn" id="9_muem4"]
+[ext_resource type="PackedScene" uid="uid://c0i2qh23e6en0" path="res://scenes/settings.tscn" id="5_trceg"]
+[ext_resource type="Script" uid="uid://bv643nch74fxm" path="res://features/lobby/states/browser.gd" id="6_a8y0u"]
+[ext_resource type="PackedScene" uid="uid://dlsb7hdk27l3l" path="res://features/lobby/scenes/lobby_browser.tscn" id="7_jkv2x"]
+[ext_resource type="Script" uid="uid://cdm54pqc6k6av" path="res://features/lobby/states/in_lobby.gd" id="8_jbj1t"]
+[ext_resource type="PackedScene" uid="uid://d3ec5ciieb22w" path="res://features/lobby/scenes/lobby_room.tscn" id="9_muem4"]
 [ext_resource type="PackedScene" uid="uid://cpjp8o5nseqhm" path="res://features/deck_builder/scenes/deck_builder.tscn" id="9_ya4ey"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0wfyh"]
-bg_color = Color(0, 0, 0, 0.6666667)
+bg_color = Color(0, 0, 0, 0.78431374)
 corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 
@@ -37,6 +37,8 @@ metadata/_custom_type_script = "uid://bb50oxlatsq3p"
 
 [node name="Main" type="Node" parent="StateMachine" unique_id=212386248 node_paths=PackedStringArray("transition_manager")]
 script = ExtResource("4_eb6dy")
+transition_in = "fade"
+transition_out = "fade"
 transition_manager = NodePath("../../TransitionManager")
 metadata/_custom_type_script = "uid://c06xj1g5oewu4"
 

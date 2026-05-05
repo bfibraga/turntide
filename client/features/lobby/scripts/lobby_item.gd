@@ -28,7 +28,13 @@ func _ready() -> void:
 	data.is_private.manually_emit()
 	data.capacity.manually_emit()
 	data.max_capacity.manually_emit()
-	
+
+func _enter_tree() -> void:
+	data.lobby_name.manually_emit()
+	data.format.manually_emit()
+	data.is_private.manually_emit()
+	data.capacity.manually_emit()
+	data.max_capacity.manually_emit()
 	
 func update_lobby_name_label(lobby_name: String) -> void:
 	print("Updating lobby name")

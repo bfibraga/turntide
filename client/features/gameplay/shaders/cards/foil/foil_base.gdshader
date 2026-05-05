@@ -1,8 +1,8 @@
 shader_type canvas_item;
 
-#include "res://shaders/cards/foil/foil_common.gdshaderinc"
-#include "res://shaders/cards/foil/foil_regular.gdshaderinc"
-#include "res://shaders/cards/foil/foil_etched.gdshaderinc"
+#include "res://features/gameplay/shaders/cards/foil/foil_common.gdshaderinc"
+#include "res://features/gameplay/shaders/cards/foil/foil_regular.gdshaderinc"
+#include "res://features/gameplay/shaders/cards/foil/foil_etched.gdshaderinc"
 
 uniform int foil_type : hint_range(0, 2) = 0;
 uniform float shimmer_speed : hint_range(0.1, 5.0) = 1.0;

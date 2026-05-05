@@ -13,7 +13,7 @@ import (
 
 func TestInLobbyOnEnter(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		lobbyReg := components.NewLobbyRegistry()
+		lobbyReg := components.NewLobbyRegistry(INF)
 		lobby := lobbyReg.CreateLobby(1, "host", "Test Lobby", "1v1", 2, false, "")
 		lobbyReg.JoinLobby(lobby.ID, 2, "player2", "")
 
@@ -31,7 +31,7 @@ func TestInLobbyOnEnter(t *testing.T) {
 	})
 
 	t.Run("lobby not found", func(t *testing.T) {
-		lobbyReg := components.NewLobbyRegistry()
+		lobbyReg := components.NewLobbyRegistry(INF)
 		client := clients.NewFakeClient(1)
 		inLobby := states.NewInLobby(slog.Default(), lobbyReg, client, 999, "host")
 
@@ -45,7 +45,7 @@ func TestInLobbyOnEnter(t *testing.T) {
 }
 
 func TestInLobbyLeave(t *testing.T) {
-	lobbyReg := components.NewLobbyRegistry()
+	lobbyReg := components.NewLobbyRegistry(INF)
 	lobby := lobbyReg.CreateLobby(1, "host", "Test Lobby", "1v1", 2, false, "")
 	lobbyID := lobby.ID
 
@@ -77,7 +77,7 @@ func TestInLobbyLeave(t *testing.T) {
 }
 
 func TestInLobbyLeaveError(t *testing.T) {
-	lobbyReg := components.NewLobbyRegistry()
+	lobbyReg := components.NewLobbyRegistry(INF)
 	lobby := lobbyReg.CreateLobby(1, "host", "Test Lobby", "1v1", 2, false, "")
 	lobbyID := lobby.ID
 
@@ -98,7 +98,7 @@ func TestInLobbyLeaveError(t *testing.T) {
 }
 
 func TestInLobbyReady(t *testing.T) {
-	lobbyReg := components.NewLobbyRegistry()
+	lobbyReg := components.NewLobbyRegistry(INF)
 	lobby := lobbyReg.CreateLobby(1, "host", "Test Lobby", "1v1", 2, false, "")
 	lobbyID := lobby.ID
 	lobbyReg.JoinLobby(lobbyID, 2, "player2", "")
@@ -115,7 +115,7 @@ func TestInLobbyReady(t *testing.T) {
 }
 
 func TestInLobbyReadyError(t *testing.T) {
-	lobbyReg := components.NewLobbyRegistry()
+	lobbyReg := components.NewLobbyRegistry(INF)
 	lobby := lobbyReg.CreateLobby(1, "host", "Test Lobby", "1v1", 2, false, "")
 	lobbyID := lobby.ID
 
@@ -138,7 +138,7 @@ func TestInLobbyStartError(t *testing.T) {
 	logger := slog.Default()
 
 	t.Run("not host", func(t *testing.T) {
-		lobbyReg := components.NewLobbyRegistry()
+		lobbyReg := components.NewLobbyRegistry(INF)
 		lobby := lobbyReg.CreateLobby(1, "host", "Test Lobby", "1v1", 2, false, "")
 		lobbyID := lobby.ID
 		lobbyReg.JoinLobby(lobbyID, 2, "player2", "")
@@ -157,7 +157,7 @@ func TestInLobbyStartError(t *testing.T) {
 	})
 
 	t.Run("not all ready", func(t *testing.T) {
-		lobbyReg := components.NewLobbyRegistry()
+		lobbyReg := components.NewLobbyRegistry(INF)
 		lobby := lobbyReg.CreateLobby(1, "host", "Test Lobby", "1v1", 2, false, "")
 		lobbyID := lobby.ID
 		lobbyReg.JoinLobby(lobbyID, 2, "player2", "")
@@ -178,7 +178,7 @@ func TestInLobbyStartError(t *testing.T) {
 }
 
 func TestInLobbyGameStart(t *testing.T) {
-	lobbyReg := components.NewLobbyRegistry()
+	lobbyReg := components.NewLobbyRegistry(INF)
 	lobby := lobbyReg.CreateLobby(1, "host", "Test Lobby", "1v1", 2, false, "")
 	lobbyID := lobby.ID
 	lobbyReg.JoinLobby(lobbyID, 2, "player2", "")
@@ -205,7 +205,7 @@ func TestInLobbyOnExit(t *testing.T) {
 		// This test verifies OnExit handles nil client gracefully
 		// Note: NewInLobby with nil client is not a normal scenario
 		// but we test the nil check in OnExit works
-		lobbyReg := components.NewLobbyRegistry()
+		lobbyReg := components.NewLobbyRegistry(INF)
 		lobby := lobbyReg.CreateLobby(1, "host", "Test", "1v1", 2, false, "")
 		lobbyID := lobby.ID
 
@@ -224,7 +224,7 @@ func TestInLobbyOnExit(t *testing.T) {
 	})
 
 	t.Run("leaves lobby", func(t *testing.T) {
-		lobbyReg := components.NewLobbyRegistry()
+		lobbyReg := components.NewLobbyRegistry(INF)
 		lobby := lobbyReg.CreateLobby(1, "host", "Test", "1v1", 2, false, "")
 		lobbyID := lobby.ID
 
@@ -247,7 +247,7 @@ func TestInLobbyPlayerJoin(t *testing.T) {
 	logger := slog.Default()
 
 	t.Run("one player joining", func(t *testing.T) {
-		lobbyReg := components.NewLobbyRegistry()
+		lobbyReg := components.NewLobbyRegistry(INF)
 		lobby := lobbyReg.CreateLobby(1, "host", "Test", "1v1", 2, false, "")
 		lobbyID := lobby.ID
 

@@ -16,7 +16,12 @@ func _ready() -> void:
 	WS.packet_received.connect(_on_ws_packet_received)
 	
 	# Connect to server
-	var url : String = UrlBuilder.ws().host("localhost").port(4000).path("ws").build()
+	var url : String = UrlBuilder.ws() \
+		.host("localhost") \
+		.port(4000) \
+		.path("ws") \
+		.build()
+	
 	WS.connect_to_url(url)
 	
 	RepositoryFactory.new_card_repository()
@@ -24,15 +29,12 @@ func _ready() -> void:
 	
 func _on_ws_connected_to_server() -> void:
 	logger.success("Connected to server")
-	#self.Transitioned.emit(self, LoginState.Name())
-	gui_state_machine.current_state.Transitioned.emit(
-		gui_state_machine.current_state,
-		LoginState.Name()
-	)
+	Global.game_controller.gui_transition_to(LoginState.Name())
 
 func _on_ws_connection_closed() -> void:
 	logger.error("Connection closed")
 	self.Transitioned.emit(self, ClosedState.Name())
+	#Global.game_controller.gui_transition_to("reconnecting")
 
 func _on_ws_packet_received(packet: packets.Packet) -> void:
 	var sender_id : int = packet.get_sender_id()

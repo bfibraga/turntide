@@ -11,9 +11,13 @@ import (
 	"github.com/bfibraga/turntide/server/test/internal/server/clients"
 )
 
+const (
+	INF time.Duration = -1
+)
+
 func TestAuthenticatedLobbyList(t *testing.T) {
 	logger := slog.Default()
-	lobbyReg := components.NewLobbyRegistry()
+	lobbyReg := components.NewLobbyRegistry(INF)
 	lobbyReg.CreateLobby(1, "host1", "Public Lobby", "1v1", 2, false, "")
 
 	client := clients.NewFakeClient(1)
@@ -34,7 +38,7 @@ func TestAuthenticatedCreateLobby(t *testing.T) {
 	logger := slog.Default()
 
 	t.Run("success", func(t *testing.T) {
-		lobbyReg := components.NewLobbyRegistry()
+		lobbyReg := components.NewLobbyRegistry(INF)
 
 		client := clients.NewFakeClient(1)
 		auth := states.NewAuthenticated(logger, "host", lobbyReg)
@@ -57,7 +61,7 @@ func TestAuthenticatedCreateLobby(t *testing.T) {
 	})
 
 	t.Run("duplicate name", func(t *testing.T) {
-		lobbyReg := components.NewLobbyRegistry()
+		lobbyReg := components.NewLobbyRegistry(INF)
 		// Create first lobby
 		lobbyReg.CreateLobby(1, "host", "My Lobby", "1v1", 2, false, "")
 
@@ -84,7 +88,7 @@ func TestAuthenticatedCreateLobby(t *testing.T) {
 
 func TestAuthenticatedHandleUnknownMessage(t *testing.T) {
 	logger := slog.Default()
-	lobbyReg := components.NewLobbyRegistry()
+	lobbyReg := components.NewLobbyRegistry(INF)
 
 	client := clients.NewFakeClient(1)
 	auth := states.NewAuthenticated(logger, "host", lobbyReg)

@@ -10,9 +10,6 @@ const factory := preload("res://core/network/packets/factory.gd")
 static func Name() -> String:
 	return "Ingame"
 
-func _init() -> void:
-	packed_scene = preload("res://core/state_machine/ingame/ingame.tscn")
-
 func enter() -> void:
 	super.enter()
 	WS.connection_closed.connect(_on_ws_connection_closed)

@@ -15,8 +15,9 @@ controller = NodePath("Controller")
 [node name="View" parent="." unique_id=1111885400 instance=ExtResource("2_s42fv")]
 layout_mode = 0
 
-[node name="Controller" type="Node" parent="." unique_id=1275324217]
+[node name="Controller" type="Node" parent="." unique_id=1275324217 node_paths=PackedStringArray("view")]
 script = ExtResource("5_hefud")
+view = NodePath("../View")
 
 [node name="Movement" type="Node" parent="." unique_id=1649964722]
 script = ExtResource("7_aim30")

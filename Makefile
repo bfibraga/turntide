@@ -16,11 +16,17 @@ fetcher:
 server:
 	go build -o $(BIN_PATH) ./server
 
-test:
-	go test ./server/test/...
+test: test-client test-server
+	@echo "Executed test suite"
+
+test-client:
+	$(GODOT_BIN) -d -s --path "$(PWD)/client" addons/gut/gut_cmdln.gd -gdir=res://test/unit -gconfig=res://test/unit/gutconfig.json
+
+test-server:
+	@go test ./server/test/...
 
 clean:
-	rm -rf $(BIN_PATH)
+	@rm -rf $(BIN_PATH)
 
 sql: sql-fetcher sql-server
 	@echo "Generated sqlc bindings"

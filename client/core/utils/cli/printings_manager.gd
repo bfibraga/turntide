@@ -3,8 +3,8 @@ class_name PrintingsManager extends Node
 signal card_printing_ready(key: String, path: String)
 
 const IMAGES_PATH: String = "user://cache/images/"
-const TRACKER_FILE = "user://cache/printings.json"
-const DB_PATH = "user://cache/database/cards.db"
+const TRACKER_FILE: String = "user://cache/printings.json"
+const DB_PATH: String = "user://cache/database/cards.db"
 
 var _registry: Dictionary = {}
 var _registry_mutex: Mutex = Mutex.new()
@@ -36,7 +36,7 @@ func request_download(metadata: CardMetadata) -> void:
 		return
 	
 	# Create a NEW instance per request to avoid argument pollution
-	var fetcher = FetcherCLI.new()
+	var fetcher: FetcherCLI = FetcherCLI.new()
 	_active_fetcher = fetcher  # Keep alive until callback
 	
 	# Connect to the CLIWrapper signal
@@ -45,10 +45,10 @@ func request_download(metadata: CardMetadata) -> void:
 	)
 	
 	# Build and Run
-	fetcher.images()\
-		.db_path(DB_PATH)\
-		.output_dir(IMAGES_PATH)\
-		.card(metadata)\
+	fetcher.images() \
+		.db_path(DB_PATH) \
+		.output_dir(IMAGES_PATH) \
+		.card(metadata) \
 		.run()
 
 func _on_fetcher_finished(_output: Array, exit_code: int, metadata: CardMetadata, fetcher: FetcherCLI) -> void:

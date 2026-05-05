@@ -1,11 +1,8 @@
-[gd_scene format=3 uid="uid://bhsjcwk4ki45f"]
-
-[ext_resource type="Script" uid="uid://cdrt23etharo7" path="res://features/lobby/scripts/lobby_room.gd" id="1_wjbq6"]
+[gd_scene format=3 uid="uid://d3ec5ciieb22w"]
 
 [node name="LobbyRoom" type="Control" unique_id=1]
 layout_mode = 3
 anchors_preset = 0
-script = ExtResource("1_wjbq6")
 
 [node name="VBox" type="VBoxContainer" parent="." unique_id=2]
 layout_mode = 0

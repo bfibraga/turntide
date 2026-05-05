@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dw64jlmj7t5t"]
 
-[ext_resource type="Script" uid="uid://clg5uk7jap5ks" path="res://core/state_machine/connected/login.gd" id="1_ldr9u"]
-[ext_resource type="PackedScene" uid="uid://pgd2yhn11go0" path="res://scenes/fractal_background.tscn" id="2_cpvdj"]
+[ext_resource type="Script" uid="uid://clg5uk7jap5ks" path="res://features/auth/states/login.gd" id="1_ldr9u"]
+[ext_resource type="PackedScene" uid="uid://pgd2yhn11go0" path="res://features/background/scenes/fractal_background.tscn" id="2_cpvdj"]
 
 [node name="LoginScene" type="Control" unique_id=156594807]
 layout_mode = 3

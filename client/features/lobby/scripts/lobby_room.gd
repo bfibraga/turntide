@@ -2,7 +2,7 @@ extends Control
 
 const packets := preload("res://core/network/packets/packets.gd")
 
-@onready var logger: Log = ConsoleLogger.new()
+@onready var logger: Log = Global.logger
 @onready var ready_button: Button = $%Ready
 @onready var start_button: Button = $%Start
 @onready var leave_button: Button = $%Leave
