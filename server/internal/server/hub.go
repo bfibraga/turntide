@@ -2,10 +2,13 @@ package server
 
 import (
 	"log/slog"
+	"math/rand/v2"
 	"net/http"
 
 	"github.com/bfibraga/turntide/server/internal/server/components"
 	"github.com/bfibraga/turntide/server/internal/server/user"
+	"github.com/bfibraga/turntide/server/pkg/packets"
+	"github.com/go-faker/faker/v4"
 )
 
 type Hub struct {
@@ -17,13 +20,80 @@ type Hub struct {
 }
 
 func NewHub(logger *slog.Logger, userService *user.Service) *Hub {
+	lobbyReg := components.NewLobbyRegistry(-1)
+
+	hostID, err := faker.RandomInt(0, 255)
+	if err != nil {
+		return nil
+	}
+
+	hostUsername := faker.Name()
+	lobbyName := faker.Name()
+	format := "Casual"
+	var hostPassword string = ""
+	if rand.Float64() < 0.25 {
+		hostPassword = faker.Password()
+	}
+	capacity, err := faker.RandomInt(3, 10)
+	if err != nil {
+		return nil
+	}
+
+	lobbyReg.CreateLobby(
+		uint64(hostID[0]),
+		hostUsername,
+		lobbyName,
+		format,
+		capacity[0],
+		false,
+		hostPassword,
+	)
+
 	return &Hub{
 		Logger:      logger,
 		UserService: userService,
 		Registry:    components.NewClientRegistry(),
 		Broker:      components.NewMessageBroker(),
-		Lobbies:     components.NewLobbyRegistry(),
+		Lobbies:     lobbyReg,
 	}
+}
+
+// Initialize registers runtime callbacks for components that need hub access.
+// Call once after creating the hub.
+func (h *Hub) Initialize() {
+	if h.Lobbies != nil {
+		// Register onChange to broadcast lobby lists when they change
+		h.Lobbies.SetOnChange(func() { h.BroadcastLobbyList() })
+	}
+}
+
+// BroadcastLobbyList broadcasts current public lobbies to all authenticated clients.
+// It is intended to be registered as a callback with the LobbyRegistry.
+func (h *Hub) BroadcastLobbyList() {
+	lobbies := h.Lobbies.ListPublicLobbies()
+
+	var lobbyInfos []*packets.LobbyInfo
+	for _, l := range lobbies {
+		lobbyInfos = append(lobbyInfos, &packets.LobbyInfo{
+			Id:             l.ID,
+			Name:           l.Name,
+			Format:         l.Format,
+			CurrentPlayers: int32(l.CurrentPlayers),
+			MaxPlayers:     int32(l.MaxPlayers),
+			HostUsername:   l.HostUsername,
+			IsPrivate:      l.IsPrivate,
+		})
+	}
+
+	msg := packets.NewLobbyListResponse(lobbyInfos)
+
+	// Broadcast only to authenticated clients so unauthenticated sockets ignore it.
+	h.Registry.ForEach(func(id uint64, client ClientInterfacer) {
+		// Only send to clients that are in the Authenticated state
+		if client.StateName() == "Authenticated" {
+			client.ProcessPacket(0, msg)
+		}
+	})
 }
 
 func (h *Hub) Run() {

@@ -18,7 +18,7 @@ import (
 
 var (
 	port   = flag.Int("port", 4000, "port to listen on")
-	dbPath = flag.String("db-path", "shared/resources/server.db", "path to the server database")
+	dbPath = flag.String("db-path", "./shared/resources/server.db", "path to the server database")
 )
 
 func main() {
@@ -44,12 +44,20 @@ func main() {
 	}
 	defer conn.Close()
 
+	err = conn.Ping()
+	if err != nil {
+		logger.Error("failed to ping database", "error", err)
+		os.Exit(1)
+	}
+
 	userRepo := user.NewSQLiteUserRepository(conn)
 	userService := user.NewService(userRepo)
 
 	defer userRepo.Close()
 
 	hub := server.NewHub(logger, userService)
+	// Initialize runtime callbacks that require the hub to exist
+	hub.Initialize()
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		hub.Serve(clients.NewWebSocketClient, w, r)

@@ -22,7 +22,8 @@ RepositoryFactory="*uid://dkqb8gptj1f7a"
 Global="*uid://cg33kihswuayp"
 PacketFactory="*uid://buqxsmypo5gce"
 WS="*uid://d07d5mlkr1hfa"
-CardFactory="*res://scripts/card/card_factory.gd"
+CardFactory="*res://features/gameplay/scripts/card/card_factory.gd"
+TransitionManager="uid://byiuvyakhj5fc"
 
 [debug]
 

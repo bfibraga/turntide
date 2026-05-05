@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://dw64jlmj7t5t"]
+
+[ext_resource type="Script" uid="uid://clg5uk7jap5ks" path="res://core/state_machine/connected/login.gd" id="1_ldr9u"]
+[ext_resource type="PackedScene" uid="uid://pgd2yhn11go0" path="res://scenes/fractal_background.tscn" id="2_cpvdj"]
+
+[node name="LoginScene" type="Control" unique_id=156594807]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ldr9u")
+
+[node name="Fractal Background" parent="." unique_id=1618489495 instance=ExtResource("2_cpvdj")]
+layout_mode = 1
+mid_red = Color(0.086268246, 0.09779444, 0.10932068, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1427443473]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="CenterContainer" unique_id=1245959505]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/Panel" unique_id=2140918377]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 0
+offset_left = -150.0
+offset_top = -106.0
+offset_right = 150.0
+offset_bottom = 105.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 12
+
+[node name="UsernameInput" type="LineEdit" parent="CenterContainer/Panel/VBoxContainer" unique_id=763842987]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Username"
+
+[node name="PasswordInput" type="LineEdit" parent="CenterContainer/Panel/VBoxContainer" unique_id=1312503723]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Password"
+secret = true
+
+[node name="ErrorLabel" type="Label" parent="CenterContainer/Panel/VBoxContainer" unique_id=934399218]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.2, 0.2, 1)
+
+[node name="LoginButton" type="Button" parent="CenterContainer/Panel/VBoxContainer" unique_id=569560024]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Login"
+
+[node name="Separator" type="HSeparator" parent="CenterContainer/Panel/VBoxContainer" unique_id=570428812]
+layout_mode = 2
+
+[node name="RegisterButton" type="Button" parent="CenterContainer/Panel/VBoxContainer" unique_id=1315035768]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Go to Register"

@@ -72,3 +72,104 @@ func NewDenyResponse(reason string) Msg {
 		},
 	}
 }
+
+// Lobby packets
+
+func NewLobbyListRequest() Msg {
+	return &Packet_LobbyListRequest{
+		LobbyListRequest: &LobbyListRequest{},
+	}
+}
+
+func NewLobbyListResponse(lobbies []*LobbyInfo) Msg {
+	return &Packet_LobbyListResponse{
+		LobbyListResponse: &LobbyListResponse{Lobbies: lobbies},
+	}
+}
+
+func NewLobbyInfo(lobbyId uint64, lobbyName, hostUsername string, maxPlayers int32, format string, currentPlayers int32) *LobbyInfo {
+	return &LobbyInfo{
+		Id:             lobbyId,
+		Name:           lobbyName,
+		HostUsername:   hostUsername,
+		MaxPlayers:     maxPlayers,
+		Format:         format,
+		CurrentPlayers: currentPlayers,
+	}
+}
+
+func NewLobbyCreateRequest(name, format string, maxPlayers int32, isPrivate bool, password *string) Msg {
+	return &Packet_LobbyCreateRequest{
+		LobbyCreateRequest: &LobbyCreateRequest{
+			Name:       name,
+			Format:     format,
+			MaxPlayers: maxPlayers,
+			IsPrivate:  isPrivate,
+			Password:   password,
+		},
+	}
+}
+
+func NewLobbyJoinRequest(lobbyId uint64) Msg {
+	return &Packet_LobbyJoinRequest{
+		LobbyJoinRequest: &LobbyJoinRequest{
+			LobbyId: lobbyId,
+		},
+	}
+}
+
+func NewLobbyJoinedResponse(lobbyId uint64, lobbyName, hostUsername string, players []*LobbyPlayer) Msg {
+	return &Packet_LobbyJoinedResponse{
+		LobbyJoinedResponse: &LobbyJoinedResponse{
+			LobbyId:      lobbyId,
+			LobbyName:    lobbyName,
+			HostUsername: hostUsername,
+			Players:      players,
+		},
+	}
+}
+
+func NewLobbyPlayer(username string, clientId uint64, ready bool) *LobbyPlayer {
+	return &LobbyPlayer{
+		Username: username,
+		ClientId: clientId,
+		Ready:    ready,
+	}
+}
+
+func NewLobbyPlayerJoined(player *LobbyPlayer) Msg {
+	return &Packet_LobbyPlayerJoined{
+		LobbyPlayerJoined: &LobbyPlayerJoined{
+			Player: player,
+		},
+	}
+}
+
+func NewLobbyPlayerLeft(clientId uint64) Msg {
+	return &Packet_LobbyPlayerLeft{
+		LobbyPlayerLeft: &LobbyPlayerLeft{
+			ClientId: clientId,
+		},
+	}
+}
+
+func NewLobbyPlayerReady(clientId uint64, ready bool) Msg {
+	return &Packet_LobbyPlayerReady{
+		LobbyPlayerReady: &LobbyPlayerReady{
+			ClientId: clientId,
+			Ready:    ready,
+		},
+	}
+}
+
+func NewLobbyStartRequest() Msg {
+	return &Packet_LobbyStartRequest{
+		LobbyStartRequest: &LobbyStartRequest{},
+	}
+}
+
+func NewLobbyLeaveRequest() Msg {
+	return &Packet_LobbyLeaveRequest{
+		LobbyLeaveRequest: &LobbyLeaveRequest{},
+	}
+}

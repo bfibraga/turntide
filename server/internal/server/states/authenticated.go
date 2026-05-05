@@ -30,10 +30,10 @@ import (
 )
 
 type Authenticated struct {
-	client      server.ClientInterfacer
-	username    string
-	logger      *slog.Logger
-	lobbyReg    *components.LobbyRegistry
+	client   server.ClientInterfacer
+	username string
+	logger   *slog.Logger
+	lobbyReg *components.LobbyRegistry
 }
 
 func NewAuthenticated(logger *slog.Logger, username string, lobbyReg *components.LobbyRegistry) *Authenticated {
@@ -81,13 +81,13 @@ func (a *Authenticated) handleLobbyList() {
 	var lobbyInfos []*packets.LobbyInfo
 	for _, l := range lobbies {
 		lobbyInfos = append(lobbyInfos, &packets.LobbyInfo{
-			Id:            l.ID,
-			Name:          l.Name,
-			Format:        l.Format,
+			Id:             l.ID,
+			Name:           l.Name,
+			Format:         l.Format,
 			CurrentPlayers: int32(l.CurrentPlayers),
-			MaxPlayers:    int32(l.MaxPlayers),
-			HostUsername:  l.HostUsername,
-			IsPrivate:     l.IsPrivate,
+			MaxPlayers:     int32(l.MaxPlayers),
+			HostUsername:   l.HostUsername,
+			IsPrivate:      l.IsPrivate,
 		})
 	}
 
@@ -131,10 +131,30 @@ func (a *Authenticated) handleJoinLobby(senderId uint64, msg *packets.LobbyJoinR
 		return
 	}
 
+	a.logger.Debug("joined lobby", "lobby_id", msg.LobbyId)
+
+	playerPkt := packets.NewLobbyPlayer(a.username, senderId, false)
+	joinPkt := packets.NewLobbyPlayerJoined(playerPkt)
+	a.broadcastToLobby(joinPkt, msg.LobbyId)
+
 	// Transition to InLobby state
 	a.client.SetState(NewInLobby(a.logger, a.lobbyReg, a.client, msg.LobbyId, a.username))
 }
 
+func (a *Authenticated) broadcastToLobby(msg packets.Msg, lobbyID uint64) {
+	lobby, ok := a.lobbyReg.FindLobby(lobbyID)
+	if !ok {
+		return
+	}
+
+	for clientID := range lobby.Players {
+		if clientID == a.client.Id() {
+			continue
+		}
+		a.client.PassToPeer(msg, clientID)
+	}
+}
+
 func (a *Authenticated) OnExit() {
-	a.logger.Info("client leaving authenticated state", "username", a.username)
+	//a.logger.Info("client leaving authenticated state", "username", a.username)
 }

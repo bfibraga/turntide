@@ -49,6 +49,16 @@ func (s *SharedCollection[T]) Size() int {
 	return len(s.items)
 }
 
+func (s *SharedCollection[T]) Items() []T {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	items := make([]T, 0, len(s.items))
+	for _, v := range s.items {
+		items = append(items, v)
+	}
+	return items
+}
+
 func (s *SharedCollection[T]) ForEach(f func(key uint64, value T)) {
 	s.mu.Lock()
 	copy := maps.Clone(s.items)
@@ -57,4 +67,27 @@ func (s *SharedCollection[T]) ForEach(f func(key uint64, value T)) {
 	for k, v := range copy {
 		f(k, v)
 	}
+}
+
+func (s *SharedCollection[T]) Filter(f func(key uint64, value T) bool) *SharedCollection[T] {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	result := NewSharedCollection[T]()
+	for k, v := range s.items {
+		if f(k, v) {
+			result.Add(v)
+		}
+	}
+	return result
+}
+
+func Map[T any, U any](s *SharedCollection[T], f func(key uint64, value T) U) *SharedCollection[U] {
+	result := NewSharedCollection[U]()
+	s.mu.RLock()
+	for k, v := range s.items {
+		result.Add(f(k, v))
+	}
+	s.mu.RUnlock()
+	return result
 }

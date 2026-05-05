@@ -52,6 +52,12 @@ func (c *WebSocketClient) Initialize(id uint64) {
 	c.logger = c.hub.Logger.With("client_id", id)
 	c.SetState(states.NewConnected(c.logger, c.hub.UserService, c.hub.Lobbies))
 	c.logger.Debug("Sent ID to client")
+
+	// Register lobby change callback once hub is available
+	if c.hub != nil && c.hub.Lobbies != nil {
+		// set the onChange callback on the registry to broadcast updated lists
+		c.hub.Lobbies.SetOnChange(func() { c.hub.BroadcastLobbyList() })
+	}
 }
 
 func (c *WebSocketClient) ProcessPacket(senderId uint64, message packets.Msg) {
@@ -177,12 +183,21 @@ func (c *WebSocketClient) SetState(state server.ClientStateHandler) {
 	}
 }
 
+// StateName exposes the current underlying state's name for hub-level routing.
+func (c *WebSocketClient) StateName() string {
+	if c.state == nil {
+		return "None"
+	}
+	return c.state.Name()
+}
+
 func (c *WebSocketClient) Close() {
 	c.logger.Info("Closing client connection")
-
+	// Ensure state exit handlers run (which remove the client from any lobby)
+	// before unregistering from the broker.
+	c.SetState(nil)
 	c.hub.Broker.Unregister(c)
 	c.conn.Close()
-	c.SetState(nil)
 	if _, closed := <-c.sendChan; !closed {
 		close(c.sendChan)
 	}

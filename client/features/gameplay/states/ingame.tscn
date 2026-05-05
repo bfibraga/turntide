@@ -1,0 +1,354 @@
+[gd_scene format=3 uid="uid://r85jixs0mei4"]
+
+[ext_resource type="PackedScene" uid="uid://pgd2yhn11go0" path="res://scenes/fractal_background.tscn" id="2_ll2wp"]
+[ext_resource type="PackedScene" uid="uid://b8egimx27vbxu" path="res://features/gameplay/scenes/hand/hand.tscn" id="3_ube6o"]
+[ext_resource type="Script" uid="uid://cajckdqfvke5i" path="res://core/state_machine/ingame/mouse_tracker.gd" id="4_ku7qw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q22go"]
+resource_local_to_scene = true
+bg_color = Color(1, 0.34509805, 0.25882354, 0.8862745)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wuwgw"]
+bg_color = Color(0, 0, 0, 0.19607843)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ll2wp"]
+bg_color = Color(0, 0, 0, 0.7764706)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ube6o"]
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="Main" type="Control" unique_id=1006834727]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MouseTracker" type="Node" parent="." unique_id=1923517248]
+script = ExtResource("4_ku7qw")
+
+[node name="Fractal Background" parent="." unique_id=1618489495 instance=ExtResource("2_ll2wp")]
+layout_mode = 1
+
+[node name="GridContainer" type="GridContainer" parent="." unique_id=1683547030]
+layout_direction = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 1
+theme_override_constants/v_separation = 1
+columns = 2
+
+[node name="Battlefield 1" type="Panel" parent="GridContainer" unique_id=862243090]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_q22go")
+
+[node name="MarginContainer" type="MarginContainer" parent="GridContainer/Battlefield 1" unique_id=221750224]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GridContainer/Battlefield 1/MarginContainer" unique_id=600194731]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Main2" type="Panel" parent="GridContainer/Battlefield 1/MarginContainer/HBoxContainer" unique_id=219571347]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wuwgw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GridContainer/Battlefield 1/MarginContainer/HBoxContainer" unique_id=147408317]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="Main" type="Panel" parent="GridContainer/Battlefield 1/MarginContainer/HBoxContainer/VBoxContainer" unique_id=554279339]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wuwgw")
+
+[node name="Lands" type="Panel" parent="GridContainer/Battlefield 1/MarginContainer/HBoxContainer/VBoxContainer" unique_id=733628627]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_wuwgw")
+
+[node name="Battlefield 2" type="Panel" parent="GridContainer" unique_id=1729723080]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_q22go")
+
+[node name="MarginContainer" type="MarginContainer" parent="GridContainer/Battlefield 2" unique_id=158783452]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GridContainer/Battlefield 2/MarginContainer" unique_id=1835477560]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Main2" type="Panel" parent="GridContainer/Battlefield 2/MarginContainer/HBoxContainer" unique_id=624743583]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wuwgw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GridContainer/Battlefield 2/MarginContainer/HBoxContainer" unique_id=1212179505]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="Main" type="Panel" parent="GridContainer/Battlefield 2/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1066453463]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wuwgw")
+
+[node name="Lands" type="Panel" parent="GridContainer/Battlefield 2/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1813126209]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_wuwgw")
+
+[node name="Battlefield 3" type="Panel" parent="GridContainer" unique_id=1087184558]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_q22go")
+
+[node name="MarginContainer" type="MarginContainer" parent="GridContainer/Battlefield 3" unique_id=1455169793]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GridContainer/Battlefield 3/MarginContainer" unique_id=1038138827]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Main2" type="Panel" parent="GridContainer/Battlefield 3/MarginContainer/HBoxContainer" unique_id=412863936]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wuwgw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GridContainer/Battlefield 3/MarginContainer/HBoxContainer" unique_id=1078179580]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="Main" type="Panel" parent="GridContainer/Battlefield 3/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1929975571]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wuwgw")
+
+[node name="Lands" type="Panel" parent="GridContainer/Battlefield 3/MarginContainer/HBoxContainer/VBoxContainer" unique_id=370183793]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_wuwgw")
+
+[node name="Battlefield 4" type="Panel" parent="GridContainer" unique_id=243498965]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_q22go")
+
+[node name="MarginContainer" type="MarginContainer" parent="GridContainer/Battlefield 4" unique_id=1671522320]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GridContainer/Battlefield 4/MarginContainer" unique_id=1692373671]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Main2" type="Panel" parent="GridContainer/Battlefield 4/MarginContainer/HBoxContainer" unique_id=192985954]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wuwgw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GridContainer/Battlefield 4/MarginContainer/HBoxContainer" unique_id=1262400235]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="Main" type="Panel" parent="GridContainer/Battlefield 4/MarginContainer/HBoxContainer/VBoxContainer" unique_id=269293011]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wuwgw")
+
+[node name="Lands" type="Panel" parent="GridContainer/Battlefield 4/MarginContainer/HBoxContainer/VBoxContainer" unique_id=654332437]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_wuwgw")
+
+[node name="Panel" type="Panel" parent="." unique_id=1537874246]
+custom_minimum_size = Vector2(300, 150)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -50.0
+offset_right = 150.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ll2wp")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=1586658421]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="GridContainer" type="GridContainer" parent="Panel/MarginContainer" unique_id=1723376823]
+layout_mode = 2
+columns = 2
+
+[node name="LifeCounter" type="Panel" parent="Panel/MarginContainer/GridContainer" unique_id=1445361057]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_ube6o")
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/GridContainer/LifeCounter" unique_id=1778694144]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "40"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LifeCounter2" type="Panel" parent="Panel/MarginContainer/GridContainer" unique_id=1087343932]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_ube6o")
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/GridContainer/LifeCounter2" unique_id=128566585]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "40"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LifeCounter3" type="Panel" parent="Panel/MarginContainer/GridContainer" unique_id=8321979]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_ube6o")
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/GridContainer/LifeCounter3" unique_id=768197717]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "40"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LifeCounter4" type="Panel" parent="Panel/MarginContainer/GridContainer" unique_id=140186649]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_ube6o")
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/GridContainer/LifeCounter4" unique_id=1034373881]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "40"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Hand" parent="." unique_id=90390812 instance=ExtResource("3_ube6o")]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+offset_top = -81.0
+grow_vertical = 0

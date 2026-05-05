@@ -1,0 +1,116 @@
+[gd_scene format=3 uid="uid://die2458ml2aad"]
+
+[ext_resource type="Script" uid="uid://bnjait6ce8evs" path="res://card_viewer.gd" id="1_hs2gs"]
+[ext_resource type="PackedScene" uid="uid://pgd2yhn11go0" path="res://scenes/fractal_background.tscn" id="2_37t42"]
+[ext_resource type="Script" uid="uid://nv5mq1l585aj" path="res://core/utils/search_line_edit.gd" id="3_3157e"]
+
+[node name="Card Viewer" type="Control" unique_id=1100113074]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hs2gs")
+
+[node name="Fractal Background" parent="." unique_id=1618489495 instance=ExtResource("2_37t42")]
+visible = false
+layout_mode = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1049769964]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=615853635]
+layout_mode = 2
+alignment = 1
+
+[node name="Header" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=639454208]
+layout_mode = 2
+size_flags_vertical = 0
+alignment = 1
+
+[node name="CardName" type="LineEdit" parent="MarginContainer/VBoxContainer/Header" unique_id=1083811287]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Card Name "
+expand_to_text_length = true
+script = ExtResource("3_3157e")
+metadata/_custom_type_script = "uid://nv5mq1l585aj"
+
+[node name="Set" type="LineEdit" parent="MarginContainer/VBoxContainer/Header" unique_id=885066875]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Set Code"
+expand_to_text_length = true
+script = ExtResource("3_3157e")
+metadata/_custom_type_script = "uid://nv5mq1l585aj"
+
+[node name="Back" type="Button" parent="MarginContainer/VBoxContainer/Header" unique_id=152788252]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Back"
+
+[node name="Main" type="HSplitContainer" parent="MarginContainer/VBoxContainer" unique_id=2100763760]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Card List" type="ScrollContainer" parent="MarginContainer/VBoxContainer/Main" unique_id=1441078337]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Grid" type="FlowContainer" parent="MarginContainer/VBoxContainer/Main/Card List" unique_id=136783085]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+last_wrap_alignment = 1
+
+[node name="Card Details" type="Control" parent="MarginContainer/VBoxContainer/Main" unique_id=314318673]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Content" type="RichTextLabel" parent="MarginContainer/VBoxContainer/Main/Card Details" unique_id=1989066048]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+
+[node name="Footer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1054671219]
+layout_mode = 2
+alignment = 1
+
+[node name="Previous" type="Button" parent="MarginContainer/VBoxContainer/Footer" unique_id=1746941151]
+unique_name_in_owner = true
+layout_mode = 2
+text = "<"
+
+[node name="Container" type="CenterContainer" parent="MarginContainer/VBoxContainer/Footer" unique_id=1331347550]
+layout_mode = 2
+
+[node name="Page Number" type="Label" parent="MarginContainer/VBoxContainer/Footer/Container" unique_id=217513152]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Next" type="Button" parent="MarginContainer/VBoxContainer/Footer" unique_id=1523449536]
+unique_name_in_owner = true
+layout_mode = 2
+text = ">"

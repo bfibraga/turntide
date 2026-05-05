@@ -22,6 +22,10 @@ type ClientInterfacer interface {
 
 	SetState(state ClientStateHandler)
 
+	// StateName returns the current state's Name(). Used for routing decisions
+	// at the hub level without depending on concrete client types.
+	StateName() string
+
 	Close()
 }
 

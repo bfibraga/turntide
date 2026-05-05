@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://rmcy2p4mkung"]
+
+[ext_resource type="Script" uid="uid://bkj6n7gcsi1yo" path="res://features/gameplay/scripts/card/card.gd" id="1_ubfjn"]
+[ext_resource type="PackedScene" uid="uid://dpcsg765ssgg8" path="res://features/gameplay/scenes/card/card_view.tscn" id="2_s42fv"]
+[ext_resource type="Script" uid="uid://tku1nh3d3rte" path="res://features/gameplay/scripts/card/controller.gd" id="5_hefud"]
+[ext_resource type="Script" uid="uid://b06mduquspyco" path="res://features/gameplay/scripts/card/movement.gd" id="7_aim30"]
+
+[node name="Card" type="Control" unique_id=1819874517 node_paths=PackedStringArray("controller")]
+layout_mode = 3
+anchors_preset = 0
+size_flags_vertical = 4
+script = ExtResource("1_ubfjn")
+controller = NodePath("Controller")
+
+[node name="View" parent="." unique_id=1111885400 instance=ExtResource("2_s42fv")]
+layout_mode = 0
+
+[node name="Controller" type="Node" parent="." unique_id=1275324217]
+script = ExtResource("5_hefud")
+
+[node name="Movement" type="Node" parent="." unique_id=1649964722]
+script = ExtResource("7_aim30")
+
+[connection signal="gui_input" from="." to="Movement" method="_on_gui_input"]
+[connection signal="mouse_entered" from="." to="Movement" method="_on_mouse_enter"]
+[connection signal="mouse_exited" from="." to="Movement" method="_on_mouse_exit"]

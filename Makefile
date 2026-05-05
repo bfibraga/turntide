@@ -17,7 +17,7 @@ server:
 	go build -o $(BIN_PATH) ./server
 
 test:
-	go test ./...
+	go test ./server/test/...
 
 clean:
 	rm -rf $(BIN_PATH)
