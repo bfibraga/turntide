@@ -1,17 +1,20 @@
 extends GutTest
 
 var _signal_flag: bool = false
-var _entered_flag: bool = false
 
 func test_initial_state_is_in_hand() -> void:
 	var InHandScript = load("res://features/gameplay/scripts/card/state/game/in_hand.gd")
+	var OnBattlefieldScript = load("res://features/gameplay/scripts/card/state/game/on_battlefield.gd")
 	var StateMachineScript = load("res://features/gameplay/scripts/card/state/game/state_machine.gd")
 	
 	var hand_state = InHandScript.new()
 	hand_state.name = "InHand"
+	var battlefield_state = OnBattlefieldScript.new()
+	battlefield_state.name = "OnBattlefield"
 	
 	var sm = StateMachineScript.new()
 	sm.add_child(hand_state)
+	sm.add_child(battlefield_state)
 	sm.initial_state = hand_state
 	
 	sm._ready()
