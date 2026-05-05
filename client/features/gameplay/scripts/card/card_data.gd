@@ -1,5 +1,5 @@
 extends Node
-class_name CardData
+class_name CardDisplayData
 
 @export_category("Card Metadata")
 @export_file_path(".jpg") var image_path: String = ""
@@ -9,15 +9,15 @@ func _init(card_name: String = "", image_path: String = "") -> void:
 	self.card_name = card_name
 	self.image_path = image_path
 
-func with_image_path(image_path: String) -> CardData:
+func with_image_path(image_path: String) -> CardDisplayData:
 	self.image_path = image_path
 	return self
 
-func with_card_name(card_name: String) -> CardData:
+func with_card_name(card_name: String) -> CardDisplayData:
 	self.card_name = card_name
 	return self
 
-func random() -> CardData:
+func random() -> CardDisplayData:
 	var printings_dir: String = "../shared/resources/printings"
 
 	var dir: DirAccess = DirAccess.open(printings_dir)

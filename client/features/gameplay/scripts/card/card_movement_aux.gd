@@ -15,7 +15,7 @@ signal discarded(card: CardNode)
 @export var card_size: Vector2 = Vector2(250, 350)
 @export var hover_offset: Vector2 = Vector2(0, -20)
 
-var card_data: CardData
+var card_data: CardDisplayData
 
 var is_selected: bool = false
 var is_dragging: bool = false
@@ -27,7 +27,7 @@ var is_discarded: bool = false
 
 func _ready() -> void:
 	if card_data == null:
-		card_data = CardData.new()
+		card_data = CardDisplayData.new()
 	_setup_view()
 	_connect_signals()
 
