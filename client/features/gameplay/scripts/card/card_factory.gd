@@ -37,4 +37,22 @@ func create_card_view(card_metadata: CardMetadata = null) -> CardView:
 	card_view.custom_minimum_size = Vector2(250, 350)
 	
 	return card_view
+
+func create_card_2d(card_data, game_state_machine, animation_state_machine) -> Control:
+	var view_2d_script = preload("res://features/gameplay/scripts/card/view/view_2d.gd")
+	var view_2d: Control = view_2d_script.new()
+	
+	view_2d.setup(card_data, game_state_machine, animation_state_machine)
+	add_child(view_2d)
+	
+	return view_2d
+
+func create_card_3d(card_data, game_state_machine, animation_state_machine) -> Node3D:
+	var view_3d_script = preload("res://features/gameplay/scripts/card/view/view_3d.gd")
+	var view_3d: Node3D = view_3d_script.new()
+	
+	view_3d.setup(card_data, game_state_machine, animation_state_machine)
+	add_child(view_3d)
+	
+	return view_3d
 	
