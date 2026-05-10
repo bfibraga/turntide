@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"os"
 	"time"
 
@@ -34,7 +35,8 @@ var dbListCmd = &cobra.Command{
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
-		factory, err := repository.NewFactory(dbPath)
+		logger := slog.Default()
+		factory, err := repository.NewFactory(dbPath, logger)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error: failed to initialize repository factory: %v\n", err)
 			os.Exit(ExitConfigError)
@@ -70,7 +72,8 @@ var dbCountCmd = &cobra.Command{
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
-		factory, err := repository.NewFactory(dbPath)
+		logger := slog.Default()
+		factory, err := repository.NewFactory(dbPath, logger)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error: failed to initialize repository: %v\n", err)
 			os.Exit(ExitConfigError)
@@ -99,7 +102,8 @@ var dbSearchCmd = &cobra.Command{
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
-		factory, err := repository.NewFactory(dbPath)
+		logger := slog.Default()
+		factory, err := repository.NewFactory(dbPath, logger)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error: failed to initialize repository: %v\n", err)
 			os.Exit(ExitConfigError)
@@ -139,7 +143,8 @@ var dbSetCmd = &cobra.Command{
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
-		factory, err := repository.NewFactory(dbPath)
+		logger := slog.Default()
+		factory, err := repository.NewFactory(dbPath, logger)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error: failed to initialize repository: %v\n", err)
 			os.Exit(ExitConfigError)

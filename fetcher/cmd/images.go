@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+	"log/slog"
 	"os"
 	"strings"
 
@@ -56,7 +57,8 @@ var imagesCmd = &cobra.Command{
 			output = "card_images"
 		}
 
-		factory, err := repository.NewFactory(dbPath)
+		logger := slog.Default()
+		factory, err := repository.NewFactory(dbPath, logger)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error: failed to initialize repository factory: %v\n", err)
 			os.Exit(ExitConfigError)

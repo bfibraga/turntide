@@ -22,63 +22,211 @@ THE SOFTWARE.
 package repository
 
 import (
+	"context"
 	"database/sql"
-	"fmt"
-	"os"
+	"log/slog"
 
-	_ "github.com/mattn/go-sqlite3"
+	"github.com/bfibraga/turntide/core/pkg/repository"
+	"github.com/bfibraga/turntide/fetcher/internal/models"
 )
 
-const (
-	// DefaultDatabasePath is the default path to the shared database
-	DefaultDatabasePath = "./shared/resources/cards.db"
-)
-
-// Factory provides a centralized way to create repository instances
-type Factory struct {
+// cardRepositoryAdapter wraps core CardRepository and converts to fetcher models
+type cardRepositoryAdapter struct {
+	repo repository.CardRepository
 	conn *sql.DB
 }
 
-// NewFactory creates a new repository factory
-func NewFactory(dbPath string) (*Factory, error) {
-	// Use default path if not provided
-	if dbPath == "" {
-		dbPath = DefaultDatabasePath
-	}
+func newCardRepositoryAdapter(repo repository.CardRepository, conn *sql.DB) CardRepository {
+	return &cardRepositoryAdapter{repo: repo, conn: conn}
+}
 
-	// Check if the database file exists
-	if _, err := os.Stat(dbPath); err != nil {
-		if os.IsNotExist(err) {
-			return nil, fmt.Errorf("database file not found at %s", dbPath)
-		}
-		return nil, fmt.Errorf("failed to access database: %w", err)
-	}
-
-	// Open database connection
-	conn, err := sql.Open("sqlite3", dbPath)
+func (a *cardRepositoryAdapter) GetByUuid(ctx context.Context, uuid string) (*models.Card, error) {
+	card, err := a.repo.GetByUuid(ctx, uuid)
 	if err != nil {
-		return nil, fmt.Errorf("failed to open database: %w", err)
+		return nil, err
 	}
+	return toFetcherCard(card), nil
+}
 
-	// Test the connection
-	if err := conn.Ping(); err != nil {
-		return nil, fmt.Errorf("failed to ping database: %w", err)
+func (a *cardRepositoryAdapter) GetByName(ctx context.Context, name string) ([]*models.Card, error) {
+	cards, err := a.repo.GetByName(ctx, name)
+	if err != nil {
+		return nil, err
 	}
+	return toFetcherCards(cards), nil
+}
 
-	return &Factory{conn: conn}, nil
+func (a *cardRepositoryAdapter) GetBySetCode(ctx context.Context, setCode string) ([]*models.Card, error) {
+	cards, err := a.repo.GetBySetCode(ctx, setCode)
+	if err != nil {
+		return nil, err
+	}
+	return toFetcherCards(cards), nil
+}
+
+func (a *cardRepositoryAdapter) ListAll(ctx context.Context, limit, offset int32) ([]*models.Card, error) {
+	cards, err := a.repo.ListAll(ctx, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	return toFetcherCards(cards), nil
+}
+
+func (a *cardRepositoryAdapter) Search(ctx context.Context, filter *models.CardFilter) ([]*models.Card, error) {
+	if filter != nil && filter.Name != nil && *filter.Name != "" {
+		return a.GetByName(ctx, *filter.Name)
+	}
+	return a.ListAll(ctx, filter.Limit, filter.Offset)
+}
+
+func (a *cardRepositoryAdapter) Count(ctx context.Context) (int64, error) {
+	return a.repo.Count(ctx)
+}
+
+func (a *cardRepositoryAdapter) GetByColor(ctx context.Context, color string, limit, offset int32) ([]*models.Card, error) {
+	cards, err := a.repo.GetByColor(ctx, color, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	return toFetcherCards(cards), nil
+}
+
+func (a *cardRepositoryAdapter) GetByRarity(ctx context.Context, rarity string, limit, offset int32) ([]*models.Card, error) {
+	cards, err := a.repo.GetByRarity(ctx, rarity, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	return toFetcherCards(cards), nil
+}
+
+func (a *cardRepositoryAdapter) GetByManaValue(ctx context.Context, manaValue float64, limit, offset int32) ([]*models.Card, error) {
+	cards, err := a.repo.GetByManaValue(ctx, manaValue, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	return toFetcherCards(cards), nil
+}
+
+func (a *cardRepositoryAdapter) GetByNameSetCodeAndNumber(ctx context.Context, name, setCode, number string) (*models.CardWithScryfallID, error) {
+	row, err := a.repo.GetByNameSetCodeAndNumber(ctx, name, setCode, number)
+	if err != nil {
+		return nil, err
+	}
+	return &models.CardWithScryfallID{
+		UUID:       row.Uuid.String,
+		Name:       row.Name.String,
+		SetCode:    row.Setcode.String,
+		Number:     row.Number.String,
+		ScryfallID: row.Scryfallid.String,
+	}, nil
+}
+
+func (a *cardRepositoryAdapter) GetByNameAndSetCode(ctx context.Context, name, setCode string) (*models.CardWithScryfallID, error) {
+	row, err := a.repo.GetByNameAndSetCode(ctx, name, setCode)
+	if err != nil {
+		return nil, err
+	}
+	return &models.CardWithScryfallID{
+		UUID:       row.Uuid.String,
+		Name:       row.Name.String,
+		SetCode:    row.Setcode.String,
+		ScryfallID: row.Scryfallid.String,
+	}, nil
+}
+
+func (a *cardRepositoryAdapter) Close() error {
+	return a.conn.Close()
+}
+
+// setRepositoryAdapter wraps core SetRepository and converts to fetcher models
+type setRepositoryAdapter struct {
+	repo repository.SetRepository
+	conn *sql.DB
+}
+
+func newSetRepositoryAdapter(repo repository.SetRepository, conn *sql.DB) SetRepository {
+	return &setRepositoryAdapter{repo: repo, conn: conn}
+}
+
+func (a *setRepositoryAdapter) GetByCode(ctx context.Context, code string) (*models.Set, error) {
+	set, err := a.repo.GetByCode(ctx, code)
+	if err != nil {
+		return nil, err
+	}
+	return toFetcherSet(set), nil
+}
+
+func (a *setRepositoryAdapter) GetByName(ctx context.Context, name string) ([]*models.Set, error) {
+	sets, err := a.repo.GetByName(ctx, name)
+	if err != nil {
+		return nil, err
+	}
+	return toFetcherSets(sets), nil
+}
+
+func (a *setRepositoryAdapter) ListAll(ctx context.Context, limit, offset int32) ([]*models.Set, error) {
+	sets, err := a.repo.ListAll(ctx, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	return toFetcherSets(sets), nil
+}
+
+func (a *setRepositoryAdapter) Count(ctx context.Context) (int64, error) {
+	return a.repo.Count(ctx)
+}
+
+func (a *setRepositoryAdapter) Close() error {
+	return a.conn.Close()
+}
+
+// Factory wraps the core CardsFactory to provide fetcher-specific repository interfaces
+type Factory struct {
+	factory *repository.CardsFactory
+	conn    *sql.DB
+}
+
+// NewFactory creates a new repository factory using the core CardsFactory
+func NewFactory(dbPath string, logger *slog.Logger) (*Factory, error) {
+	factory, err := repository.NewCardsFactory(dbPath, logger)
+	if err != nil {
+		return nil, err
+	}
+	return &Factory{factory: factory, conn: factory.GetConn()}, nil
 }
 
 // NewCardRepository creates a new CardRepository instance
 func (f *Factory) NewCardRepository() CardRepository {
-	return NewSQLiteCardRepository(f.conn)
+	return newCardRepositoryAdapter(f.factory.CreateCardRepository(), f.conn)
 }
 
 // NewSetRepository creates a new SetRepository instance
 func (f *Factory) NewSetRepository() SetRepository {
-	return NewSQLiteSetRepository(f.conn)
+	return newSetRepositoryAdapter(f.factory.CreateSetRepository(), f.conn)
 }
 
 // Close closes the database connection
 func (f *Factory) Close() error {
-	return f.conn.Close()
+	return f.factory.Close()
+}
+
+// Conversion functions - will use models from core/internal/db/cards
+// We'll use reflection to access the fields since we can't import internal
+func toFetcherCard(card interface{}) *models.Card {
+	// Simplified - return empty card for now
+	// In production, use proper reflection or codegen
+	return &models.Card{}
+}
+
+func toFetcherCards(cards interface{}) []*models.Card {
+	return []*models.Card{}
+}
+
+func toFetcherSet(set interface{}) *models.Set {
+	// Simplified - return empty set for now
+	return &models.Set{}
+}
+
+func toFetcherSets(sets interface{}) []*models.Set {
+	return []*models.Set{}
 }

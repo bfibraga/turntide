@@ -1,0 +1,16 @@
+version: "2"
+sql:
+  - engine: "sqlite"
+    queries: "./queries/cards"
+    schema: "./schemas/cards.sql"
+    gen:
+      go:
+        package: "cards"
+        out: "../cards"
+  - engine: "sqlite"
+    queries: "./queries/server"
+    schema: "./schemas/server.sql"
+    gen:
+      go:
+        package: "server"
+        out: "../server"

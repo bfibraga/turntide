@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package shared;
+
+option go_package = "/pkg/packets";
+
+message PingMessage {
+  uint64 timestamp = 1;
+}
+
+message ChatMessage {
+  string msg = 1;
+}
+
+message IdMessage {
+  uint64 id = 1;
+}
+
+message LoginRequestMessage {
+  string username = 1;
+  string password = 2;
+}
+
+message RegisterRequestMessage {
+  string username = 1;
+  string password = 2;
+}
+
+message OkResponseMessage {
+}
+
+message DenyResponseMessage {
+  string reason = 2;
+}
+
+message Packet {
+  uint64 sender_id = 1;
+  oneof msg {
+    PingMessage ping = 2;
+    ChatMessage chat = 3;
+    IdMessage id = 4;
+    LoginRequestMessage login_request = 5;
+    RegisterRequestMessage register_request = 6;
+    OkResponseMessage ok_response = 7;
+    DenyResponseMessage deny_response = 8;
+  }
+}

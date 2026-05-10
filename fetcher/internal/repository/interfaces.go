@@ -27,41 +27,27 @@ import (
 	"github.com/bfibraga/turntide/fetcher/internal/models"
 )
 
-// CardRepository defines the interface for card data access
+// CardRepository defines the interface for card data access using fetcher models
 type CardRepository interface {
-	// GetByUuid retrieves a card by its UUID
 	GetByUuid(ctx context.Context, uuid string) (*models.Card, error)
-
-	// GetByName retrieves cards matching a name
 	GetByName(ctx context.Context, name string) ([]*models.Card, error)
-
-	// GetBySetCode retrieves all cards from a specific set
 	GetBySetCode(ctx context.Context, setCode string) ([]*models.Card, error)
-
-	// ListAll retrieves cards with pagination
-	ListAll(ctx context.Context, limit int32, offset int32) ([]*models.Card, error)
-
-	// Search retrieves cards with dynamic filtering
+	ListAll(ctx context.Context, limit, offset int32) ([]*models.Card, error)
 	Search(ctx context.Context, filter *models.CardFilter) ([]*models.Card, error)
-
-	// Count returns the total number of cards
 	Count(ctx context.Context) (int64, error)
-
-	// GetByColor retrieves cards of a specific color
-	GetByColor(ctx context.Context, color string, limit int32, offset int32) ([]*models.Card, error)
-
-	// GetByRarity retrieves cards of a specific rarity
-	GetByRarity(ctx context.Context, rarity string, limit int32, offset int32) ([]*models.Card, error)
-
-	// GetByManaValue retrieves cards with a specific mana value
-	GetByManaValue(ctx context.Context, manaValue float64, limit int32, offset int32) ([]*models.Card, error)
-
-	// GetByNameSetCodeAndNumber retrieves a card by name, set code, and collector number
+	GetByColor(ctx context.Context, color string, limit, offset int32) ([]*models.Card, error)
+	GetByRarity(ctx context.Context, rarity string, limit, offset int32) ([]*models.Card, error)
+	GetByManaValue(ctx context.Context, manaValue float64, limit, offset int32) ([]*models.Card, error)
 	GetByNameSetCodeAndNumber(ctx context.Context, name, setCode, number string) (*models.CardWithScryfallID, error)
-
-	// GetByNameAndSetCode retrieves a card by name and set code (first match)
 	GetByNameAndSetCode(ctx context.Context, name, setCode string) (*models.CardWithScryfallID, error)
+	Close() error
+}
 
-	// Close closes the underlying database connection
+// SetRepository defines the interface for set data access using fetcher models
+type SetRepository interface {
+	GetByCode(ctx context.Context, code string) (*models.Set, error)
+	GetByName(ctx context.Context, name string) ([]*models.Set, error)
+	ListAll(ctx context.Context, limit, offset int32) ([]*models.Set, error)
+	Count(ctx context.Context) (int64, error)
 	Close() error
 }
