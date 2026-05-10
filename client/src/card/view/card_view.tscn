@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://b3qw3f5376ssa"]
+
+[ext_resource type="Shader" uid="uid://6bh6uf8nbbf5" path="res://assets/shaders/card/faux_3d_perspective_shader.gdshader.gdshader" id="1_hvbp4"]
+[ext_resource type="Script" uid="uid://bv0jo2dijkdoy" path="res://src/card/view/card_view.gd" id="2_l0amn"]
+[ext_resource type="Shader" uid="uid://cmmkabcp8y12j" path="res://assets/shaders/card/card_node.gdshader" id="3_l0amn"]
+[ext_resource type="Texture2D" uid="uid://bsdvhdnxicqae" path="res://assets/card/back/back_card.png" id="4_l0amn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kn0ba"]
+resource_local_to_scene = true
+shader = ExtResource("1_hvbp4")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p87q3"]
+shader = ExtResource("3_l0amn")
+shader_parameter/_cornerRadius = 60.00000285
+
+[node name="Card View" type="SubViewportContainer" unique_id=960405069]
+material = SubResource("ShaderMaterial_kn0ba")
+anchors_preset = -1
+anchor_right = 0.21700001
+anchor_bottom = 0.54
+offset_right = 0.015991211
+offset_bottom = 0.07998657
+pivot_offset = Vector2(125, 175)
+script = ExtResource("2_l0amn")
+tilt_scale = 0.075
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=1785722354]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(250, 350)
+render_target_update_mode = 4
+
+[node name="Art" type="TextureRect" parent="SubViewport" unique_id=874565429]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_p87q3")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(125, 175)
+size_flags_horizontal = 6
+size_flags_vertical = 6
+texture = ExtResource("4_l0amn")
+expand_mode = 1
+stretch_mode = 5

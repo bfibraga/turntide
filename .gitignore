@@ -8,3 +8,6 @@ shared/resources/*.db
 
 # Worktrees for isolated development
 .worktrees/
+
+# Go debug binaries
+__debug_bin*

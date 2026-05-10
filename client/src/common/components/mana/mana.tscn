@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://cs3xgq6x0b61x"]
+
+[ext_resource type="Texture2D" uid="uid://y7cqocmjf24x" path="res://assets/mana_symbols/colorless/colorless_mana_symbol.svg" id="1_abq8l"]
+[ext_resource type="Script" uid="uid://b2rf8d6ys420f" path="res://src/common/components/mana/mana.gd" id="2_abq8l"]
+
+[node name="Mana" type="TextureRect" unique_id=1444271651]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_abq8l")
+expand_mode = 2
+stretch_mode = 5
+script = ExtResource("2_abq8l")

@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cewyxfrkdmlo5"]
+
+[ext_resource type="Theme" uid="uid://w654htq0sry0" path="res://assets/themes/success_chip.tres" id="1_7oo72"]
+[ext_resource type="Script" uid="uid://degf1kqjnwfa" path="res://src/common/components/chip/chip.gd" id="2_tkcwq"]
+
+[node name="Chip" type="PanelContainer" unique_id=432381811]
+theme = ExtResource("1_7oo72")
+script = ExtResource("2_tkcwq")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1684267416]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_right = 15
+
+[node name="Label" type="Label" parent="MarginContainer" unique_id=224282102]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Chip"

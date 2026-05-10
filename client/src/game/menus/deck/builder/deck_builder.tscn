@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://cpjp8o5nseqhm"]
+
+[ext_resource type="PackedScene" uid="uid://d0lfxpxwn71im" path="res://src/game/menus/deck/browser/deck_browser.tscn" id="2_gktbo"]
+[ext_resource type="PackedScene" uid="uid://drkvnapl7anhd" path="res://src/game/menus/card/atlas/card_atlas.tscn" id="3_gktbo"]
+
+[sub_resource type="GDScript" id="GDScript_1fgeg"]
+script/source = "extends Control
+"
+
+[node name="DeckBuilder" type="TabContainer" unique_id=1587540706]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 0
+script = SubResource("GDScript_1fgeg")
+
+[node name="Deck Browser" parent="." unique_id=1978447245 instance=ExtResource("2_gktbo")]
+layout_mode = 2
+
+[node name="Card Atlas" parent="." unique_id=1100113074 instance=ExtResource("3_gktbo")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1

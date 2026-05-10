@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://dtrqtmvo1kswi"]
+
+[ext_resource type="Script" uid="uid://xwaq3o7uy31y" path="res://src/card/ui/card_ui.gd" id="1_rm57c"]
+[ext_resource type="PackedScene" uid="uid://b3qw3f5376ssa" path="res://src/card/view/card_view.tscn" id="2_t8bav"]
+[ext_resource type="Shader" uid="uid://6bh6uf8nbbf5" path="res://assets/shaders/card/faux_3d_perspective_shader.gdshader.gdshader" id="3_cixhd"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vloml"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n6nm8"]
+resource_local_to_scene = true
+shader = ExtResource("3_cixhd")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[node name="Card" type="PanelContainer" unique_id=2067653633]
+offset_right = 250.0
+offset_bottom = 350.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_vloml")
+script = ExtResource("1_rm57c")
+
+[node name="View" parent="." unique_id=960405069 instance=ExtResource("2_t8bav")]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_n6nm8")
+layout_mode = 2
