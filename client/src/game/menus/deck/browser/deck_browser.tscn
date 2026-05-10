@@ -1,0 +1,212 @@
+[gd_scene format=3 uid="uid://d0lfxpxwn71im"]
+
+[ext_resource type="Script" uid="uid://dbe21uwpwja6f" path="res://src/game/menus/deck/browser/deck_browser.gd" id="1_asdlk"]
+[ext_resource type="Script" uid="uid://nv5mq1l585aj" path="res://src/common/components/search_line_edit/search_line_edit.gd" id="2_a3fkt"]
+[ext_resource type="Script" uid="uid://ds3ik4uojxsuq" path="res://src/common/components/extensible_scroll_container/extensable_scroll_container.gd" id="3_7f7k7"]
+[ext_resource type="Script" uid="uid://bc5kbya8n3crb" path="res://src/common/components/deck/list/deck_list.gd" id="4_a3fkt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gktbo"]
+bg_color = Color(0, 0, 0, 0.24313726)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="Deck Browser" type="MarginContainer" unique_id=1978447245]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+script = ExtResource("1_asdlk")
+metadata/_tab_index = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1536276103]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Sidebar" type="MarginContainer" parent="HBoxContainer" unique_id=1712747833]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="HBoxContainer/Sidebar" unique_id=238357728]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/Sidebar/VBoxContainer4" unique_id=157172812]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Top" type="VBoxContainer" parent="HBoxContainer/Sidebar/VBoxContainer4/ScrollContainer" unique_id=1264215310]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/Sidebar/VBoxContainer4/ScrollContainer/Top" unique_id=1919590172]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/Sidebar/VBoxContainer4/ScrollContainer/Top/VBoxContainer2" unique_id=99257916]
+layout_mode = 2
+bbcode_enabled = true
+text = "Search"
+fit_content = true
+
+[node name="Name" type="LineEdit" parent="HBoxContainer/Sidebar/VBoxContainer4/ScrollContainer/Top/VBoxContainer2" unique_id=1461614956]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Name"
+script = ExtResource("2_a3fkt")
+metadata/_custom_type_script = "uid://nv5mq1l585aj"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Sidebar/VBoxContainer4/ScrollContainer/Top" unique_id=1311052905]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/Sidebar/VBoxContainer4/ScrollContainer/Top/VBoxContainer" unique_id=627947760]
+layout_mode = 2
+bbcode_enabled = true
+text = "Format"
+fit_content = true
+
+[node name="Format" type="OptionButton" parent="HBoxContainer/Sidebar/VBoxContainer4/ScrollContainer/Top/VBoxContainer" unique_id=765334644]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="HBoxContainer/Sidebar/VBoxContainer4/ScrollContainer/Top" unique_id=406476925]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/Sidebar/VBoxContainer4/ScrollContainer/Top/VBoxContainer3" unique_id=33026013]
+layout_mode = 2
+bbcode_enabled = true
+text = "Color Identity"
+fit_content = true
+
+[node name="FlowContainer" type="FlowContainer" parent="HBoxContainer/Sidebar/VBoxContainer4/ScrollContainer/Top/VBoxContainer3" unique_id=1455239896]
+layout_mode = 2
+
+[node name="Red" type="CheckBox" parent="HBoxContainer/Sidebar/VBoxContainer4/ScrollContainer/Top/VBoxContainer3/FlowContainer" unique_id=298855808]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Red"
+
+[node name="Blue" type="CheckBox" parent="HBoxContainer/Sidebar/VBoxContainer4/ScrollContainer/Top/VBoxContainer3/FlowContainer" unique_id=1418954019]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Blue
+"
+
+[node name="White" type="CheckBox" parent="HBoxContainer/Sidebar/VBoxContainer4/ScrollContainer/Top/VBoxContainer3/FlowContainer" unique_id=2134830784]
+unique_name_in_owner = true
+layout_mode = 2
+text = "White
+"
+
+[node name="Black" type="CheckBox" parent="HBoxContainer/Sidebar/VBoxContainer4/ScrollContainer/Top/VBoxContainer3/FlowContainer" unique_id=34587031]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Black
+"
+
+[node name="Green" type="CheckBox" parent="HBoxContainer/Sidebar/VBoxContainer4/ScrollContainer/Top/VBoxContainer3/FlowContainer" unique_id=36024717]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Green
+"
+
+[node name="Bottom" type="VBoxContainer" parent="HBoxContainer/Sidebar/VBoxContainer4" unique_id=1736798041]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Sidebar/VBoxContainer4/Bottom" unique_id=1262076144]
+visible = false
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/Sidebar/VBoxContainer4/Bottom/VBoxContainer" unique_id=1860585237]
+layout_mode = 2
+bbcode_enabled = true
+text = "View Mode"
+fit_content = true
+
+[node name="ViewMode" type="OptionButton" parent="HBoxContainer/Sidebar/VBoxContainer4/Bottom/VBoxContainer" unique_id=1015272549]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+allow_reselect = true
+item_count = 2
+popup/item_0/text = "List"
+popup/item_0/id = 0
+popup/item_1/text = "Grid"
+popup/item_1/id = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/Sidebar/VBoxContainer4/Bottom" unique_id=1092396803]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/Sidebar/VBoxContainer4/Bottom/VBoxContainer2" unique_id=2096460676]
+layout_mode = 2
+bbcode_enabled = true
+text = "Sort By"
+fit_content = true
+
+[node name="SortBy" type="OptionButton" parent="HBoxContainer/Sidebar/VBoxContainer4/Bottom/VBoxContainer2" unique_id=2025850596]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+allow_reselect = true
+item_count = 1
+popup/item_0/text = "Name"
+popup/item_0/id = 0
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/Sidebar/VBoxContainer4/Bottom" unique_id=164414624]
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="HBoxContainer/Sidebar/VBoxContainer4/Bottom" unique_id=1392842230]
+layout_mode = 2
+
+[node name="Create" type="Button" parent="HBoxContainer/Sidebar/VBoxContainer4/Bottom/VBoxContainer3" unique_id=1776797638]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Create"
+
+[node name="Body" type="MarginContainer" parent="HBoxContainer" unique_id=778614130]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="HBoxContainer/Body" unique_id=874169348]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gktbo")
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Body/Panel" unique_id=928552793]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Body/Panel/MarginContainer" unique_id=12955674]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ExtensibleScrollContainer" type="ScrollContainer" parent="HBoxContainer/Body/Panel/MarginContainer/VBoxContainer" unique_id=149468449]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("3_7f7k7")
+vertical_threshold = 0.95
+metadata/_custom_type_script = "uid://ds3ik4uojxsuq"
+
+[node name="SearchResult" type="VBoxContainer" parent="HBoxContainer/Body/Panel/MarginContainer/VBoxContainer/ExtensibleScrollContainer" unique_id=1357808155]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("4_a3fkt")
+metadata/_custom_type_script = "uid://bc5kbya8n3crb"

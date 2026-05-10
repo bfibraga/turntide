@@ -1,0 +1,105 @@
+[gd_scene format=3 uid="uid://1oy0ob7y1wyt"]
+
+[ext_resource type="Script" uid="uid://cvk7dmtlpkftn" path="res://src/common/components/deck/item/deck_list_item.gd" id="1_58g46"]
+[ext_resource type="PackedScene" uid="uid://cewyxfrkdmlo5" path="res://src/common/components/chip/chip.tscn" id="2_2joui"]
+[ext_resource type="PackedScene" uid="uid://cs3xgq6x0b61x" path="res://src/common/components/mana/mana.tscn" id="2_58g46"]
+[ext_resource type="Texture2D" uid="uid://chjfonbw3nj5b" path="res://icon.svg" id="2_hyqba"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bomuc"]
+bg_color = Color(0.0885599, 0.08855992, 0.08855986, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3366076, 0.33660766, 0.33660737, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="DeckItem" type="Panel" unique_id=1344577510]
+custom_minimum_size = Vector2(400, 80)
+anchors_preset = -1
+anchor_right = 0.347
+anchor_bottom = 0.07700001
+offset_right = 0.25598145
+offset_bottom = 0.10399628
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_bomuc")
+script = ExtResource("1_58g46")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1819154320]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=749516816]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=400660109]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Avatar" type="TextureRect" parent="MarginContainer/HBoxContainer/HBoxContainer" unique_id=1450483513]
+layout_mode = 2
+texture = ExtResource("2_hyqba")
+expand_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/HBoxContainer" unique_id=1384028079]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer" unique_id=1509406356]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
+
+[node name="Header" type="HBoxContainer" parent="MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer/MarginContainer2" unique_id=743848638]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer/MarginContainer2/Header" unique_id=919409006]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="RichTextLabel" parent="MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer/MarginContainer2/Header/HBoxContainer" unique_id=381863534]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "Name"
+fit_content = true
+vertical_alignment = 1
+
+[node name="Color Identity" type="HBoxContainer" parent="MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer/MarginContainer2/Header" unique_id=676676599]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Mana" parent="MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer/MarginContainer2/Header/Color Identity" unique_id=1444271651 instance=ExtResource("2_58g46")]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer" unique_id=990664457]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Tags" type="HFlowContainer" parent="MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer/MarginContainer" unique_id=396711836]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Chip" parent="MarginContainer/HBoxContainer/HBoxContainer/VBoxContainer/MarginContainer/Tags" unique_id=432381811 instance=ExtResource("2_2joui")]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1648615118]
+layout_mode = 2

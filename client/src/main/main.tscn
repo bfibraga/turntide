@@ -1,0 +1,141 @@
+[gd_scene format=3 uid="uid://b8gd3m7b136nk"]
+
+[ext_resource type="Script" uid="uid://cjo1qke7v7muw" path="res://src/main/main.gd" id="1_choun"]
+[ext_resource type="PackedScene" uid="uid://do3uhx7r3fxyl" path="res://src/common/transition/transition_manager.tscn" id="2_ya4ey"]
+[ext_resource type="Script" uid="uid://bb50oxlatsq3p" path="res://src/common/state_machine/state_machine.gd" id="3_ya4ey"]
+[ext_resource type="Script" uid="uid://c06xj1g5oewu4" path="res://src/common/state_machine/scene_state.gd" id="4_eb6dy"]
+[ext_resource type="PackedScene" uid="uid://cv7y4lfcoaaa8" path="res://src/game/menus/settings/settings.tscn" id="5_trceg"]
+[ext_resource type="Script" uid="uid://bv643nch74fxm" path="res://src/common/state_machine/states/gui/lobby/browser.gd" id="6_a8y0u"]
+[ext_resource type="PackedScene" uid="uid://dmybuixer6c68" path="res://src/game/menus/lobby/browser/lobby_browser.tscn" id="7_jkv2x"]
+[ext_resource type="Script" uid="uid://cdm54pqc6k6av" path="res://src/common/state_machine/states/gui/lobby/in_lobby.gd" id="8_jbj1t"]
+[ext_resource type="PackedScene" uid="uid://bhsjcwk4ki45f" path="res://src/game/menus/lobby/room/lobby_room.tscn" id="9_muem4"]
+[ext_resource type="PackedScene" uid="uid://cpjp8o5nseqhm" path="res://src/game/menus/deck/builder/deck_builder.tscn" id="9_ya4ey"]
+[ext_resource type="PackedScene" uid="uid://pgd2yhn11go0" path="res://src/common/background/fractal/fractal_background.tscn" id="12_eb6dy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0wfyh"]
+bg_color = Color(0, 0, 0, 0.6666667)
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+
+[node name="Main" type="Control" unique_id=1220516110 node_paths=PackedStringArray("gui_state_machine")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_choun")
+gui_state_machine = NodePath("StateMachine")
+
+[node name="TransitionManager" parent="." unique_id=1630646984 node_paths=PackedStringArray("content_container") instance=ExtResource("2_ya4ey")]
+content_container = NodePath("../HBoxContainer/ContentContainer")
+
+[node name="StateMachine" type="Node" parent="." unique_id=1728865753 node_paths=PackedStringArray("initial_state")]
+script = ExtResource("3_ya4ey")
+initial_state = NodePath("Main")
+metadata/_custom_type_script = "uid://bb50oxlatsq3p"
+
+[node name="Main" type="Node" parent="StateMachine" unique_id=212386248 node_paths=PackedStringArray("transition_manager")]
+script = ExtResource("4_eb6dy")
+transition_manager = NodePath("../../TransitionManager")
+metadata/_custom_type_script = "uid://c06xj1g5oewu4"
+
+[node name="Lobby Browser" type="Node" parent="StateMachine" unique_id=1792768526 node_paths=PackedStringArray("transition_manager")]
+script = ExtResource("6_a8y0u")
+packed_scene = ExtResource("7_jkv2x")
+transition_manager = NodePath("../../TransitionManager")
+metadata/_custom_type_script = "uid://bv643nch74fxm"
+
+[node name="InLobby" type="Node" parent="StateMachine" unique_id=1328817707 node_paths=PackedStringArray("transition_manager")]
+script = ExtResource("8_jbj1t")
+packed_scene = ExtResource("9_muem4")
+transition_manager = NodePath("../../TransitionManager")
+metadata/_custom_type_script = "uid://cdm54pqc6k6av"
+
+[node name="Deck Builder" type="Node" parent="StateMachine" unique_id=305331640 node_paths=PackedStringArray("transition_manager")]
+script = ExtResource("4_eb6dy")
+packed_scene = ExtResource("9_ya4ey")
+transition_manager = NodePath("../../TransitionManager")
+metadata/_custom_type_script = "uid://c06xj1g5oewu4"
+
+[node name="Settings" type="Node" parent="StateMachine" unique_id=1802162905 node_paths=PackedStringArray("transition_manager")]
+script = ExtResource("4_eb6dy")
+packed_scene = ExtResource("5_trceg")
+transition_manager = NodePath("../../TransitionManager")
+metadata/_custom_type_script = "uid://c06xj1g5oewu4"
+
+[node name="Fractal Background" parent="." unique_id=1618489495 instance=ExtResource("12_eb6dy")]
+layout_mode = 1
+low = Color(0.031552497, 0.050106898, 0.06702885, 1)
+mid_red = Color(0.101945914, 0.087836765, 0.09630392, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=371242613]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Sidebar" type="Control" parent="HBoxContainer" unique_id=1682142825]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+
+[node name="Panel" type="Panel" parent="HBoxContainer/Sidebar" unique_id=164516547]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0wfyh")
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Sidebar" unique_id=1648711775]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Sidebar/MarginContainer" unique_id=523784423]
+layout_mode = 2
+size_flags_vertical = 2
+
+[node name="Play" type="Button" parent="HBoxContainer/Sidebar/MarginContainer/VBoxContainer" unique_id=65979924]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Play"
+
+[node name="Decks" type="Button" parent="HBoxContainer/Sidebar/MarginContainer/VBoxContainer" unique_id=1353447991]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Decks
+"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/Sidebar/MarginContainer" unique_id=1708571572]
+layout_mode = 2
+size_flags_vertical = 8
+alignment = 2
+
+[node name="Account" type="Button" parent="HBoxContainer/Sidebar/MarginContainer/VBoxContainer2" unique_id=2011914535]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Account"
+
+[node name="Settings" type="Button" parent="HBoxContainer/Sidebar/MarginContainer/VBoxContainer2" unique_id=884690006]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Settings"
+
+[node name="ContentContainer" type="MarginContainer" parent="HBoxContainer" unique_id=19938072]
+layout_mode = 2
+size_flags_horizontal = 3
