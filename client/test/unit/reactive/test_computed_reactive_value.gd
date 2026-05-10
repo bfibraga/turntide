@@ -9,11 +9,11 @@ class RectangleReactive extends ReactiveObject:
 		self
 	)
 	
-	func _init(width: int, height: int, initial_owner: Reactive = null) -> void:
+	func _init(initial_width: int, initial_height: int, initial_owner: Reactive = null) -> void:
 		super._init(initial_owner)
 		
-		self.width.value = width
-		self.height.value = height
+		self.width.value = initial_width
+		self.height.value = initial_height
 
 func test_computed_value_initialization() -> void:
 	var rectangle: RectangleReactive = RectangleReactive.new(10, 20)
