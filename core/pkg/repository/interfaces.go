@@ -35,31 +35,39 @@ type (
 	GetCardByNameAndSetCodeRow       = cards.GetCardByNameAndSetCodeRow
 )
 
+// CardModel re-exports the cards.Card type for convenience
+type CardModel = cards.Card
+
+type CardSearchParams = cards.SearchCardsParams
+
 // CardRepository defines the interface for card data access
 type CardRepository interface {
 	// GetByUuid retrieves a card by its UUID
-	GetByUuid(ctx context.Context, uuid string) (*cards.Card, error)
+	GetByUuid(ctx context.Context, uuid string) (*CardModel, error)
 
 	// GetByName retrieves cards matching a name
-	GetByName(ctx context.Context, name string) ([]*cards.Card, error)
+	GetByName(ctx context.Context, name string) ([]*CardModel, error)
 
 	// GetBySetCode retrieves all cards from a specific set
-	GetBySetCode(ctx context.Context, setCode string) ([]*cards.Card, error)
+	GetBySetCode(ctx context.Context, setCode string) ([]*CardModel, error)
 
 	// ListAll retrieves cards with pagination
-	ListAll(ctx context.Context, limit, offset int32) ([]*cards.Card, error)
+	ListAll(ctx context.Context, limit, offset int32) ([]*CardModel, error)
+
+	// SearchCards retrieves cards matching a filter
+	SearchCards(ctx context.Context, filter *CardSearchParams) ([]*CardModel, error)
 
 	// Count returns the total number of cards
 	Count(ctx context.Context) (int64, error)
 
 	// GetByColor retrieves cards of a specific color
-	GetByColor(ctx context.Context, color string, limit, offset int32) ([]*cards.Card, error)
+	GetByColor(ctx context.Context, color string, limit, offset int32) ([]*CardModel, error)
 
 	// GetByRarity retrieves cards of a specific rarity
-	GetByRarity(ctx context.Context, rarity string, limit, offset int32) ([]*cards.Card, error)
+	GetByRarity(ctx context.Context, rarity string, limit, offset int32) ([]*CardModel, error)
 
 	// GetByManaValue retrieves cards with a specific mana value
-	GetByManaValue(ctx context.Context, manaValue float64, limit, offset int32) ([]*cards.Card, error)
+	GetByManaValue(ctx context.Context, manaValue float64, limit, offset int32) ([]*CardModel, error)
 
 	// GetByNameSetCodeAndNumber retrieves a card by name, set code, and collector number
 	GetByNameSetCodeAndNumber(ctx context.Context, name, setCode, number string) (*GetCardByNameSetCodeAndNumberRow, error)
@@ -71,27 +79,37 @@ type CardRepository interface {
 	Close() error
 }
 
+// SetModel re-exports the cards.Set type for convenience
+type SetModel = cards.Set
+
 // SetRepository defines the interface for set data access
 type SetRepository interface {
 	// GetByCode retrieves a set by its code
-	GetByCode(ctx context.Context, code string) (*cards.Set, error)
+	GetByCode(ctx context.Context, code string) (*SetModel, error)
 
 	// GetByName retrieves sets matching a name
-	GetByName(ctx context.Context, name string) ([]*cards.Set, error)
+	GetByName(ctx context.Context, name string) ([]*SetModel, error)
 
 	// ListAll retrieves all sets with pagination
-	ListAll(ctx context.Context, limit, offset int32) ([]*cards.Set, error)
+	ListAll(ctx context.Context, limit, offset int32) ([]*SetModel, error)
 
 	// Count returns the total number of sets
 	Count(ctx context.Context) (int64, error)
+
+	// Close closes the underlying database connection
+	Close() error
 }
+
+
+// UserModel re-exports the server.User type for convenience
+type UserModel = server.User
 
 // UserRepository defines the interface for user data access
 type UserRepository interface {
 	// Create creates a new user with the given username and password
 	// Password should be plain text; it will be hashed before storing
-	Create(ctx context.Context, username, passwordHash string) (*server.User, error)
+	Create(ctx context.Context, username, passwordHash string) (*UserModel, error)
 
 	// GetByUsername retrieves a user by username
-	GetByUsername(ctx context.Context, username string) (*server.User, error)
+	GetByUsername(ctx context.Context, username string) (*UserModel, error)
 }

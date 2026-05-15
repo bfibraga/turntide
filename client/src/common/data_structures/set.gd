@@ -13,7 +13,7 @@ func remove(item: Variant) -> void:
 	_data.erase(item)
 
 func has(item: Variant) -> bool:
-	return _data.has(item)
+	return _data.get(item, false)
 
 func size() -> int:
 	"""Return the size of the set"""

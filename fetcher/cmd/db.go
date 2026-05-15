@@ -9,8 +9,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/bfibraga/turntide/fetcher/internal/models"
-	"github.com/bfibraga/turntide/fetcher/internal/repository"
+	"github.com/bfibraga/turntide/core/pkg/repository"
 	"github.com/bfibraga/turntide/fetcher/internal/service"
 )
 
@@ -36,17 +35,16 @@ var dbListCmd = &cobra.Command{
 		defer cancel()
 
 		logger := slog.Default()
-		factory, err := repository.NewFactory(dbPath, logger)
+		factory, err := repository.NewCardsFactory(dbPath, logger)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: failed to initialize repository factory: %v\n", err)
-			os.Exit(ExitConfigError)
+			fmt.Fprintf(os.Stderr, "Error: failed to create cards factory: %v\n", err)
+			os.Exit(ExitGeneralError)
 		}
-		defer factory.Close()
-
-		cardRepo := factory.NewCardRepository()
+		
+		cardRepo := factory.CreateCardRepository()
 		cardService := service.NewCardService(cardRepo)
 
-		cards, err := cardService.GetAllCards(ctx, &models.CardFilter{Limit: 20})
+		cards, err := cardService.GetAllCards(ctx, &repository.CardSearchParams{Limit: 20})
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error: failed to get cards: %v\n", err)
 			os.Exit(ExitGeneralError)
@@ -55,9 +53,9 @@ var dbListCmd = &cobra.Command{
 		fmt.Printf("Found %d cards (showing first 20):\n\n", len(cards))
 		for _, card := range cards {
 			fmt.Printf("Name: %s\n", card.Name)
-			fmt.Printf("  Set: %s\n", card.SetCode)
-			fmt.Printf("  Type: %s\n", card.CardType)
-			fmt.Printf("  Cost: %d\n", card.Cost)
+			fmt.Printf("  Set: %s\n", card.Setcode)
+			fmt.Printf("  Type: %s\n", card.Type.String)
+			fmt.Printf("  Cost: %d\n", card.Manacost)
 			fmt.Printf("  Rarity: %s\n", card.Rarity)
 			fmt.Println()
 		}
@@ -73,15 +71,15 @@ var dbCountCmd = &cobra.Command{
 		defer cancel()
 
 		logger := slog.Default()
-		factory, err := repository.NewFactory(dbPath, logger)
+		factory, err := repository.NewCardsFactory(dbPath, logger)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: failed to initialize repository: %v\n", err)
-			os.Exit(ExitConfigError)
+			fmt.Fprintf(os.Stderr, "Error: failed to create cards factory: %v\n", err)
+			os.Exit(ExitGeneralError)
 		}
 		defer factory.Close()
 
-		cardRepo := factory.NewCardRepository()
-		cardService := service.NewCardService(cardRepo)
+		cardRepo := factory.CreateCardRepository()
+		cardService := service.NewCardService(cardRepo)		
 
 		stats, err := cardService.GetCardStatistics(ctx)
 		if err != nil {
@@ -103,15 +101,15 @@ var dbSearchCmd = &cobra.Command{
 		defer cancel()
 
 		logger := slog.Default()
-		factory, err := repository.NewFactory(dbPath, logger)
+		factory, err := repository.NewCardsFactory(dbPath, logger)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: failed to initialize repository: %v\n", err)
-			os.Exit(ExitConfigError)
+			fmt.Fprintf(os.Stderr, "Error: failed to create cards factory: %v\n", err)
+			os.Exit(ExitGeneralError)
 		}
 		defer factory.Close()
 
-		cardRepo := factory.NewCardRepository()
-		cardService := service.NewCardService(cardRepo)
+		cardRepo := factory.CreateCardRepository()
+		cardService := service.NewCardService(cardRepo)		
 
 		cards, err := cardService.GetCardsByName(ctx, args[0])
 		if err != nil {
@@ -126,9 +124,9 @@ var dbSearchCmd = &cobra.Command{
 
 		fmt.Printf("Found %d cards matching '%s':\n\n", len(cards), args[0])
 		for _, card := range cards {
-			fmt.Printf("- %s (%s)\n", card.Name, card.SetCode)
+			fmt.Printf("- %s (%s)\n", card.Name, card.Setcode)
 			fmt.Printf("  Rarity: %s\n", card.Rarity)
-			fmt.Printf("  Type: %s\n", card.CardType)
+			fmt.Printf("  Type: %s\n", card.Type.String)
 			fmt.Println()
 		}
 	},
@@ -144,15 +142,15 @@ var dbSetCmd = &cobra.Command{
 		defer cancel()
 
 		logger := slog.Default()
-		factory, err := repository.NewFactory(dbPath, logger)
+		factory, err := repository.NewCardsFactory(dbPath, logger)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: failed to initialize repository: %v\n", err)
-			os.Exit(ExitConfigError)
+			fmt.Fprintf(os.Stderr, "Error: failed to create cards factory: %v\n", err)
+			os.Exit(ExitGeneralError)
 		}
 		defer factory.Close()
 
-		cardRepo := factory.NewCardRepository()
-		cardService := service.NewCardService(cardRepo)
+		cardRepo := factory.CreateCardRepository()
+		cardService := service.NewCardService(cardRepo)		
 
 		cards, err := cardService.GetCardsBySetCode(ctx, args[0])
 		if err != nil {
@@ -169,7 +167,7 @@ var dbSetCmd = &cobra.Command{
 		for _, card := range cards {
 			fmt.Printf("- %s\n", card.Name)
 			fmt.Printf("  Rarity: %s\n", card.Rarity)
-			fmt.Printf("  Type: %s\n", card.CardType)
+			fmt.Printf("  Type: %s\n", card.Type.String)
 		}
 	},
 }

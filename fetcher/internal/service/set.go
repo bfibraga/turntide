@@ -24,9 +24,7 @@ package service
 import (
 	"context"
 	"fmt"
-
-	"github.com/bfibraga/turntide/fetcher/internal/models"
-	"github.com/bfibraga/turntide/fetcher/internal/repository"
+	"github.com/bfibraga/turntide/core/pkg/repository"
 )
 
 // SetService provides business logic for set operations
@@ -42,17 +40,17 @@ func NewSetService(setRepo repository.SetRepository) *SetService {
 }
 
 // GetSetByCode retrieves a set by its code
-func (s *SetService) GetSetByCode(ctx context.Context, code string) (*models.Set, error) {
+func (s *SetService) GetSetByCode(ctx context.Context, code string) (*repository.SetModel, error) {
 	return s.setRepo.GetByCode(ctx, code)
 }
 
 // GetSetsByName retrieves sets by name
-func (s *SetService) GetSetsByName(ctx context.Context, name string) ([]*models.Set, error) {
+func (s *SetService) GetSetsByName(ctx context.Context, name string) ([]*repository.SetModel, error) {
 	return s.setRepo.GetByName(ctx, name)
 }
 
 // ListAllSets retrieves all sets with pagination
-func (s *SetService) ListAllSets(ctx context.Context, limit int32, offset int32) ([]*models.Set, error) {
+func (s *SetService) ListAllSets(ctx context.Context, limit int32, offset int32) ([]* repository.SetModel, error) {
 	return s.setRepo.ListAll(ctx, limit, offset)
 }
 

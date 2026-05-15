@@ -1,62 +1,67 @@
 package main
 
 import (
-	"database/sql"
 	"flag"
 	"fmt"
 	"log/slog"
 	"net/http"
 	"os"
-	"runtime/debug"
+	"time"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 
+	"github.com/lmittmann/tint"
+	"github.com/mattn/go-colorable"
+	"github.com/mattn/go-isatty"
+
+	"github.com/bfibraga/turntide/core/pkg/repository"
 	"github.com/bfibraga/turntide/server/internal/server"
 	"github.com/bfibraga/turntide/server/internal/server/clients"
 	"github.com/bfibraga/turntide/server/internal/server/user"
+	"github.com/joho/godotenv"
 )
 
 var (
-	port   = flag.Int("port", 4000, "port to listen on")
-	dbPath = flag.String("db-path", "./shared/resources/server.db", "path to the server database")
+	defaultConfig = NewConfig(4000, "./server.db")
+	configPath    = flag.String("config", ".env", "path to the config file")
 )
 
 func main() {
-	flag.Parse()
+	// Set up logger
+	writer := os.Stdout
+	options := &tint.Options{
+		Level: slog.LevelInfo,
+		TimeFormat: time.Kitchen,
+		NoColor: !isatty.IsTerminal(writer.Fd()),
+		ReplaceAttr: func(groups []string, attr slog.Attr) slog.Attr {
+			if attr.Key == "error" {
+				return tint.Attr(13, slog.String(attr.Key, attr.Value.String()))
+			}
 
-	handler := slog.NewJSONHandler(os.Stdout, nil)
-	buildInfo, _ := debug.ReadBuildInfo()
-	baseLogger := slog.New(handler)
-	logger := baseLogger.With(
-		slog.Group(
-			"program_info",
-			slog.Int("pid", os.Getpid()),
-			slog.String("version", buildInfo.GoVersion),
-		),
-	)
-
+			return attr
+		},
+	}
+	handler := tint.NewHandler(colorable.NewColorable(writer), options)
+	logger := slog.New(handler)
 	slog.SetDefault(logger)
 
-	conn, err := sql.Open("sqlite3", *dbPath)
-	if err != nil {
-		logger.Error("failed to open database", "error", err)
-		os.Exit(1)
-	}
-	defer conn.Close()
+	// Load config
+	flag.Parse()
 
-	err = conn.Ping()
+	err := godotenv.Load(*configPath)
+	cfg, err := LoadConfig(defaultConfig)
 	if err != nil {
-		logger.Error("failed to ping database", "error", err)
-		os.Exit(1)
-	}
+		logger.Error("failed to load config file, defaulting to env vars", "error", err)
+	}	
 
-	userRepo := user.NewSQLiteUserRepository(conn)
+	// Setup server factory, repositories and services
+	factory, err := repository.NewServerFactory(cfg.DBPath, logger)
+	userRepo := factory.CreateUserRepository()
+
 	userService := user.NewService(userRepo)
 
-	defer userRepo.Close()
-
+	// Initialize hub  
 	hub := server.NewHub(logger, userService)
-	// Initialize runtime callbacks that require the hub to exist
 	hub.Initialize()
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
@@ -66,11 +71,10 @@ func main() {
 	// Start the server
 	go hub.Run()
 
-	addr := fmt.Sprintf(":%d", *port)
+	addr := fmt.Sprintf(":%d", cfg.Port)
 	err = http.ListenAndServe(addr, nil)
 	if err != nil {
 		logger.Error("failed to start server", "error", err)
 		os.Exit(1)
 	}
-
 }

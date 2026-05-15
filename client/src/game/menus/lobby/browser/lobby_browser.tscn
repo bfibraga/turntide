@@ -11,6 +11,13 @@ corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8e6is"]
+bg_color = Color(0, 0, 0, 0.24313726)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
 [node name="LobbyBrowser" type="Control" unique_id=664186976]
 layout_mode = 3
 anchors_preset = 15
@@ -36,25 +43,44 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 0
 
 [node name="TabContainer" type="MarginContainer" parent="HBoxContainer" unique_id=736133601]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/TabContainer" unique_id=1253613431]
 layout_mode = 2
+theme_override_constants/separation = 5
 
-[node name="LobbyNameSearch" type="LineEdit" parent="HBoxContainer/TabContainer/VBoxContainer" unique_id=676327999]
+[node name="Lobby Name" type="VBoxContainer" parent="HBoxContainer/TabContainer/VBoxContainer" unique_id=1182357798]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/TabContainer/VBoxContainer/Lobby Name" unique_id=167201941]
+layout_mode = 2
+text = "Search
+"
+fit_content = true
+
+[node name="LobbyNameSearch" type="LineEdit" parent="HBoxContainer/TabContainer/VBoxContainer/Lobby Name" unique_id=676327999]
 layout_mode = 2
 placeholder_text = "Search"
 script = ExtResource("1_yd7we")
 metadata/_custom_type_script = "uid://nv5mq1l585aj"
 
-[node name="FormatDropdown" type="OptionButton" parent="HBoxContainer/TabContainer/VBoxContainer" unique_id=2060276114]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/TabContainer/VBoxContainer" unique_id=12673996]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/TabContainer/VBoxContainer/VBoxContainer" unique_id=842653320]
+layout_mode = 2
+text = "Format"
+fit_content = true
+
+[node name="FormatDropdown" type="OptionButton" parent="HBoxContainer/TabContainer/VBoxContainer/VBoxContainer" unique_id=2060276114]
 layout_mode = 2
 item_count = 2
 popup/item_0/text = "Commander"
@@ -68,15 +94,15 @@ text = "Available"
 
 [node name="ShowPrivateCheckbox" type="CheckBox" parent="HBoxContainer/TabContainer/VBoxContainer" unique_id=1340726894]
 layout_mode = 2
-text = "Show Private Lobbies"
+text = "Private"
 
 [node name="VBoxContainer" type="MarginContainer" parent="HBoxContainer" unique_id=605852050]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=73711091]
 layout_mode = 2
@@ -89,14 +115,32 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Create"
 
-[node name="ExtensibleScrollContainer" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer" unique_id=1431106077]
+[node name="Panel" type="Panel" parent="HBoxContainer/VBoxContainer/VBoxContainer" unique_id=1783891559]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_8e6is")
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer/Panel" unique_id=941214004]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ExtensibleScrollContainer" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer/Panel/MarginContainer" unique_id=1431106077]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("3_dpbp3")
 metadata/_custom_type_script = "uid://ds3ik4uojxsuq"
 
-[node name="LobbyList" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer/ExtensibleScrollContainer" unique_id=159184385]
+[node name="LobbyList" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/VBoxContainer/Panel/MarginContainer/ExtensibleScrollContainer" unique_id=159184385]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3

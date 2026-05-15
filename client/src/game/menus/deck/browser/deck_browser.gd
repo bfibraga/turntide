@@ -12,7 +12,7 @@ enum SortMode {
 class Data extends Reactive:
 	
 	var name: ReactiveValue = ReactiveValue.String("", self)
-	var format: ReactiveValue = ReactiveValue.new(null, self)
+	var format: ReactiveObject = ReactiveObject.new(null, self)
 	var color_identity: ReactiveSet = ReactiveSet.new(Set.new(), self)
 	
 	var view_mode: ReactiveValue = ReactiveValue.new(ViewMode.LIST, self)
@@ -64,7 +64,7 @@ var _show_deck_list: ReactiveArray = ReactiveArray.new()
 @onready var search_result: DeckList = %SearchResult
 @onready var extensible_scroll_container: ExtensibleScrollContainer = %ExtensibleScrollContainer
 
-var DeckListItemScene : PackedScene = load("res://features/deck_builder/scenes/deck_list_item.tscn")
+var DeckListItemScene : PackedScene = load("res://src/common/components/deck/item/deck_list_item.tscn")
 
 func _create_decks() -> void:
 	Global.deck_repository.create_deck(
@@ -120,8 +120,7 @@ func _ready() -> void:
 			var same_color_identity: bool = _data.color_identity.value.size() == 0 \
 				or ( item.color_identity.contains_all(_data.color_identity.value) )
 			var same_format: bool = not _data.format.value \
-				or not item.format \
-				or item.format == _data.format.value
+				or (item.format and item.format == _data.format.value)
 			
 			return same_name and same_color_identity and same_format
 		)
@@ -148,47 +147,28 @@ func _ready() -> void:
 	).call()
 	
 	format.item_selected.connect(func(index: int) -> void:
-		if index < 1:
-			_data.format.value = null
-		
-		_data.format.value = Global.deck_format_manager.formats.get(index - 1)
+		_data.format.value = Global.deck_format_manager.formats.get(index - 1) if index > 0 else null
 	)
 	
-	red.toggled.connect(func(is_on: bool) -> void:
-		change_color_identity("red", is_on)
-	)
-	blue.toggled.connect(func(is_on: bool) -> void:
-		change_color_identity("blue", is_on)
-	)
-	white.toggled.connect(func(is_on: bool) -> void:
-		change_color_identity("white", is_on)
-	)
-	black.toggled.connect(func(is_on: bool) -> void:
-		change_color_identity("black", is_on)
-	)
-	green.toggled.connect(func(is_on: bool) -> void:
-		change_color_identity("green", is_on)
-	)
+	red.toggled.connect(change_color_identity.bind("red"))
+	blue.toggled.connect(change_color_identity.bind("blue"))
+	white.toggled.connect(change_color_identity.bind("white"))
+	black.toggled.connect(change_color_identity.bind("black"))
+	green.toggled.connect(change_color_identity.bind("green"))
 	
 	view_mode.item_selected.connect(func(index: int) -> void:
-		#match index:
-			#ViewMode.GRID:
-				#_data.view_mode.value = ViewMode.GRID
-			#ViewMode.LIST:
-				#_data.view_mode.value = ViewMode.LIST
-			
-		_data.view_mode.value = ViewMode.get(index)
+		_data.view_mode.value = index
 	)
 	
 	sort_by.item_selected.connect(func(index: int) -> void:
-		_data.sort_by.value = SortMode.get(index)
+		_data.sort_by.value = index
 	)
 	
 	_deck_list.sort_custom(sort_algorithms[_data.sort_by.value])
 	_show_deck_list.value = _deck_list
 	
 
-func change_color_identity(key: String, is_adding: bool) -> void:	
+func change_color_identity(is_adding: bool, key: String) -> void:
 	if is_adding:
 		_data.color_identity.add(key)
 	else: 

@@ -132,20 +132,34 @@ func (lb *LobbyBuilder) Build() *Lobby {
 type LobbyRegistry struct {
 	lobbies       *objects.SharedCollection[*Lobby]
 	clientToLobby sync.Map // map[uint64]uint64  (clientID → lobbyID)
-	mu            sync.RWMutex
+	mu            sync.RWMutex            
 	// timers for scheduled lobby removals (grace period when empty)
-	timers map[uint64]*time.Timer
+	timers        map[uint64]*time.Timer  
 	// ttl to keep empty lobbies around before deletion
-	ttl time.Duration
+	ttl           time.Duration
 	// onChange callback is invoked when the public lobby set changes
-	onChange func()
+	onChange func() 
 }
 
-func NewLobbyRegistry(ttl time.Duration) *LobbyRegistry {
+type LobbyConfig struct {
+	ttl time.Duration
+}
+
+// NewLobbyConfig creates a new LobbyConfig with the specified TTL.
+func NewLobbyConfig(ttl time.Duration) LobbyConfig {
+	return LobbyConfig{ttl: ttl}
+}
+
+// DefaultLobbyConfig returns the default lobby configuration with a TTL of 1 minute.
+func DefaultLobbyConfig() LobbyConfig {
+	return NewLobbyConfig(time.Minute) // default TTL is 1 minute
+}
+
+func NewLobbyRegistry(config LobbyConfig) *LobbyRegistry {
 	return &LobbyRegistry{
 		lobbies: objects.NewSharedCollection[*Lobby](),
 		timers:  make(map[uint64]*time.Timer),
-		ttl:     ttl,
+		ttl:     config.ttl,
 	}
 }
 

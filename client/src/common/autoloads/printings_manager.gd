@@ -9,9 +9,11 @@ const DB_PATH: String = "user://cache/database/cards.db"
 var _registry: Dictionary = {}
 var _registry_mutex: Mutex = Mutex.new()
 
-func _ready() -> void:
+func _init() -> void:
 	load_tracker()
 	DirAccess.make_dir_recursive_absolute(IMAGES_PATH)
+	
+	ensure_db_ready()
 
 ## --- THREAD-SAFE ACCESSORS ---
 
@@ -94,12 +96,23 @@ func _make_key(uuid: String, setcode: String, num: String) -> String:
 
 func get_image_path(card_data: CardData) -> String:
 	var filename : String = "%s_%s_%s.jpg" % [
-		card_data.name.replace(" ", "_"), 
+		card_data.name, 
 		card_data.setCode, 
 		card_data.uuid.substr(0, 8)
 	]
+	var sanitized_filename: String = filename \
+			.replace("/", "_") \
+			.replace("\\", "_") \
+			.replace(":", "_") \
+			.replace("*", "_") \
+			.replace("?", "_") \
+			.replace("\"", "_") \
+			.replace("<", "_") \
+			.replace(">", "_") \
+			.replace("|", "_") \
+			.replace(" ", "_")
 	
-	return ProjectSettings.globalize_path(IMAGES_PATH + filename)
+	return ProjectSettings.globalize_path(IMAGES_PATH + sanitized_filename)
 
 func save_tracker() -> void:
 	_registry_mutex.lock()
@@ -123,3 +136,5 @@ func ensure_db_ready() -> void:
 		fetcher_cli.download() \
 		.db_path(DB_PATH) \
 		.run()
+	
+		await fetcher_cli.task_finished

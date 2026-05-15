@@ -1,11 +1,299 @@
 [gd_scene format=3 uid="uid://cpjp8o5nseqhm"]
 
 [ext_resource type="PackedScene" uid="uid://d0lfxpxwn71im" path="res://src/game/menus/deck/browser/deck_browser.tscn" id="2_gktbo"]
+[ext_resource type="Script" uid="uid://ds3ik4uojxsuq" path="res://src/common/components/extensible_scroll_container/extensable_scroll_container.gd" id="2_r7j4g"]
 [ext_resource type="PackedScene" uid="uid://drkvnapl7anhd" path="res://src/game/menus/card/atlas/card_atlas.tscn" id="3_gktbo"]
+[ext_resource type="PackedScene" uid="uid://b3qw3f5376ssa" path="res://src/card/view/card_view.tscn" id="3_ux8qr"]
+[ext_resource type="Shader" uid="uid://6bh6uf8nbbf5" path="res://assets/shaders/card/faux_3d_perspective_shader.gdshader.gdshader" id="4_16frv"]
+[ext_resource type="Texture2D" uid="uid://dlmphhaqs33pi" path="res://assets/card/front/test_card (1).jpg" id="5_drlrx"]
+[ext_resource type="Texture2D" uid="uid://csodc80a6kq0h" path="res://assets/card/front/test_card.jpg" id="6_sf5dj"]
+[ext_resource type="Texture2D" uid="uid://bsubkococ7xm0" path="res://assets/card/front/test_card (2).jpg" id="7_ci3o7"]
+[ext_resource type="Texture2D" uid="uid://m6g7karmqqcn" path="res://assets/card/front/Sol_Ring_CMM_01b47f91.jpg" id="8_ux8qr"]
+[ext_resource type="PackedScene" uid="uid://dtrqtmvo1kswi" path="res://src/card/ui/card_ui.tscn" id="9_16frv"]
 
 [sub_resource type="GDScript" id="GDScript_1fgeg"]
 script/source = "extends Control
 "
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xrgnf"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_16frv"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ty15s"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m6vcx"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_drlrx"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sf5dj"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ci3o7"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8b1ik"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g57r5"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sgxxq"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qulfv"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2vjcs"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ui65p"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6q6b0"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ryuge"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ismhb"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tmw0q"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kukob"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rrv2x"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ptljq"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w52m4"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n4xur"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q822y"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hu4b8"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cjmy7"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v7hs1"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ipvtp"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cchex"]
+resource_local_to_scene = true
+shader = ExtResource("4_16frv")
+shader_parameter/cull_backface = false
+shader_parameter/use_front = true
+shader_parameter/fov = 60.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
 
 [node name="DeckBuilder" type="TabContainer" unique_id=1587540706]
 anchors_preset = 15
@@ -13,13 +301,473 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-current_tab = 0
+current_tab = 1
 script = SubResource("GDScript_1fgeg")
 
 [node name="Deck Browser" parent="." unique_id=1978447245 instance=ExtResource("2_gktbo")]
+visible = false
 layout_mode = 2
 
-[node name="Card Atlas" parent="." unique_id=1100113074 instance=ExtResource("3_gktbo")]
+[node name="Placeholder Deck" type="TabContainer" parent="." unique_id=1834990667]
+layout_mode = 2
+current_tab = 0
+metadata/_tab_index = 1
+
+[node name="Home" type="Control" parent="Placeholder Deck" unique_id=1736517507]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Placeholder Deck/Home" unique_id=73718778]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Placeholder Deck/Home/HBoxContainer" unique_id=1006356472]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer" unique_id=253109202]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="Placeholder Deck/Home/HBoxContainer" unique_id=1540246575]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ExtensibleScrollContainer" type="ScrollContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2" unique_id=918032677]
+layout_mode = 2
+script = ExtResource("2_r7j4g")
+metadata/_custom_type_script = "uid://ds3ik4uojxsuq"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer" unique_id=37339278]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Card Column" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer" unique_id=1235352957]
+layout_mode = 2
+
+[node name="Header" type="MarginContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column" unique_id=233965515]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column/Header" unique_id=1991182455]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column/Header/VBoxContainer" unique_id=49886806]
+layout_mode = 2
+
+[node name="Label" type="RichTextLabel" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column/Header/VBoxContainer/HBoxContainer" unique_id=1565519140]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Label"
+fit_content = true
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column/Header/VBoxContainer" unique_id=1628014179]
+layout_mode = 2
+
+[node name="Quantity" type="RichTextLabel" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column/Header/VBoxContainer/HBoxContainer2" unique_id=21570259]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.61339027, 0.61339027, 0.61339027, 1)
+theme_override_font_sizes/normal_font_size = 12
+theme_override_font_sizes/bold_font_size = 12
+theme_override_font_sizes/bold_italics_font_size = 12
+theme_override_font_sizes/italics_font_size = 12
+theme_override_font_sizes/mono_font_size = 12
+text = "Qty: 0"
+fit_content = true
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="Cards" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column" unique_id=1009199724]
+layout_mode = 2
+theme_override_constants/separation = -310
+
+[node name="Card View" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column/Cards" unique_id=960405069 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_xrgnf")
+layout_mode = 2
+front_art = ExtResource("5_drlrx")
+
+[node name="Card View4" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column/Cards" unique_id=1009153694 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_16frv")
+layout_mode = 2
+front_art = ExtResource("5_drlrx")
+
+[node name="Card View2" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column/Cards" unique_id=751109515 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_ty15s")
+layout_mode = 2
+front_art = ExtResource("6_sf5dj")
+
+[node name="Card View3" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column/Cards" unique_id=702080073 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_m6vcx")
+layout_mode = 2
+front_art = ExtResource("7_ci3o7")
+
+[node name="Card Column2" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer" unique_id=1184209266]
+layout_mode = 2
+
+[node name="Header" type="MarginContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column2" unique_id=187432378]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column2/Header" unique_id=85649801]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column2/Header/VBoxContainer" unique_id=1076057112]
+layout_mode = 2
+
+[node name="Label" type="RichTextLabel" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column2/Header/VBoxContainer/HBoxContainer" unique_id=1617320281]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Label"
+fit_content = true
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column2/Header/VBoxContainer" unique_id=1718394441]
+layout_mode = 2
+
+[node name="Quantity" type="RichTextLabel" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column2/Header/VBoxContainer/HBoxContainer2" unique_id=628455727]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.61339027, 0.61339027, 0.61339027, 1)
+theme_override_font_sizes/normal_font_size = 12
+theme_override_font_sizes/bold_font_size = 12
+theme_override_font_sizes/bold_italics_font_size = 12
+theme_override_font_sizes/italics_font_size = 12
+theme_override_font_sizes/mono_font_size = 12
+text = "Qty: 0"
+fit_content = true
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="Cards" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column2" unique_id=400720743]
+layout_mode = 2
+theme_override_constants/separation = -310
+
+[node name="Card View" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column2/Cards" unique_id=1207574233 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_drlrx")
+layout_mode = 2
+front_art = ExtResource("8_ux8qr")
+
+[node name="Card Column3" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer" unique_id=2016250466]
+layout_mode = 2
+
+[node name="Header" type="MarginContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3" unique_id=71060425]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3/Header" unique_id=812659373]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3/Header/VBoxContainer" unique_id=1460044749]
+layout_mode = 2
+
+[node name="Label" type="RichTextLabel" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3/Header/VBoxContainer/HBoxContainer" unique_id=1743259272]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Label"
+fit_content = true
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3/Header/VBoxContainer" unique_id=1583602057]
+layout_mode = 2
+
+[node name="Quantity" type="RichTextLabel" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3/Header/VBoxContainer/HBoxContainer2" unique_id=845903358]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.61339027, 0.61339027, 0.61339027, 1)
+theme_override_font_sizes/normal_font_size = 12
+theme_override_font_sizes/bold_font_size = 12
+theme_override_font_sizes/bold_italics_font_size = 12
+theme_override_font_sizes/italics_font_size = 12
+theme_override_font_sizes/mono_font_size = 12
+text = "Qty: 0"
+fit_content = true
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="Cards" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3" unique_id=1044163593]
+layout_mode = 2
+theme_override_constants/separation = -310
+
+[node name="Card View" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3/Cards" unique_id=1809043196 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_sf5dj")
+layout_mode = 2
+front_art = ExtResource("5_drlrx")
+
+[node name="Card View4" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3/Cards" unique_id=298502162 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_ci3o7")
+layout_mode = 2
+front_art = ExtResource("5_drlrx")
+
+[node name="Card View2" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3/Cards" unique_id=1712698849 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_8b1ik")
+layout_mode = 2
+front_art = ExtResource("6_sf5dj")
+
+[node name="Card View3" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3/Cards" unique_id=817983678 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_g57r5")
+layout_mode = 2
+front_art = ExtResource("7_ci3o7")
+
+[node name="Card View5" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3/Cards" unique_id=227492896 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_sgxxq")
+layout_mode = 2
+front_art = ExtResource("7_ci3o7")
+
+[node name="Card View6" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3/Cards" unique_id=238686095 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_qulfv")
+layout_mode = 2
+front_art = ExtResource("7_ci3o7")
+
+[node name="Card View7" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3/Cards" unique_id=1103374893 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_2vjcs")
+layout_mode = 2
+front_art = ExtResource("7_ci3o7")
+
+[node name="Card View8" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3/Cards" unique_id=703719778 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_ui65p")
+layout_mode = 2
+front_art = ExtResource("7_ci3o7")
+
+[node name="Card View9" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3/Cards" unique_id=2077436643 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_6q6b0")
+layout_mode = 2
+front_art = ExtResource("7_ci3o7")
+
+[node name="Card View10" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3/Cards" unique_id=241224500 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_ryuge")
+layout_mode = 2
+front_art = ExtResource("7_ci3o7")
+
+[node name="Card View11" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3/Cards" unique_id=726970766 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_ismhb")
+layout_mode = 2
+front_art = ExtResource("7_ci3o7")
+
+[node name="Card" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column3/Cards" unique_id=2067653633 instance=ExtResource("9_16frv")]
+layout_mode = 2
+
+[node name="Card Column4" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer" unique_id=661286650]
+layout_mode = 2
+
+[node name="Header" type="MarginContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column4" unique_id=312472178]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column4/Header" unique_id=881532039]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column4/Header/VBoxContainer" unique_id=1416966460]
+layout_mode = 2
+
+[node name="Label" type="RichTextLabel" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column4/Header/VBoxContainer/HBoxContainer" unique_id=1998086269]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Label"
+fit_content = true
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column4/Header/VBoxContainer" unique_id=1517751379]
+layout_mode = 2
+
+[node name="Quantity" type="RichTextLabel" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column4/Header/VBoxContainer/HBoxContainer2" unique_id=1476458381]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.61339027, 0.61339027, 0.61339027, 1)
+theme_override_font_sizes/normal_font_size = 12
+theme_override_font_sizes/bold_font_size = 12
+theme_override_font_sizes/bold_italics_font_size = 12
+theme_override_font_sizes/italics_font_size = 12
+theme_override_font_sizes/mono_font_size = 12
+text = "Qty: 0"
+fit_content = true
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="Cards" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column4" unique_id=881911110]
+layout_mode = 2
+theme_override_constants/separation = -310
+
+[node name="Card View" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column4/Cards" unique_id=764218455 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_tmw0q")
+layout_mode = 2
+front_art = ExtResource("5_drlrx")
+
+[node name="Card View4" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column4/Cards" unique_id=1217017237 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_kukob")
+layout_mode = 2
+front_art = ExtResource("5_drlrx")
+
+[node name="Card View2" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column4/Cards" unique_id=1295886152 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_rrv2x")
+layout_mode = 2
+front_art = ExtResource("6_sf5dj")
+
+[node name="Card View3" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column4/Cards" unique_id=2019477723 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_ptljq")
+layout_mode = 2
+front_art = ExtResource("7_ci3o7")
+
+[node name="Card Column5" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer" unique_id=978761186]
+layout_mode = 2
+
+[node name="Header" type="MarginContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column5" unique_id=191770715]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column5/Header" unique_id=946055835]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column5/Header/VBoxContainer" unique_id=1971523660]
+layout_mode = 2
+
+[node name="Label" type="RichTextLabel" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column5/Header/VBoxContainer/HBoxContainer" unique_id=2121171212]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Label"
+fit_content = true
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column5/Header/VBoxContainer" unique_id=406896852]
+layout_mode = 2
+
+[node name="Quantity" type="RichTextLabel" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column5/Header/VBoxContainer/HBoxContainer2" unique_id=1426618635]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.61339027, 0.61339027, 0.61339027, 1)
+theme_override_font_sizes/normal_font_size = 12
+theme_override_font_sizes/bold_font_size = 12
+theme_override_font_sizes/bold_italics_font_size = 12
+theme_override_font_sizes/italics_font_size = 12
+theme_override_font_sizes/mono_font_size = 12
+text = "Qty: 0"
+fit_content = true
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="Cards" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column5" unique_id=1829543117]
+layout_mode = 2
+theme_override_constants/separation = -310
+
+[node name="Card View" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column5/Cards" unique_id=914812254 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_w52m4")
+layout_mode = 2
+front_art = ExtResource("5_drlrx")
+
+[node name="Card View4" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column5/Cards" unique_id=2122849202 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_n4xur")
+layout_mode = 2
+front_art = ExtResource("5_drlrx")
+
+[node name="Card View2" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column5/Cards" unique_id=1100652783 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_q822y")
+layout_mode = 2
+front_art = ExtResource("6_sf5dj")
+
+[node name="Card View3" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column5/Cards" unique_id=1066438374 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_hu4b8")
+layout_mode = 2
+front_art = ExtResource("7_ci3o7")
+
+[node name="Card Column6" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer" unique_id=1901486317]
+layout_mode = 2
+
+[node name="Header" type="MarginContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column6" unique_id=1309208210]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column6/Header" unique_id=1079348460]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column6/Header/VBoxContainer" unique_id=2021037621]
+layout_mode = 2
+
+[node name="Label" type="RichTextLabel" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column6/Header/VBoxContainer/HBoxContainer" unique_id=1051928268]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Label"
+fit_content = true
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column6/Header/VBoxContainer" unique_id=300387816]
+layout_mode = 2
+
+[node name="Quantity" type="RichTextLabel" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column6/Header/VBoxContainer/HBoxContainer2" unique_id=761758802]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.61339027, 0.61339027, 0.61339027, 1)
+theme_override_font_sizes/normal_font_size = 12
+theme_override_font_sizes/bold_font_size = 12
+theme_override_font_sizes/bold_italics_font_size = 12
+theme_override_font_sizes/italics_font_size = 12
+theme_override_font_sizes/mono_font_size = 12
+text = "Qty: 0"
+fit_content = true
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="Cards" type="VBoxContainer" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column6" unique_id=392083073]
+layout_mode = 2
+theme_override_constants/separation = -310
+
+[node name="Card View" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column6/Cards" unique_id=284879436 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_cjmy7")
+layout_mode = 2
+front_art = ExtResource("5_drlrx")
+
+[node name="Card View4" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column6/Cards" unique_id=945254346 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_v7hs1")
+layout_mode = 2
+front_art = ExtResource("5_drlrx")
+
+[node name="Card View2" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column6/Cards" unique_id=235216684 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_ipvtp")
+layout_mode = 2
+front_art = ExtResource("6_sf5dj")
+
+[node name="Card View3" parent="Placeholder Deck/Home/HBoxContainer/MarginContainer2/ExtensibleScrollContainer/HBoxContainer/Card Column6/Cards" unique_id=716547852 instance=ExtResource("3_ux8qr")]
+material = SubResource("ShaderMaterial_cchex")
+layout_mode = 2
+front_art = ExtResource("7_ci3o7")
+
+[node name="Card Search" parent="Placeholder Deck" unique_id=1100113074 instance=ExtResource("3_gktbo")]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 1

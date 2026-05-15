@@ -5,7 +5,8 @@ var _dependencies: Array[Reactive]
 
 var value: Variant :
 	get: return _compute.call()
-	set(v): pass  # read-only
+	set(v): 
+		push_warning("Setting value on a computed object")
 
 func _init(compute: Callable, dependencies: Array[Reactive], initial_owner: Reactive = null) -> void:
 	super._init(initial_owner)

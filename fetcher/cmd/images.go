@@ -9,9 +9,10 @@ import (
 	"os"
 	"strings"
 
+	"github.com/bfibraga/turntide/core/pkg/repository"
 	"github.com/bfibraga/turntide/fetcher/internal/images/providers"
 	"github.com/bfibraga/turntide/fetcher/internal/parsers"
-	"github.com/bfibraga/turntide/fetcher/internal/repository"
+	"github.com/bfibraga/turntide/fetcher/internal/service"
 	"github.com/spf13/cobra"
 )
 
@@ -58,16 +59,17 @@ var imagesCmd = &cobra.Command{
 		}
 
 		logger := slog.Default()
-		factory, err := repository.NewFactory(dbPath, logger)
+		factory, err := repository.NewCardsFactory(dbPath, logger)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: failed to initialize repository factory: %v\n", err)
-			os.Exit(ExitConfigError)
+			fmt.Fprintf(os.Stderr, "Error: failed to create cards factory: %v\n", err)
+			os.Exit(ExitGeneralError)
 		}
 		defer factory.Close()
 
-		cardRepo := factory.NewCardRepository()
+		cardRepo := factory.CreateCardRepository()
+		cardService := service.NewCardService(cardRepo)
 
-		err = providers.ScryfallDownload(cardData, cardRepo, output, format)
+		err = providers.ScryfallDownload(cardData, *cardService, output, format)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			os.Exit(ExitNetworkError)

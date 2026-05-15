@@ -1,5 +1,10 @@
 extends Control
 
+class SearchData extends Reactive:
+	var lobby_name: ReactiveValue = ReactiveValue.String("", self)
+	var format: ReactiveObject = ReactiveObject.new(null, self)
+	
+
 const LobbyItemScene: PackedScene = preload("res://src/common/components/lobby/item/lobby_item.tscn")
 const packets := preload("res://src/common/network/packets/packets.gd")
 

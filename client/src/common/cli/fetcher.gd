@@ -4,7 +4,7 @@ extends CLIWrapper
 var _args: PackedStringArray = []
 
 func _init() -> void:
-	super._init("res://resources/bin/fetcher")
+	super._init("res://assets/bin/fetcher")
 
 func images() -> FetcherCLI:
 	_args.clear()

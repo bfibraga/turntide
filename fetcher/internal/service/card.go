@@ -25,8 +25,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/bfibraga/turntide/fetcher/internal/models"
-	"github.com/bfibraga/turntide/fetcher/internal/repository"
+	"github.com/bfibraga/turntide/core/pkg/repository"
 )
 
 // CardService provides business logic for card operations
@@ -42,41 +41,41 @@ func NewCardService(cardRepo repository.CardRepository) *CardService {
 }
 
 // GetAllCards retrieves all cards with optional filtering
-func (s *CardService) GetAllCards(ctx context.Context, filter *models.CardFilter) ([]*models.Card, error) {
+func (s *CardService) GetAllCards(ctx context.Context, filter *repository.CardSearchParams) ([]*repository.CardModel, error) {
 	if filter != nil {
-		return s.cardRepo.Search(ctx, filter)
+		return s.cardRepo.SearchCards(ctx, filter)
 	}
 	// If no filter, return all cards with default limit
 	return s.cardRepo.ListAll(ctx, 1000, 0)
 }
 
 // GetCardByUuid retrieves a card by its UUID
-func (s *CardService) GetCardByUuid(ctx context.Context, uuid string) (*models.Card, error) {
+func (s *CardService) GetCardByUuid(ctx context.Context, uuid string) (*repository.CardModel, error) {
 	return s.cardRepo.GetByUuid(ctx, uuid)
 }
 
 // GetCardsByName retrieves cards by name
-func (s *CardService) GetCardsByName(ctx context.Context, name string) ([]*models.Card, error) {
+func (s *CardService) GetCardsByName(ctx context.Context, name string) ([]*repository.CardModel, error) {
 	return s.cardRepo.GetByName(ctx, name)
 }
 
 // GetCardsBySetCode retrieves cards by set code
-func (s *CardService) GetCardsBySetCode(ctx context.Context, setCode string) ([]*models.Card, error) {
+func (s *CardService) GetCardsBySetCode(ctx context.Context, setCode string) ([]*repository.CardModel, error) {
 	return s.cardRepo.GetBySetCode(ctx, setCode)
 }
 
 // GetCardsByColor retrieves cards by color
-func (s *CardService) GetCardsByColor(ctx context.Context, color string, limit int32, offset int32) ([]*models.Card, error) {
+func (s *CardService) GetCardsByColor(ctx context.Context, color string, limit int32, offset int32) ([]*repository.CardModel, error) {
 	return s.cardRepo.GetByColor(ctx, color, limit, offset)
 }
 
 // GetCardsByRarity retrieves cards by rarity
-func (s *CardService) GetCardsByRarity(ctx context.Context, rarity string, limit int32, offset int32) ([]*models.Card, error) {
+func (s *CardService) GetCardsByRarity(ctx context.Context, rarity string, limit int32, offset int32) ([]*repository.CardModel, error) {
 	return s.cardRepo.GetByRarity(ctx, rarity, limit, offset)
 }
 
 // GetCardsByManaValue retrieves cards by mana value
-func (s *CardService) GetCardsByManaValue(ctx context.Context, manaValue float64, limit int32, offset int32) ([]*models.Card, error) {
+func (s *CardService) GetCardsByManaValue(ctx context.Context, manaValue float64, limit int32, offset int32) ([]*repository.CardModel, error) {
 	return s.cardRepo.GetByManaValue(ctx, manaValue, limit, offset)
 }
 
@@ -92,6 +91,21 @@ func (s *CardService) GetCardStatistics(ctx context.Context) (map[string]any, er
 	}
 
 	return stats, nil
+}
+
+// SearchCards searches for cards based on the given search parameters
+func (s *CardService) SearchCards(ctx context.Context, searchParams *repository.CardSearchParams) ([]*repository.CardModel, error) {
+	return s.cardRepo.SearchCards(ctx, searchParams)
+}
+
+// GetCardByNameSetCodeAndNumber retrieves a card by name, set code, and number
+func (s *CardService) GetCardByNameSetCodeAndNumber(ctx context.Context, name, setCode, number string) (*repository.GetCardByNameSetCodeAndNumberRow, error) {
+	return s.cardRepo.GetByNameSetCodeAndNumber(ctx, name, setCode, number)
+}
+
+// GetCardByNameAndSetCode retrieves a card by name and set code
+func (s *CardService) GetCardByNameAndSetCode(ctx context.Context, name, setCode string) (*repository.GetCardByNameAndSetCodeRow, error) {
+	return s.cardRepo.GetByNameAndSetCode(ctx, name, setCode)
 }
 
 // Close closes the underlying repository connection

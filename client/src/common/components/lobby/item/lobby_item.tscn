@@ -64,6 +64,8 @@ vertical_alignment = 1
 [node name="HFlowContainer" type="HFlowContainer" parent="MarginContainer/HBoxContainer" unique_id=1563880890]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 0
 alignment = 2
 
 [node name="PublicIndicator" type="RichTextLabel" parent="MarginContainer/HBoxContainer/HFlowContainer" unique_id=1231807566]

@@ -28,10 +28,9 @@ func _init() -> void:
 	
 	if not printings_manager:
 		printings_manager = PrintingsManager.new()
-		printings_manager.load_tracker()
-	
-	#if not transition_manager:
-		#transition_manager = TransitionManager.new()
+		
+	if not game_controller:
+		game_controller = GameController.new()
 
 func _exit_tree() -> void:
 	if card_repository:

@@ -22,7 +22,7 @@ func _on_text_changed(_new_text: String) -> void:
 	_search_timer.stop()
 	_search_timer.start(delay_time)
 	
-func _execute_search() -> void:
+func _execute_search(text: String = "") -> void:
 	var query : String = text.strip_edges()
 	
 	if query.is_empty():

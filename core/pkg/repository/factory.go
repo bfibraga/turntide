@@ -29,7 +29,7 @@ import (
 	"os"
 	"path/filepath"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 )
 
 const (
@@ -74,7 +74,7 @@ func NewFactory(dbPath string, logger *slog.Logger) (*Factory, error) {
 		return nil, fmt.Errorf("failed to create database directory: %w", err)
 	}
 
-	conn, err := sql.Open("sqlite3", dbPath)
+	conn, err := sql.Open("sqlite", dbPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open database: %w", err)
 	}
@@ -97,3 +97,4 @@ func (f *Factory) GetDBTX() DBTX {
 func (f *Factory) Close() error {
 	return f.conn.Close()
 }
+

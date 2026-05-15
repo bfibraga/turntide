@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dbe21uwpwja6f" path="res://src/game/menus/deck/browser/deck_browser.gd" id="1_asdlk"]
 [ext_resource type="Script" uid="uid://nv5mq1l585aj" path="res://src/common/components/search_line_edit/search_line_edit.gd" id="2_a3fkt"]
 [ext_resource type="Script" uid="uid://ds3ik4uojxsuq" path="res://src/common/components/extensible_scroll_container/extensable_scroll_container.gd" id="3_7f7k7"]
+[ext_resource type="Texture2D" uid="uid://bi71l73nxjle5" path="res://assets/mana_symbols/red/red_mana_symbol.png" id="3_cyc5f"]
 [ext_resource type="Script" uid="uid://bc5kbya8n3crb" path="res://src/common/components/deck/list/deck_list.gd" id="4_a3fkt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gktbo"]
@@ -91,6 +92,8 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 text = "Red"
+icon = ExtResource("3_cyc5f")
+expand_icon = true
 
 [node name="Blue" type="CheckBox" parent="HBoxContainer/Sidebar/VBoxContainer4/ScrollContainer/Top/VBoxContainer3/FlowContainer" unique_id=1418954019]
 unique_name_in_owner = true

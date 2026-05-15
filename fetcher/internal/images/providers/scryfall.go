@@ -10,10 +10,10 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/bfibraga/turntide/core/pkg/repository"
 	"github.com/bfibraga/turntide/fetcher/internal/download"
-	"github.com/bfibraga/turntide/fetcher/internal/models"
 	"github.com/bfibraga/turntide/fetcher/internal/parsers"
-	"github.com/bfibraga/turntide/fetcher/internal/repository"
+	"github.com/bfibraga/turntide/fetcher/internal/service"
 )
 
 const (
@@ -43,30 +43,26 @@ var (
 )
 
 // ScryfallDownload downloads card images from Scryfall
-func ScryfallDownload(cards []parsers.TurntideCardData, cardRepo repository.CardRepository, outputDir string, format string) error {
+func ScryfallDownload(cards []parsers.TurntideCardData, cardService service.CardService, outputDir string, format string) error {
 	return download.NewDownloadProviderBuilder().
 		WithSteps(
-			QueryCardImages(cards, cardRepo, format),
+			QueryCardImages(cards, cardService, format),
 			DownloadImages(outputDir),
 		).
 		Download()
 }
 
 // QueryCardImages queries the database for Scryfall IDs and builds download list
-func QueryCardImages(cards []parsers.TurntideCardData, cardRepo repository.CardRepository, format string) func(ctx context.Context) error {
+func QueryCardImages(cards []parsers.TurntideCardData, cardService service.CardService, format string) func(ctx context.Context) error {
 	return func(ctx context.Context) error {
 		imageCards = make([]CardImageData, 0, len(cards))
 
 		for _, card := range cards {
-			var cardData *models.CardWithScryfallID
+			var cardData *repository.GetCardByNameSetCodeAndNumberRow
 			var err error
 
-			if card.CardID != "" {
-				cardData, err = cardRepo.GetByNameSetCodeAndNumber(ctx, card.Name, card.SetCode, card.CardID)
-			} else {
-				cardData, err = cardRepo.GetByNameAndSetCode(ctx, card.Name, card.SetCode)
-			}
-
+			cardData, err = cardService.GetCardByNameSetCodeAndNumber(ctx, card.Name, card.SetCode, card.CardID)
+	
 			if err != nil {
 				return fmt.Errorf("failed to query card %s from set %s: %w", card.Name, card.SetCode, err)
 			}
@@ -76,13 +72,14 @@ func QueryCardImages(cards []parsers.TurntideCardData, cardRepo repository.CardR
 				continue
 			}
 
-			imageURL := buildScryfallImageURL(cardData.ScryfallID, format)
+			scryfallID := cardData.Scryfallid.String
+			imageURL := buildScryfallImageURL(scryfallID, format)
 
 			imageCards = append(imageCards, CardImageData{
-				Name:       cardData.Name,
-				SetCode:    cardData.SetCode,
-				UUID:       cardData.UUID,
-				ScryfallID: cardData.ScryfallID,
+				Name:       cardData.Name.String,
+				SetCode:    cardData.Setcode.String,
+				UUID:       cardData.Uuid.String,
+				ScryfallID: scryfallID,
 				ImageURL:   imageURL,
 			})
 		}

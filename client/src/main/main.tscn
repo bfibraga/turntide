@@ -11,11 +11,13 @@
 [ext_resource type="PackedScene" uid="uid://bhsjcwk4ki45f" path="res://src/game/menus/lobby/room/lobby_room.tscn" id="9_muem4"]
 [ext_resource type="PackedScene" uid="uid://cpjp8o5nseqhm" path="res://src/game/menus/deck/builder/deck_builder.tscn" id="9_ya4ey"]
 [ext_resource type="PackedScene" uid="uid://pgd2yhn11go0" path="res://src/common/background/fractal/fractal_background.tscn" id="12_eb6dy"]
+[ext_resource type="Texture2D" uid="uid://bharq87hp8em7" path="res://assets/mana_symbols/red/red_phyrexian_mana_symbol.png" id="12_w0wra"]
+[ext_resource type="Texture2D" uid="uid://bi71l73nxjle5" path="res://assets/mana_symbols/red/red_mana_symbol.png" id="13_4tqcc"]
+[ext_resource type="Texture2D" uid="uid://cmlj3qhsspb8g" path="res://assets/mana_symbols/blue/blue_mana_symbol.png" id="14_nqfqj"]
+[ext_resource type="Texture2D" uid="uid://yuf6f3nj2v8t" path="res://assets/mana_symbols/blue/blue_phyrexian_mana_symbol.png" id="15_hmxxs"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0wfyh"]
 bg_color = Color(0, 0, 0, 0.6666667)
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
 
 [node name="Main" type="Control" unique_id=1220516110 node_paths=PackedStringArray("gui_state_machine")]
 layout_mode = 3
@@ -114,12 +116,16 @@ size_flags_vertical = 2
 unique_name_in_owner = true
 layout_mode = 2
 text = "Play"
+icon = ExtResource("12_w0wra")
+expand_icon = true
 
 [node name="Decks" type="Button" parent="HBoxContainer/Sidebar/MarginContainer/VBoxContainer" unique_id=1353447991]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Decks
 "
+icon = ExtResource("13_4tqcc")
+expand_icon = true
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/Sidebar/MarginContainer" unique_id=1708571572]
 layout_mode = 2
@@ -130,11 +136,15 @@ alignment = 2
 unique_name_in_owner = true
 layout_mode = 2
 text = "Account"
+icon = ExtResource("14_nqfqj")
+expand_icon = true
 
 [node name="Settings" type="Button" parent="HBoxContainer/Sidebar/MarginContainer/VBoxContainer2" unique_id=884690006]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Settings"
+icon = ExtResource("15_hmxxs")
+expand_icon = true
 
 [node name="ContentContainer" type="MarginContainer" parent="HBoxContainer" unique_id=19938072]
 layout_mode = 2

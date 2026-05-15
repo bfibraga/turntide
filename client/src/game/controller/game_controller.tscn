@@ -25,6 +25,14 @@ script = ExtResource("2_wf0ff")
 initial_state = NodePath("Login")
 metadata/_custom_type_script = "uid://bb50oxlatsq3p"
 
+[node name="Entered" type="Node" parent="GUIStateMachine" unique_id=1344573301 node_paths=PackedStringArray("transition_manager")]
+script = ExtResource("10_shnkw")
+packed_scene = ExtResource("14_py7vm")
+transition_in = "diagonal_popping_squares"
+transition_out = "diagonal_popping_squares"
+transition_manager = NodePath("../../TransitionManager")
+metadata/_custom_type_script = "uid://dwbc0pee0vhur"
+
 [node name="Login" type="Node" parent="GUIStateMachine" unique_id=1723029804 node_paths=PackedStringArray("transition_manager")]
 script = ExtResource("4_t3ua1")
 packed_scene = ExtResource("5_wf0ff")
@@ -40,14 +48,6 @@ transition_in = "diagonal_popping_squares"
 transition_out = "diagonal_popping_squares"
 transition_manager = NodePath("../../TransitionManager")
 metadata/_custom_type_script = "uid://c06xj1g5oewu4"
-
-[node name="Entered" type="Node" parent="GUIStateMachine" unique_id=1344573301 node_paths=PackedStringArray("transition_manager")]
-script = ExtResource("10_shnkw")
-packed_scene = ExtResource("14_py7vm")
-transition_in = "diagonal_popping_squares"
-transition_out = "diagonal_popping_squares"
-transition_manager = NodePath("../../TransitionManager")
-metadata/_custom_type_script = "uid://dwbc0pee0vhur"
 
 [node name="NetworkStateMachine" type="Node" parent="." unique_id=1500622133 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("2_wf0ff")

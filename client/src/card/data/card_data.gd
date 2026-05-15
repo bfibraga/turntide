@@ -26,7 +26,6 @@ class Builder extends RefCounted:
 @export var number: String = ""
 @export var rarity: String = ""
 
-# Printing & Release (DB: setCode)
 @export_group("Printing & Release")
 @export var setCode: String = ""
 @export var printings: String = ""
@@ -36,14 +35,12 @@ class Builder extends RefCounted:
 @export var promoTypes: String = ""
 @export var finishes: String = ""
 
-# IDs
 @export_group("IDs")
 @export var scryfall_id: String = ""
 
 
 @export_category("Classification & Type")
 
-# Classification
 @export_group("Classification")
 @export var type: String = ""
 @export var types: String = ""
@@ -53,7 +50,6 @@ class Builder extends RefCounted:
 
 @export_category("Face & Printing")
 
-# Face
 @export_group("Face")
 @export var faceName: String = ""
 @export var facePrintedName: String = ""
@@ -62,7 +58,6 @@ class Builder extends RefCounted:
 @export var faceManaValue: float = .0
 @export var otherFaceIds: String = ""
 
-# Artist & Credits
 @export_group("Artist & Credits")
 @export var artist: String = ""
 @export var artistIds: String = ""
@@ -70,13 +65,11 @@ class Builder extends RefCounted:
 
 @export_category("Text & Rules")
 
-# Text & Flavor
 @export_group("Text & Flavor")
 @export var text: String = ""
 @export var flavorText: String = ""
 @export var flavorName: String = ""
 
-# Rules & Text
 @export_group("Rules & Text")
 @export var printedText: String = ""
 @export var originalText: String = ""
@@ -87,7 +80,6 @@ class Builder extends RefCounted:
 
 @export_category("Color & Mana")
 
-# Color & Mana Details
 @export_group("Color & Mana Details")
 @export var colors: String = ""
 @export var colorIdentity: String = ""
@@ -99,7 +91,6 @@ class Builder extends RefCounted:
 
 @export_category("Stats & Gameplay")
 
-# Stats & Gameplay
 @export_group("Stats & Gameplay")
 @export var power: String = ""
 @export var toughness: String = ""
@@ -111,12 +102,10 @@ class Builder extends RefCounted:
 
 @export_category("Aggregates & Flags")
 
-# Aggregates & Rankings
 @export_group("Aggregates & Rankings")
 @export var edhrecRank: int = 0
 @export var edhrecSaltiness: float = .0
 
-# Flags
 @export_group("Flags")
 @export var hasAlternativeDeckLimit: bool = false
 @export var hasContentWarning: bool = false
@@ -137,12 +126,10 @@ class Builder extends RefCounted:
 
 @export_category("Metadata Extras")
 
-# Keywords & Language
 @export_group("Keywords & Language")
 @export var keywords: String = ""
 @export var language: String = ""
 
-# Layout & Presentation
 @export_group("Layout & Presentation")
 @export var layout: String = ""
 @export var watermark: String = ""
@@ -151,7 +138,6 @@ class Builder extends RefCounted:
 
 @export_category("Collections & Relations")
 
-# Collections & Relations
 @export_group("Collections & Relations")
 @export var cardParts: String = ""
 @export var relatedCards: String = ""
@@ -162,7 +148,6 @@ class Builder extends RefCounted:
 
 @export_category("Misc")
 
-# Misc
 @export_group("Misc")
 @export var attractionLights: String = ""
 @export var availability: String = ""
@@ -186,4 +171,4 @@ func to_turntide_format() -> String:
 
 
 func _to_string() -> String:
-	return "[Card: %s (%s)]" % [name, setCode]
+	return "[Card: %s [%s] (%s)]" % [name, number, setCode]

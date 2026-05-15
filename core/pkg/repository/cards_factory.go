@@ -29,7 +29,7 @@ import (
 	"path/filepath"
 
 	config "github.com/bfibraga/turntide/core/internal/db/config/schemas"
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 )
 
 // CardsFactory creates repositories for the cards domain
@@ -58,7 +58,7 @@ func NewCardsFactory(dbPath string, logger *slog.Logger) (*CardsFactory, error) 
 		}
 	}
 
-	conn, err := sql.Open("sqlite3", dbPath)
+	conn, err := sql.Open("sqlite", dbPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open database: %w", err)
 	}
@@ -73,7 +73,7 @@ func NewCardsFactory(dbPath string, logger *slog.Logger) (*CardsFactory, error) 
 }
 
 func createCardsDatabase(dbPath string) error {
-	conn, err := sql.Open("sqlite3", dbPath)
+	conn, err := sql.Open("sqlite", dbPath)
 	if err != nil {
 		return fmt.Errorf("failed to create database: %w", err)
 	}

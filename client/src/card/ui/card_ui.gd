@@ -48,6 +48,9 @@ func _ready() -> void:
 			
 			if event.is_action_pressed("flip_card"):
 				view.flip_card.emit()
+	
+			if event.is_action_pressed("ui_left"):
+				print("Selected card %s" % data.card_data.value.name)
 			
 			if event is InputEventMouseMotion:
 				view.follow()

@@ -15,9 +15,13 @@ const (
 	INF time.Duration = -1
 )
 
+var (
+	config components.LobbyConfig = components.NewLobbyConfig(INF)
+)
+
 func TestAuthenticatedLobbyList(t *testing.T) {
 	logger := slog.Default()
-	lobbyReg := components.NewLobbyRegistry(INF)
+	lobbyReg := components.NewLobbyRegistry(config)
 	lobbyReg.CreateLobby(1, "host1", "Public Lobby", "1v1", 2, false, "")
 
 	client := clients.NewFakeClient(1)
@@ -38,7 +42,7 @@ func TestAuthenticatedCreateLobby(t *testing.T) {
 	logger := slog.Default()
 
 	t.Run("success", func(t *testing.T) {
-		lobbyReg := components.NewLobbyRegistry(INF)
+		lobbyReg := components.NewLobbyRegistry(config)
 
 		client := clients.NewFakeClient(1)
 		auth := states.NewAuthenticated(logger, "host", lobbyReg)
@@ -61,7 +65,7 @@ func TestAuthenticatedCreateLobby(t *testing.T) {
 	})
 
 	t.Run("duplicate name", func(t *testing.T) {
-		lobbyReg := components.NewLobbyRegistry(INF)
+		lobbyReg := components.NewLobbyRegistry(config)
 		// Create first lobby
 		lobbyReg.CreateLobby(1, "host", "My Lobby", "1v1", 2, false, "")
 
@@ -88,7 +92,7 @@ func TestAuthenticatedCreateLobby(t *testing.T) {
 
 func TestAuthenticatedHandleUnknownMessage(t *testing.T) {
 	logger := slog.Default()
-	lobbyReg := components.NewLobbyRegistry(INF)
+	lobbyReg := components.NewLobbyRegistry(config)
 
 	client := clients.NewFakeClient(1)
 	auth := states.NewAuthenticated(logger, "host", lobbyReg)

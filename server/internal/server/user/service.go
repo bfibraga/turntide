@@ -4,15 +4,15 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/bfibraga/turntide/server/internal/server/db"
+	"github.com/bfibraga/turntide/core/pkg/repository"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type Service struct {
-	repo Repository
+	repo repository.UserRepository
 }
 
-func NewService(repo Repository) *Service {
+func NewService(repo repository.UserRepository) *Service {
 	return &Service{
 		repo: repo,
 	}
@@ -30,7 +30,7 @@ func (s *Service) CreateUser(ctx context.Context, username, password string) err
 	return err
 }
 
-func (s *Service) GetUser(ctx context.Context, username string) (*db.User, error) {
+func (s *Service) GetUser(ctx context.Context, username string) (*repository.UserModel, error) {
 	user, err := s.repo.GetByUsername(ctx, username)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user: %w", err)

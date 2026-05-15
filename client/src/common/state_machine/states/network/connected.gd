@@ -18,7 +18,7 @@ func _ready() -> void:
 	# Connect to server
 	var url : String = UrlBuilder.ws() \
 		.host("localhost") \
-		.port(4000) \
+		.port(80) \
 		.path("ws") \
 		.build()
 	

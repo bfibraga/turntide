@@ -20,7 +20,7 @@ type Hub struct {
 }
 
 func NewHub(logger *slog.Logger, userService *user.Service) *Hub {
-	lobbyReg := components.NewLobbyRegistry(-1)
+	lobbyReg := components.NewLobbyRegistry(components.DefaultLobbyConfig())
 
 	hostID, err := faker.RandomInt(0, 255)
 	if err != nil {

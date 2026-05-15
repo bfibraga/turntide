@@ -8,7 +8,7 @@ import (
 )
 
 func TestCreateLobby(t *testing.T) {
-	reg := components.NewLobbyRegistry(time.Minute)
+	reg := components.NewLobbyRegistry(components.DefaultLobbyConfig())
 	lobby := reg.CreateLobby(1, "testhost", "My Lobby", "1v1", 2, false, "")
 
 	if lobby == nil {
@@ -32,7 +32,7 @@ func TestCreateLobby(t *testing.T) {
 }
 
 func TestListPublicLobbies(t *testing.T) {
-	reg := components.NewLobbyRegistry(time.Minute)
+	reg := components.NewLobbyRegistry(components.DefaultLobbyConfig())
 	reg.CreateLobby(1, "host1", "Public Lobby", "1v1", 2, false, "")
 	reg.CreateLobby(2, "host2", "Private Lobby", "commander", 4, true, "pass")
 
@@ -47,7 +47,7 @@ func TestListPublicLobbies(t *testing.T) {
 
 func TestJoinLobby(t *testing.T) {
 	t.Run("public lobby", func(t *testing.T) {
-		reg := components.NewLobbyRegistry(time.Minute)
+		reg := components.NewLobbyRegistry(components.DefaultLobbyConfig())
 		lobby := reg.CreateLobby(1, "host", "Test Lobby", "1v1", 2, false, "")
 		lobbyID := lobby.ID
 
@@ -63,7 +63,7 @@ func TestJoinLobby(t *testing.T) {
 	})
 
 	t.Run("lobby full", func(t *testing.T) {
-		reg := components.NewLobbyRegistry(time.Minute)
+		reg := components.NewLobbyRegistry(components.DefaultLobbyConfig())
 		lobby := reg.CreateLobby(1, "host", "Full", "1v1", 2, false, "")
 		lobbyID := lobby.ID
 		reg.JoinLobby(lobbyID, 2, "player2", "")
@@ -90,7 +90,7 @@ func TestJoinLobbyPassword(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			reg := components.NewLobbyRegistry(time.Minute)
+			reg := components.NewLobbyRegistry(components.DefaultLobbyConfig())
 			lobby := reg.CreateLobby(1, "host", "Private", "1v1", 2, tt.isPrivate, tt.password)
 			lobbyID := lobby.ID
 
@@ -104,7 +104,7 @@ func TestJoinLobbyPassword(t *testing.T) {
 
 func TestLeaveLobby(t *testing.T) {
 	t.Run("normal leave", func(t *testing.T) {
-		reg := components.NewLobbyRegistry(time.Minute)
+		reg := components.NewLobbyRegistry(components.DefaultLobbyConfig())
 		lobby := reg.CreateLobby(1, "host", "Test", "1v1", 2, false, "")
 		lobbyID := lobby.ID
 		reg.JoinLobby(lobbyID, 2, "player2", "")
@@ -117,7 +117,7 @@ func TestLeaveLobby(t *testing.T) {
 	})
 
 	t.Run("removes empty lobby", func(t *testing.T) {
-		reg := components.NewLobbyRegistry(time.Minute)
+		reg := components.NewLobbyRegistry(components.DefaultLobbyConfig())
 		lobby := reg.CreateLobby(1, "host", "Test", "1v1", 2, false, "")
 		lobbyID := lobby.ID
 
@@ -134,7 +134,7 @@ func TestLeaveLobby(t *testing.T) {
 }
 
 func TestSetReady(t *testing.T) {
-	reg := components.NewLobbyRegistry(time.Minute)
+	reg := components.NewLobbyRegistry(components.DefaultLobbyConfig())
 	lobby := reg.CreateLobby(1, "host", "Test", "1v1", 2, false, "")
 	lobbyID := lobby.ID
 	reg.JoinLobby(lobbyID, 2, "player2", "")
@@ -166,7 +166,7 @@ func TestStartGame(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			reg := components.NewLobbyRegistry(time.Minute)
+			reg := components.NewLobbyRegistry(components.DefaultLobbyConfig())
 			lobby := reg.CreateLobby(1, "host", "Test", "1v1", 2, false, "")
 			lobbyID := lobby.ID
 			reg.JoinLobby(lobbyID, 2, "player2", "")
@@ -191,7 +191,7 @@ func TestStartGame(t *testing.T) {
 }
 
 func TestGetLobbyByClient(t *testing.T) {
-	reg := components.NewLobbyRegistry(time.Minute)
+	reg := components.NewLobbyRegistry(components.DefaultLobbyConfig())
 	lobby := reg.CreateLobby(1, "host", "Test", "1v1", 2, false, "")
 	lobbyID := lobby.ID
 	reg.JoinLobby(lobbyID, 2, "player2", "")

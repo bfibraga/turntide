@@ -90,6 +90,18 @@ func (r *cardRepository) ListAll(ctx context.Context, limit, offset int32) ([]*c
 	return cards, nil
 }
 
+func (r *cardRepository) SearchCards(ctx context.Context, filter *cards.SearchCardsParams) ([]*cards.Card, error) {
+	results, err := r.queries.SearchCards(ctx, *filter)
+	if err != nil {
+		return nil, err
+	}
+	cards := make([]*cards.Card, len(results))
+	for i := range results {
+		cards[i] = &results[i]
+	}
+	return cards, nil
+}
+
 func (r *cardRepository) Count(ctx context.Context) (int64, error) {
 	return r.queries.CountCards(ctx)
 }
