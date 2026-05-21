@@ -24,9 +24,9 @@ package states
 import (
 	"log/slog"
 
+	"github.com/bfibraga/turntide/core/pkg/packets"
 	"github.com/bfibraga/turntide/server/internal/server"
 	"github.com/bfibraga/turntide/server/internal/server/components"
-	"github.com/bfibraga/turntide/server/pkg/packets"
 )
 
 type Authenticated struct {
@@ -63,13 +63,19 @@ func (a *Authenticated) OnEnter() {
 func (a *Authenticated) HandleMessage(senderId uint64, message packets.Msg) {
 	a.logger.Debug("received message from authenticated client", "sender_id", senderId, "message_type", message)
 
-	switch msg := message.(type) {
+	switch message := message.(type) {
 	case *packets.Packet_LobbyListRequest:
 		a.handleLobbyList()
 	case *packets.Packet_LobbyCreateRequest:
-		a.handleCreateLobby(senderId, msg.LobbyCreateRequest)
+		a.handleCreateLobby(senderId, message)
 	case *packets.Packet_LobbyJoinRequest:
-		a.handleJoinLobby(senderId, msg.LobbyJoinRequest)
+		a.handleJoinLobby(senderId, message)
+	case *packets.Packet_LobbyLeaveRequest:
+		// a.handleLeaveLobby(senderId, message)
+	case *packets.Packet_LobbyPlayerJoined:
+		// a.handleLobbyPlayerJoined(senderId, message)
+	case *packets.Packet_Chat:
+		// a.handleChat(senderId, message)
 	default:
 		// Ignore other messages in authenticated state
 	}
@@ -91,14 +97,12 @@ func (a *Authenticated) handleLobbyList() {
 		})
 	}
 
-	a.client.SocketSend(&packets.Packet_LobbyListResponse{
-		LobbyListResponse: &packets.LobbyListResponse{
-			Lobbies: lobbyInfos,
-		},
-	})
+	a.client.SocketSend(packets.NewLobbyListResponse(lobbyInfos))
 }
 
-func (a *Authenticated) handleCreateLobby(senderId uint64, msg *packets.LobbyCreateRequest) {
+func (a *Authenticated) handleCreateLobby(senderId uint64, message *packets.Packet_LobbyCreateRequest) {
+	msg := message.LobbyCreateRequest
+
 	var password string
 	if msg.Password != nil {
 		password = *msg.Password
@@ -118,7 +122,8 @@ func (a *Authenticated) handleCreateLobby(senderId uint64, msg *packets.LobbyCre
 	a.client.SetState(NewInLobby(a.logger, a.lobbyReg, a.client, lobby.ID, a.username))
 }
 
-func (a *Authenticated) handleJoinLobby(senderId uint64, msg *packets.LobbyJoinRequest) {
+func (a *Authenticated) handleJoinLobby(senderId uint64, message *packets.Packet_LobbyJoinRequest) {
+	msg := message.LobbyJoinRequest
 	var password string
 	if msg.Password != nil {
 		password = *msg.Password
@@ -135,23 +140,23 @@ func (a *Authenticated) handleJoinLobby(senderId uint64, msg *packets.LobbyJoinR
 
 	playerPkt := packets.NewLobbyPlayer(a.username, senderId, false)
 	joinPkt := packets.NewLobbyPlayerJoined(playerPkt)
-	a.broadcastToLobby(joinPkt, msg.LobbyId)
+	a.broadcastToLobby(senderId, joinPkt, msg.LobbyId)
 
 	// Transition to InLobby state
 	a.client.SetState(NewInLobby(a.logger, a.lobbyReg, a.client, msg.LobbyId, a.username))
 }
 
-func (a *Authenticated) broadcastToLobby(msg packets.Msg, lobbyID uint64) {
+func (a *Authenticated) broadcastToLobby(senderId uint64, msg packets.Msg, lobbyID uint64) {
 	lobby, ok := a.lobbyReg.FindLobby(lobbyID)
 	if !ok {
 		return
 	}
 
 	for clientID := range lobby.Players {
-		if clientID == a.client.Id() {
+		if clientID == senderId {
 			continue
 		}
-		a.client.PassToPeer(msg, clientID)
+		a.client.SocketSendAs(senderId, msg)
 	}
 }
 

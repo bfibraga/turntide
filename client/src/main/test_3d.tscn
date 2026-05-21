@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://dv0378ldosc3w"]
+
+[ext_resource type="PackedScene" uid="uid://fpjf6itsqwha" path="res://src/card/view/card_view_3d.tscn" id="1_kpqlm"]
+
+[sub_resource type="Environment" id="Environment_kpqlm"]
+background_mode = 1
+background_color = Color(0.19793725, 0.19793722, 0.19793722, 1)
+ambient_light_source = 3
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 1.27
+
+[sub_resource type="Environment" id="Environment_ovpnh"]
+background_color = Color(0.23753911, 0.23753914, 0.23753911, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 6.12
+
+[node name="Node2D" type="Node2D" unique_id=604977156]
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1667481387]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.2297931)
+environment = SubResource("Environment_kpqlm")
+current = true
+fov = 78.09256
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=538731410]
+environment = SubResource("Environment_ovpnh")
+
+[node name="Card3D" parent="." unique_id=2005522673 instance=ExtResource("1_kpqlm")]
+transform = Transform3D(0.90980935, 0, -0.41502684, 0, 1, 0, 0.41502684, 0, 0.90980935, 0, 0, 0)

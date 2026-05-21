@@ -4,22 +4,28 @@ signal connected_to_server()
 signal connection_closed()
 signal packet_received(packet: Variant)
 
+@export var handshake_headers: PackedStringArray
+@export var supported_protocols: PackedStringArray
+
 const packets := preload("res://src/common/network/packets/packets.gd")
 var socket : WebSocketPeer = WebSocketPeer.new()
 var last_state : WebSocketPeer.State = WebSocketPeer.STATE_CLOSED
 
-func connect_to_url(url: String, tls_options: TLSOptions = null) -> Error:
-	var err : Error = socket.connect_to_url(url, tls_options)
+func connect_to_url(url: String, tls_options: TLSOptions = null) -> Result:
+	socket.supported_protocols = supported_protocols 
+	socket.handshake_headers = handshake_headers 
+	
+	var err : int = socket.connect_to_url(url, tls_options)
 	if err != OK:
-		return err
+		return Result.error(err)
 	
 	last_state = socket.get_ready_state()
-	return OK
+	return Result.Ok(OK)
 
-func send(content: Variant) -> Error:
+func send(content: Variant) -> Result:
 	var packet : packets.Packet = content as packets.Packet
 	var data : PackedByteArray = packet.to_bytes()
-	return socket.send(data)
+	return Result.Ok(socket.send(data))
 
 func get_packet() -> packets.Packet:
 	if socket.get_available_packet_count() < 1:
@@ -27,11 +33,10 @@ func get_packet() -> packets.Packet:
 	
 	var data : PackedByteArray = socket.get_packet()
 	var packet : packets.Packet = packets.Packet.new()
-	var result : Error = packet.from_bytes(data) as Error
-	if result != OK:
+	var result : Result = Result.from_gderr(packet.from_bytes(data))
+	if result.is_err():
 		var msg : String = "Error forming packet from data %" % data.get_string_from_utf8()
 		push_error(msg)
-		printerr(msg)
 	
 	return packet
 

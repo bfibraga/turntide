@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://do3uhx7r3fxyl" path="res://src/common/transition/transition_manager.tscn" id="2_ya4ey"]
 [ext_resource type="Script" uid="uid://bb50oxlatsq3p" path="res://src/common/state_machine/state_machine.gd" id="3_ya4ey"]
 [ext_resource type="Script" uid="uid://c06xj1g5oewu4" path="res://src/common/state_machine/scene_state.gd" id="4_eb6dy"]
+[ext_resource type="PackedScene" uid="uid://cvowf7plhqg1l" path="res://src/game/menus/home/home.tscn" id="5_hmxxs"]
 [ext_resource type="PackedScene" uid="uid://cv7y4lfcoaaa8" path="res://src/game/menus/settings/settings.tscn" id="5_trceg"]
 [ext_resource type="Script" uid="uid://bv643nch74fxm" path="res://src/common/state_machine/states/gui/lobby/browser.gd" id="6_a8y0u"]
 [ext_resource type="PackedScene" uid="uid://dmybuixer6c68" path="res://src/game/menus/lobby/browser/lobby_browser.tscn" id="7_jkv2x"]
@@ -11,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://bhsjcwk4ki45f" path="res://src/game/menus/lobby/room/lobby_room.tscn" id="9_muem4"]
 [ext_resource type="PackedScene" uid="uid://cpjp8o5nseqhm" path="res://src/game/menus/deck/builder/deck_builder.tscn" id="9_ya4ey"]
 [ext_resource type="PackedScene" uid="uid://pgd2yhn11go0" path="res://src/common/background/fractal/fractal_background.tscn" id="12_eb6dy"]
+[ext_resource type="Texture2D" uid="uid://f7agqmviudck" path="res://assets/mana_symbols/colorless/colorless_mana_symbol.svg" id="12_nqfqj"]
 [ext_resource type="Texture2D" uid="uid://bharq87hp8em7" path="res://assets/mana_symbols/red/red_phyrexian_mana_symbol.png" id="12_w0wra"]
 [ext_resource type="Texture2D" uid="uid://bi71l73nxjle5" path="res://assets/mana_symbols/red/red_mana_symbol.png" id="13_4tqcc"]
 [ext_resource type="Texture2D" uid="uid://cmlj3qhsspb8g" path="res://assets/mana_symbols/blue/blue_mana_symbol.png" id="14_nqfqj"]
@@ -34,11 +36,12 @@ content_container = NodePath("../HBoxContainer/ContentContainer")
 
 [node name="StateMachine" type="Node" parent="." unique_id=1728865753 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("3_ya4ey")
-initial_state = NodePath("Main")
+initial_state = NodePath("Home")
 metadata/_custom_type_script = "uid://bb50oxlatsq3p"
 
-[node name="Main" type="Node" parent="StateMachine" unique_id=212386248 node_paths=PackedStringArray("transition_manager")]
+[node name="Home" type="Node" parent="StateMachine" unique_id=212386248 node_paths=PackedStringArray("transition_manager")]
 script = ExtResource("4_eb6dy")
+packed_scene = ExtResource("5_hmxxs")
 transition_manager = NodePath("../../TransitionManager")
 metadata/_custom_type_script = "uid://c06xj1g5oewu4"
 
@@ -68,8 +71,9 @@ metadata/_custom_type_script = "uid://c06xj1g5oewu4"
 
 [node name="Fractal Background" parent="." unique_id=1618489495 instance=ExtResource("12_eb6dy")]
 layout_mode = 1
-low = Color(0.031552497, 0.050106898, 0.06702885, 1)
-mid_red = Color(0.101945914, 0.087836765, 0.09630392, 1)
+low = Color(0.7311103, 0.18682751, 0.782427, 1)
+mid_red = Color(0.23027647, 0.566714, 0.8003714, 1)
+high = Color(0.1254902, 0.62352943, 0.23921569, 1)
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=371242613]
 layout_mode = 1
@@ -111,6 +115,13 @@ theme_override_constants/margin_bottom = 5
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Sidebar/MarginContainer" unique_id=523784423]
 layout_mode = 2
 size_flags_vertical = 2
+
+[node name="Home" type="Button" parent="HBoxContainer/Sidebar/MarginContainer/VBoxContainer" unique_id=538834839]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Home"
+icon = ExtResource("12_nqfqj")
+expand_icon = true
 
 [node name="Play" type="Button" parent="HBoxContainer/Sidebar/MarginContainer/VBoxContainer" unique_id=65979924]
 unique_name_in_owner = true

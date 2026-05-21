@@ -8,8 +8,8 @@ class_name SceneHolderState extends State
 @export_category("Dependencies")
 @export var transition_manager: TransitionManager
 
-func enter() -> void:
+func enter(data: Dictionary = {}) -> void:
 	super.enter()
 	
-	transition_manager.transition_to(packed_scene, transition_in, transition_out)
+	transition_manager.transition_to(packed_scene, transition_in, transition_out, data)
 	

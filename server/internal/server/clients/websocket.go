@@ -4,9 +4,9 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/bfibraga/turntide/core/pkg/packets"
 	"github.com/bfibraga/turntide/server/internal/server"
 	"github.com/bfibraga/turntide/server/internal/server/states"
-	"github.com/bfibraga/turntide/server/pkg/packets"
 	"github.com/gorilla/websocket"
 	"google.golang.org/protobuf/proto"
 )

@@ -2,12 +2,13 @@ class_name State
 extends Node
 
 @warning_ignore("unused_signal")
-signal Transitioned(state: State, new_state_name: String)
+signal Transitioned(state: State, new_state_name: String, data: Dictionary)
 
 static func Name() -> String:
 	return ""
 
-func enter() -> void:
+@warning_ignore("unused_parameter")
+func enter(data: Dictionary = {}) -> void:
 	pass
 
 func exit() -> void:

@@ -8,6 +8,19 @@ class Data extends Reactive:
 
 	func _init() -> void:
 		super._init()
+	
+	func _to_string() -> String:
+		return """
+		Name: {name}
+		Color Identity: {color_identity}
+		Tags: {tags}
+		Format: {format}
+		""".format({
+			"name": name.value,
+			"color_identity": color_identity.values(),
+			"tags": tags.values(),
+			"format": format.value
+		})
 
 var data: Data = Data.new()
 
@@ -45,10 +58,10 @@ func _ready() -> void:
 			tags.add_child(format_chip)
 		
 		for tag: String in reactive.tags.values():
-			var chip: Chip = ChipScene.instantiate()
-			chip._init(tag, Color.SEA_GREEN)
+			var tag_chip: Chip = ChipScene.instantiate()
+			tag_chip._init(tag, Color.SEA_GREEN)
 			
-			tags.add_child(chip)
+			tags.add_child(tag_chip)
 	)
 	
 	data.manually_emit()

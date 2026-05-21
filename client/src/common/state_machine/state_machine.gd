@@ -26,7 +26,7 @@ func _physics_process(delta: float) -> void:
 	if current_state:
 		current_state.physics_update(delta)
 
-func on_state_transition(state: State, new_state_name: String) -> void:
+func on_state_transition(state: State, new_state_name: String, data: Dictionary = {}) -> void:
 	if state != current_state:
 		return
 	
@@ -38,7 +38,7 @@ func on_state_transition(state: State, new_state_name: String) -> void:
 	if current_state:
 		current_state.exit()
 		
-	new_state.enter()
+	new_state.enter(data)
 	
 	current_state = new_state
 	state_changed.emit(state, new_state)

@@ -4,7 +4,7 @@ signal card_printing_ready(key: String, path: String)
 
 const IMAGES_PATH: String = "user://cache/images/"
 const TRACKER_FILE: String = "user://cache/printings.json"
-const DB_PATH: String = "user://cache/database/cards.db"
+const DB_PATH: String = CardRepository.DEFAULT_DB_PATH
 
 var _registry: Dictionary = {}
 var _registry_mutex: Mutex = Mutex.new()
@@ -129,12 +129,13 @@ func load_tracker() -> void:
 
 func ensure_db_ready() -> void:
 	if not FileAccess.file_exists(DB_PATH):
-		DirAccess.make_dir_recursive_absolute("user://cache/database")
+		var db_dir: String = DB_PATH.get_base_dir()
+		DirAccess.make_dir_recursive_absolute(db_dir)
 		
 		var fetcher_cli : FetcherCLI = FetcherCLI.new() 
 		
 		fetcher_cli.download() \
-		.db_path(DB_PATH) \
-		.run()
+			.db_path(DB_PATH) \
+			.run()
 	
 		await fetcher_cli.task_finished

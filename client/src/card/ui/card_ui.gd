@@ -83,7 +83,7 @@ func set_printing(printing_path: String) -> void:
 		return
 	
 	var image : Image = Image.new()
-	var err : Error = image.load(printing_path)
+	var err : int = image.load(printing_path)
 	if err != OK:
 		push_error("Failed to load card image: ", printing_path, " error: ", err )
 		return

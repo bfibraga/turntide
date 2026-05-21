@@ -38,7 +38,12 @@ func find_content_container() -> void:
 
 	content_container = deepest
 
-func transition_to(scene: PackedScene, transition_in_name: String = "fade", transition_out_name: String = "fade") -> void:
+func transition_to(
+	scene: PackedScene, 
+	transition_in_name: String = "fade", 
+	transition_out_name: String = "fade",
+	parameters: Dictionary = {},
+) -> void:
 	# Validate scene
 	if not scene:
 		push_warning("transition_to() called with null scene. Aborting transition.")
@@ -48,7 +53,7 @@ func transition_to(scene: PackedScene, transition_in_name: String = "fade", tran
 	await transition_in(transition_in_name)
 	
 	# Swap the scene while hidden
-	_swap_scene(scene)
+	_swap_scene(scene, parameters)
 	
 	# Play transition out (reveal new scene)
 	await transition_out(transition_out_name)
@@ -85,7 +90,7 @@ func transition_out(animation: String = "fade") -> void:
 	# Hide the overlay when done
 	color_rect.hide()
 
-func _swap_scene(scene: PackedScene) -> void:
+func _swap_scene(scene: PackedScene, parameters: Dictionary = {}) -> void:
 	if not content_container:
 		get_tree().change_scene_to_packed(scene)
 		return
@@ -95,6 +100,12 @@ func _swap_scene(scene: PackedScene) -> void:
 	
 	var new_scene: Node = scene.instantiate()
 	
+	if new_scene.has_method("_init"):
+		if _has_valid_init_signature(new_scene):
+			new_scene.call("_init", parameters)
+		else:
+			push_warning("Method 'init' found on %s, but signature does not match 'init(parameters: Dictionary)'" % new_scene.name)
+	
 	if is_instance_valid(_current_node):
 		_current_node.queue_free()
 	
@@ -102,3 +113,16 @@ func _swap_scene(scene: PackedScene) -> void:
 	_current_node = new_scene
 	
 	scene_instantiated.emit(new_scene)
+
+func _has_valid_init_signature(obj: Object) -> bool:
+	for method: Dictionary in obj.get_method_list():
+		if method["name"] == "_init":
+			var args: Array = method["args"]
+			
+			if args.size() == 1:
+				var first_arg: Dictionary = args[0]
+				
+				if first_arg["type"] == TYPE_DICTIONARY:
+					return true
+					
+	return false

@@ -63,7 +63,7 @@ metadata/_custom_type_script = "uid://bfppetk35xjpo"
 script = ExtResource("3_wksuf")
 metadata/_custom_type_script = "uid://ckwpv8qfylam6"
 
-[node name="ContentContainer" type="Node" parent="." unique_id=1199902843]
+[node name="ContentContainer" type="CanvasLayer" parent="." unique_id=56803864]
 
 [node name="Debug Menu" type="Control" parent="." unique_id=1947856106]
 layout_mode = 3

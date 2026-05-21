@@ -50,5 +50,5 @@ static func set_commander(card: CardData) -> CardData:
 	card.set_meta("is_commander", true)
 	return card
 
-func display_name() -> String:
+static func display_name() -> String:
 	return "Commander"

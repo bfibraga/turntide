@@ -16,7 +16,8 @@ func validate(deck: DeckData) -> bool:
 			return validate_step.call(deck)
 	)
 
-@abstract func display_name() -> String
+static func display_name() -> String:
+	return "None"
 
 func _to_string() -> String:
 	return self.display_name()

@@ -6,7 +6,7 @@ import (
 
 	"github.com/bfibraga/turntide/server/internal/server"
 	"github.com/bfibraga/turntide/server/internal/server/components"
-	"github.com/bfibraga/turntide/server/pkg/packets"
+	"github.com/bfibraga/turntide/core/pkg/packets"
 )
 
 type InLobby struct {

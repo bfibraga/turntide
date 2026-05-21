@@ -14,9 +14,12 @@ func _init() -> void:
 func _on_adding_new_deck_format(format: BaseFormat) -> void:
 	self.formats.append(format)
 
-func find_from_name(format_name: String) -> BaseFormat:
+func find_from_name(format_name: String) -> Option:
 	var index: int = formats.find_custom(func(format: BaseFormat) -> bool:
 		return format.display_name() == format_name
 	)
 	
-	return formats[index]
+	if index == -1:
+		return Option.None()
+	
+	return Option.Some(formats[index])

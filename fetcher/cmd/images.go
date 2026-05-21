@@ -101,7 +101,4 @@ func init() {
 
 	imagesCmd.Flags().StringVarP(&format, "format", "f", "png", "Output format (png, jpg, webp)")
 	imagesCmd.Flags().StringVarP(&output, "output", "o", "", "Output directory")
-	imagesCmd.Flags().StringVarP(&decklist, "decklist", "d", "", "Decklist file")
-	imagesCmd.Flags().StringVarP(&singleCard, "card", "c", "", "Single card in format 'CardName [SetCode] [CardID]'")
-	imagesCmd.Flags().StringVar(&dbPath, "db-path", "", "Path to the SQLite database (defaults to /shared/resources/cards.db)")
-}
+

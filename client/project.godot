@@ -32,12 +32,11 @@ gdscript/warnings/inference_on_variant=1
 
 [display]
 
-window/size/mode=2
 window/stretch/aspect="keep_height"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godobuf/plugin.cfg", "res://addons/godot-sqlite/plugin.cfg", "res://addons/gut/plugin.cfg")
+enabled=PackedStringArray("res://addons/godobuf/plugin.cfg", "res://addons/godot-sqlite/plugin.cfg", "res://addons/gut/plugin.cfg", "res://addons/optional/plugin.cfg")
 
 [file_customization]
 

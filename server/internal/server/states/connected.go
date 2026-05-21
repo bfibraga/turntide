@@ -4,11 +4,11 @@ import (
 	"context"
 	"log/slog"
 
+	"github.com/bfibraga/turntide/core/pkg/packets"
 	"github.com/bfibraga/turntide/server/internal/server"
 	"github.com/bfibraga/turntide/server/internal/server/components"
 	"github.com/bfibraga/turntide/server/internal/server/user"
 	"github.com/bfibraga/turntide/server/internal/server/validation"
-	"github.com/bfibraga/turntide/server/pkg/packets"
 )
 
 type Connected struct {

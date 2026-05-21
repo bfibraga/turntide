@@ -10,4 +10,5 @@ corner_detail = 20
 shadow_size = 1
 
 [resource]
+resource_local_to_scene = true
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_y17iw")

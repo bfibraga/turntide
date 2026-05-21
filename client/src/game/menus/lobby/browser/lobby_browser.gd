@@ -8,7 +8,6 @@ class SearchData extends Reactive:
 const LobbyItemScene: PackedScene = preload("res://src/common/components/lobby/item/lobby_item.tscn")
 const packets := preload("res://src/common/network/packets/packets.gd")
 
-@onready var logger: Log = Global.logger
 @onready var create_button: Button = $%Create
 @onready var lobby_list: Control = $%LobbyList
 @onready var extensible_scroll_container: ExtensibleScrollContainer = %ExtensibleScrollContainer
@@ -27,12 +26,10 @@ func _on_ws_packet_received(packet: packets.Packet) -> void:
 	if packet.has_lobby_list_response():
 		_handle_lobby_list(packet.get_lobby_list_response())
 	elif packet.has_lobby_joined_response():
-		logger.info("Joined in lobby")
-		#transition_requested.emit(InLobbyState.Name())
-		Global.game_controller.gui_transition_to(InLobbyState.Name())
+		_handle_lobby_joined_response(packet.get_lobby_joined_response())
 		
 func _handle_lobby_list(response: packets.LobbyListResponse) -> void:
-	logger.info("Received lobby list %s" % response)
+	Global.logger.info("Received lobby list %s" % response)
 	# TODO: populate UI with response.get_lobbies()
 	var lobbies: Array[packets.LobbyInfo] = response.get_lobbies()
 	
@@ -61,11 +58,21 @@ func _handle_lobby_list(response: packets.LobbyListResponse) -> void:
 		item.join_button.pressed.connect(func() -> void: _on_join_pressed(lobby.get_id()))
 		
 		lobby_list.add_child(item)
-		
+
+func _handle_lobby_joined_response(response: packets.LobbyJoinedResponse) -> void:
+	Global.logger.info("Joined in lobby")
+	
+	var lobby_data: Dictionary = {
+		"lobby_name": response.get_lobby_name(),
+		"hostname": response.get_host_username(),
+	}
+	
+	Global.game_controller.gui_transition_to(InLobbyState.Name(), lobby_data)
+	
 func _on_create_button_pressed() -> void:
 	var packet: packets.Packet = PacketFactory.new_lobby_create_req(
 		"Host name",
-		"Commander",
+		UnknownFormat.display_name(),
 		4,
 		false,
 		""
@@ -74,7 +81,7 @@ func _on_create_button_pressed() -> void:
 	WS.send(packet)
 
 func _on_join_pressed(lobby_id: int) -> void:
-	logger.info("Joining lobby %d" % lobby_id)
+	Global.logger.info("Joining lobby %d" % lobby_id)
 	var packet: packets.Packet = PacketFactory.new_lobby_join_req(lobby_id)
 	WS.send(packet)
 	

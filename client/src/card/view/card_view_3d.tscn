@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://fpjf6itsqwha"]
+
+[ext_resource type="Shader" uid="uid://cmmkabcp8y12j" path="res://assets/shaders/card/card_node.gdshader" id="1_w3bow"]
+[ext_resource type="Texture2D" uid="uid://bsubkococ7xm0" path="res://assets/card/front/test_card (2).jpg" id="2_aib3j"]
+[ext_resource type="Texture2D" uid="uid://ndgwx01xn1rc" path="res://assets/card/back/back_card.png" id="3_33eaj"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_w3bow"]
+viewport_path = NodePath("Front/SubViewport")
+
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_b5d24"]
+resource_local_to_scene = true
+transparency = 1
+albedo_texture = SubResource("ViewportTexture_w3bow")
+
+[sub_resource type="QuadMesh" id="QuadMesh_jibb8"]
+material = SubResource("ORMMaterial3D_b5d24")
+size = Vector2(1, 1.4)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lsraa"]
+shader = ExtResource("1_w3bow")
+shader_parameter/_cornerRadius = 60.00000285
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_vthy1"]
+viewport_path = NodePath("Back/SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6d4is"]
+resource_local_to_scene = true
+transparency = 1
+albedo_texture = SubResource("ViewportTexture_vthy1")
+
+[sub_resource type="QuadMesh" id="QuadMesh_igibe"]
+material = SubResource("StandardMaterial3D_6d4is")
+size = Vector2(1, 1.4)
+
+[node name="Card3D" type="Node3D" unique_id=2005522673]
+
+[node name="Front" type="MeshInstance3D" parent="." unique_id=418020596]
+mesh = SubResource("QuadMesh_jibb8")
+
+[node name="SubViewport" type="SubViewport" parent="Front" unique_id=1675359364]
+transparent_bg = true
+size = Vector2i(1500, 2100)
+
+[node name="TextureRect3" type="TextureRect" parent="Front/SubViewport" unique_id=999907321]
+material = SubResource("ShaderMaterial_lsraa")
+custom_minimum_size = Vector2(1500, 2100)
+offset_right = 1500.0
+offset_bottom = 2100.0
+size_flags_horizontal = 4
+texture = ExtResource("2_aib3j")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Back" type="MeshInstance3D" parent="." unique_id=558431412]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+mesh = SubResource("QuadMesh_igibe")
+
+[node name="SubViewport" type="SubViewport" parent="Back" unique_id=1056498973]
+transparent_bg = true
+size = Vector2i(1500, 2100)
+
+[node name="TextureRect4" type="TextureRect" parent="Back/SubViewport" unique_id=2065412820]
+material = SubResource("ShaderMaterial_lsraa")
+custom_minimum_size = Vector2(1500, 2100)
+offset_right = 1500.0
+offset_bottom = 2100.0
+size_flags_horizontal = 4
+texture = ExtResource("3_33eaj")
+expand_mode = 1
+stretch_mode = 5

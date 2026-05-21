@@ -8,5 +8,5 @@ func _init() -> void:
 func _is_deck_size_enough(deck: DeckData) -> bool:
 	return deck.cards.size() >= _DEFAULT_DECK_SIZE
 
-func display_name() -> String:
+static func display_name() -> String:
 	return "Standard"

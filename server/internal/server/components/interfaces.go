@@ -1,7 +1,7 @@
 package components
 
 import (
-	"github.com/bfibraga/turntide/server/pkg/packets"
+	"github.com/bfibraga/turntide/core/pkg/packets"
 )
 
 // ClientInterfacer defines the interface for clients in the hub

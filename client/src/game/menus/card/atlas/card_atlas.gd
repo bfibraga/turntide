@@ -87,12 +87,12 @@ func _ready() -> void:
 		
 		WorkerThreadPool.add_task(func() -> void:
 			_search_card({
-					"name": reactive.card_name.value, 
-					"setCode": reactive.setCode.value,
-					"sort_by": reactive.sort_by.value, 
-				}, 
-				view_data.page.value, 
-				view_data.page_size.value
+					"name": search_data.card_name.value, 
+					"setCode": search_data.setCode.value,
+					"sort_by": search_data.sort_by.value, 
+					"page": reactive.page.value,
+					"page_size": reactive.page_size.value,
+				} 
 			)
 		)
 	)
@@ -103,9 +103,9 @@ func _ready() -> void:
 					"name": search_data.card_name.value, 
 					"setCode": search_data.setCode.value,
 					"sort_by": search_data.sort_by.value, 
-				}, 
-				reactive.page.value, 
-				reactive.page_size.value
+					"page": reactive.page.value,
+					"page_size": reactive.page_size.value,
+				} 
 			)
 		)
 	)
@@ -134,18 +134,8 @@ func nearest_multiple(number: float, n: float) -> float:
 	return n * round(number / n)
 
 func _search_card(
-	params: Dictionary[String, Variant],
-	page: int = 1,
-	page_size: int = 10,
+	params: Dictionary[String, Variant]
 	) -> void:
-	#for child: Node in grid.get_children():
-		#child.queue_free()
-	
-	params.merge({ 
-		"page": page,
-		"page_size": page_size,
-	}, true)
-	
 	var cards: Array[CardData] = Global.card_repository.search_cards(params)
 	
 	for card_data: CardData in cards:

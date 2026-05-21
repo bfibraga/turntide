@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://d2n1kg476gxh5"]
+
+[ext_resource type="Shader" uid="uid://6bh6uf8nbbf5" path="res://assets/shaders/card/faux_3d_perspective_shader.gdshader.gdshader" id="1_vthfw"]
+[ext_resource type="Script" uid="uid://bv0jo2dijkdoy" path="res://src/card/view/card_view.gd" id="2_85q02"]
+[ext_resource type="Shader" uid="uid://cmmkabcp8y12j" path="res://assets/shaders/card/card_node.gdshader" id="3_byqp2"]
+[ext_resource type="Texture2D" uid="uid://ndgwx01xn1rc" path="res://assets/card/back/back_card.png" id="4_n3tw1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vthfw"]
+shader = ExtResource("1_vthfw")
+shader_parameter/cull_backface = true
+shader_parameter/use_front = true
+shader_parameter/fov = 90.0
+shader_parameter/rot_y_deg = 0.0
+shader_parameter/rot_x_deg = 0.0
+shader_parameter/inset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ib4qj"]
+shader = ExtResource("3_byqp2")
+shader_parameter/_cornerRadius = 0.0
+
+[node name="CanvasLayer" type="SubViewportContainer" unique_id=1095951496]
+material = SubResource("ShaderMaterial_vthfw")
+script = ExtResource("2_85q02")
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=1042557623]
+
+[node name="Sprite2D" type="Sprite2D" parent="SubViewport" unique_id=862660088]
+material = SubResource("ShaderMaterial_ib4qj")
+texture = ExtResource("4_n3tw1")
+centered = false

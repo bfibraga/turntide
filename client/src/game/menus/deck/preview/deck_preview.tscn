@@ -1,0 +1,164 @@
+[gd_scene format=3 uid="uid://r5wlmym80q76"]
+
+[ext_resource type="Script" uid="uid://ds3ik4uojxsuq" path="res://src/common/components/extensible_scroll_container/extensable_scroll_container.gd" id="1_kmwv2"]
+[ext_resource type="Script" uid="uid://h525l4nvf15x" path="res://src/game/menus/deck/preview/deck_preview.gd" id="1_rn3lg"]
+[ext_resource type="Script" uid="uid://nv5mq1l585aj" path="res://src/common/components/search_line_edit/search_line_edit.gd" id="2_rn3lg"]
+[ext_resource type="Texture2D" uid="uid://chjfonbw3nj5b" path="res://icon.svg" id="2_v5jn5"]
+[ext_resource type="PackedScene" uid="uid://drkvnapl7anhd" path="res://src/game/menus/card/atlas/card_atlas.tscn" id="3_v5jn5"]
+[ext_resource type="PackedScene" uid="uid://cs3xgq6x0b61x" path="res://src/common/components/mana/mana.tscn" id="3_wnie6"]
+
+[node name="Placeholder Deck" type="TabContainer" unique_id=1406257668]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+current_tab = 0
+script = ExtResource("1_rn3lg")
+metadata/_tab_index = 1
+
+[node name="Home" type="Control" parent="." unique_id=1199300746]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Home" unique_id=960225425]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="Home/HBoxContainer" unique_id=667065317]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Home/HBoxContainer/MarginContainer" unique_id=587928703]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MarginContainer" type="MarginContainer" parent="Home/HBoxContainer/MarginContainer/VBoxContainer" unique_id=857796309]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="TextureRect" type="TextureRect" parent="Home/HBoxContainer/MarginContainer/VBoxContainer/MarginContainer" unique_id=1984601889]
+layout_mode = 2
+texture = ExtResource("2_v5jn5")
+expand_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Home/HBoxContainer/MarginContainer/VBoxContainer" unique_id=629568368]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Home/HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer" unique_id=120317673]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Deck Name" type="RichTextLabel" parent="Home/HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=2005893167]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "Placeholder Deck Name"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Color Identity" type="HBoxContainer" parent="Home/HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer" unique_id=377449501]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Mana" parent="Home/HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/Color Identity" unique_id=1444271651 instance=ExtResource("3_wnie6")]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="Home/HBoxContainer/MarginContainer/VBoxContainer" unique_id=512258645]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Home/HBoxContainer/MarginContainer/VBoxContainer/Panel" unique_id=1783813]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Home/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer" unique_id=1188200927]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Home/HBoxContainer/MarginContainer/VBoxContainer/Panel/MarginContainer/VBoxContainer" unique_id=2127975890]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Statistics"
+
+[node name="MarginContainer2" type="MarginContainer" parent="Home/HBoxContainer" unique_id=1495312025]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Home/HBoxContainer/MarginContainer2" unique_id=1450020115]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Home/HBoxContainer/MarginContainer2/VBoxContainer" unique_id=938402721]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Home/HBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" unique_id=1577467644]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SearchLineEdit" type="LineEdit" parent="Home/HBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/HBoxContainer" unique_id=823189320]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+placeholder_text = "Search"
+script = ExtResource("2_rn3lg")
+metadata/_custom_type_script = "uid://nv5mq1l585aj"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Home/HBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" unique_id=1031265973]
+layout_mode = 2
+
+[node name="Close" type="Button" parent="Home/HBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/HBoxContainer2" unique_id=281168446]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Close"
+
+[node name="ExtensibleScrollContainer" type="ScrollContainer" parent="Home/HBoxContainer/MarginContainer2/VBoxContainer" unique_id=1433139092]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("1_kmwv2")
+metadata/_custom_type_script = "uid://ds3ik4uojxsuq"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Home/HBoxContainer/MarginContainer2/VBoxContainer/ExtensibleScrollContainer" unique_id=1576178793]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Home/HBoxContainer/MarginContainer2/VBoxContainer/ExtensibleScrollContainer/VBoxContainer" unique_id=1248864461]
+layout_mode = 2
+text = "Mainboard"
+
+[node name="Card Categories" type="HBoxContainer" parent="Home/HBoxContainer/MarginContainer2/VBoxContainer/ExtensibleScrollContainer/VBoxContainer" unique_id=514127481]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Card Search" parent="." unique_id=1100113074 instance=ExtResource("3_v5jn5")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1

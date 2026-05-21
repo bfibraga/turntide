@@ -9,30 +9,30 @@ const DEFAULT_PAGE_PARAMS : Dictionary[String, Variant] = {
 var _db: SQLite = null
 var _is_open: bool = false
 
-func open() -> Error:
+func open() -> Result:
 	if _is_open:
-		return OK
+		return Result.error(ERR_ALREADY_IN_USE)
 	
 	if !_db:
-		return Error.ERR_CONNECTION_ERROR
+		return Result.error(ERR_CONNECTION_ERROR)
 	
 	if _db.path.strip_escapes().is_empty():
-		return Error.ERR_INVALID_DATA
+		return Result.error(ERR_INVALID_DATA)
 	
 	var isOpen : bool = _db.open_db()
 	if !isOpen:
-		return Error.ERR_ALREADY_IN_USE
+		return Result.error(ERR_ALREADY_IN_USE)
 	
 	_is_open = true
-	return OK  
+	return Result.Ok(_db)  
 
-func close() -> Error:
+func close() -> Result:
 	var success : bool = _db.close_db()
 	if not success:
-		return Error.ERR_BUSY
+		return Result.error(ERR_BUSY)
 	
 	_is_open = false
-	return OK
+	return Result.Ok(_db)
 
 func _init(db: SQLite) -> void:
 	_db = db

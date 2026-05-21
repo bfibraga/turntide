@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://dhefdbfetcb1v"]
+
+[ext_resource type="Script" uid="uid://4i6ssscj0rku" path="res://src/game/menus/deck/preview/card_category/card_category.gd" id="1_vkbui"]
+
+[node name="Card Column" type="VBoxContainer" unique_id=244964237]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vkbui")
+
+[node name="Header" type="MarginContainer" parent="." unique_id=532866392]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Header" unique_id=1605342467]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Header/VBoxContainer" unique_id=198659593]
+layout_mode = 2
+
+[node name="Label" type="RichTextLabel" parent="Header/VBoxContainer/HBoxContainer" unique_id=716503183]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Label"
+fit_content = true
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Header/VBoxContainer" unique_id=1145723473]
+layout_mode = 2
+
+[node name="Quantity" type="RichTextLabel" parent="Header/VBoxContainer/HBoxContainer2" unique_id=1236124994]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.61339027, 0.61339027, 0.61339027, 1)
+theme_override_font_sizes/normal_font_size = 12
+theme_override_font_sizes/bold_font_size = 12
+theme_override_font_sizes/bold_italics_font_size = 12
+theme_override_font_sizes/italics_font_size = 12
+theme_override_font_sizes/mono_font_size = 12
+text = "Qty: 0"
+fit_content = true
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="Cards" type="VBoxContainer" parent="." unique_id=919096177]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = -265

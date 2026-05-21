@@ -4,6 +4,8 @@
 class_name CardView2
 extends SubViewportContainer
 
+signal on_mouse_enter
+signal on_mouse_exit
 signal tap_card
 signal flip_card
 
@@ -70,10 +72,14 @@ func _ready() -> void:
 	
 	set_process(true)
 	
-	mouse_entered.connect(func() -> void: is_mouse_entered = true)
+	mouse_entered.connect(func() -> void: 
+		is_mouse_entered = true
+		on_mouse_enter.emit()
+	)
 	mouse_exited.connect(func() -> void: 
 		is_mouse_entered = false
 		_set_normal_state()
+		on_mouse_exit.emit()
 	)
 	tap_card.connect(func() -> void: toggle_tap())
 	flip_card.connect(func() -> void: toggle_flip())

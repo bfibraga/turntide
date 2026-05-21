@@ -10,36 +10,36 @@ func _init(path: String, extension_name: String) -> void:
 	_extension_name = extension_name
 
 # Implementation of the abstract open method
-func open() -> Error:
+func open() -> Result:
 	var dir : DirAccess = DirAccess.open(_directory_path)
 	if not dir:
 		# Attempt to create the directory if it doesn't exist
-		var err : Error = DirAccess.make_dir_recursive_absolute(_directory_path)
+		var err : int = DirAccess.make_dir_recursive_absolute(_directory_path)
 		if err != OK:
-			return err
+			return Result.error(err)
 	
 	_is_open = true
-	return OK
+	return Result.Ok(OK)
 
 # Implementation of the abstract close method
-func close() -> Error:
+func close() -> Result:
 	_is_open = false
-	return OK
+	return Result.Ok(OK)
 
 @abstract func _serialize(file: FileAccess, data: Dictionary) -> void
 
 @abstract func _deserialize(file: FileAccess) -> Variant
 
-func save_data(filename: String, data: Dictionary) -> Error:
-	if not _is_open: return ERR_CANT_OPEN
+func save_data(filename: String, data: Dictionary) -> Result:
+	if not _is_open: return Result.error(ERR_CANT_OPEN)
 	
 	var full_path: String = _directory_path.path_join(filename + _extension_name)
 	var file: FileAccess = FileAccess.open(full_path, FileAccess.WRITE)
 	
-	if not file: return FileAccess.get_open_error()
+	if not file: return Result.error(FileAccess.get_open_error())
 	
 	_serialize(file, data) # Call the specific implementation
-	return OK
+	return Result.Ok(OK)
 
 func load_data(filename: String) -> Variant:
 	if not _is_open: return null
@@ -70,10 +70,10 @@ func exists(filename: String) -> bool:
 	return FileAccess.file_exists(global_filepath)
 
 ## Deletes a specific JSON file
-func delete(filename: String) -> Error:
+func delete(filename: String) -> Result:
 	if not exists(filename):
-		return ERR_FILE_NOT_FOUND
-	return DirAccess.remove_absolute(filename)
+		return Result.error(ERR_FILE_NOT_FOUND)
+	return Result.from_gderr(DirAccess.remove_absolute(filename))
 
 ## Wipes the entire repository (Deletes all files in the directory)
 func clear_all() -> void:

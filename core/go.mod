@@ -2,7 +2,10 @@ module github.com/bfibraga/turntide/core
 
 go 1.26.1
 
-require modernc.org/sqlite v1.50.1
+require (
+	google.golang.org/protobuf v1.36.11
+	modernc.org/sqlite v1.50.1
+)
 
 require (
 	github.com/dustin/go-humanize v1.0.1 // indirect

@@ -3,8 +3,8 @@ package states
 import (
 	"log/slog"
 
+	"github.com/bfibraga/turntide/core/pkg/packets"
 	"github.com/bfibraga/turntide/server/internal/server"
-	"github.com/bfibraga/turntide/server/pkg/packets"
 )
 
 type InGame struct {

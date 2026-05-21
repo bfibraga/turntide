@@ -2,13 +2,11 @@ package server
 
 import (
 	"log/slog"
-	"math/rand/v2"
 	"net/http"
 
+	"github.com/bfibraga/turntide/core/pkg/packets"
 	"github.com/bfibraga/turntide/server/internal/server/components"
 	"github.com/bfibraga/turntide/server/internal/server/user"
-	"github.com/bfibraga/turntide/server/pkg/packets"
-	"github.com/go-faker/faker/v4"
 )
 
 type Hub struct {
@@ -22,31 +20,15 @@ type Hub struct {
 func NewHub(logger *slog.Logger, userService *user.Service) *Hub {
 	lobbyReg := components.NewLobbyRegistry(components.DefaultLobbyConfig())
 
-	hostID, err := faker.RandomInt(0, 255)
-	if err != nil {
-		return nil
-	}
-
-	hostUsername := faker.Name()
-	lobbyName := faker.Name()
-	format := "Casual"
-	var hostPassword string = ""
-	if rand.Float64() < 0.25 {
-		hostPassword = faker.Password()
-	}
-	capacity, err := faker.RandomInt(3, 10)
-	if err != nil {
-		return nil
-	}
-
+	// Placeholder lobby for testing
 	lobbyReg.CreateLobby(
-		uint64(hostID[0]),
-		hostUsername,
-		lobbyName,
-		format,
-		capacity[0],
+		uint64(99),
+		"Test User",
+		"Placeholder Lobby",
+		"Casual",
+		10,
 		false,
-		hostPassword,
+		"",
 	)
 
 	return &Hub{

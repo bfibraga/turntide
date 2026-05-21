@@ -8,7 +8,7 @@ const packets := preload("res://src/common/network/packets/packets.gd")
 static func Name() -> String:
 	return "Lobby Browser"
 
-func enter() -> void:	
+func enter(data: Dictionary = {}) -> void:	
 	var packet: packets.Packet = PacketFactory.new_lobby_list_req()
 	WS.send(packet)
 	

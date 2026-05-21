@@ -17,11 +17,9 @@ func _init() -> void:
 	
 	if not card_repository:
 		card_repository = RepositoryFactory.new_card_repository()
-		card_repository.open()
 	
 	if not deck_repository:
 		deck_repository = RepositoryFactory.new_deck_repository()
-		deck_repository.open()
 	
 	if not deck_format_manager:
 		deck_format_manager = FormatManager.new()
@@ -38,4 +36,3 @@ func _exit_tree() -> void:
 	
 	if deck_repository:
 		deck_repository.close()
-	

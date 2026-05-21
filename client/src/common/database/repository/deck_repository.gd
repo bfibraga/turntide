@@ -19,8 +19,8 @@ func _get_safe_id(deck_name: String) -> String:
 func create_deck(deck: DeckData) -> bool:
 	var id: String = _get_safe_id(deck.deck_name)
 	
-	var err: Error = save_data(id, deck.to_dict())
-	if err != OK:
+	var result: Result = save_data(id, deck.to_dict())
+	if result.is_err():
 		return false
 		
 	_deck_cache[id] = deck
@@ -46,9 +46,9 @@ func replace_deck(deck: DeckData, must_exist: bool = true) -> bool:
 
 func delete_deck(deck_name: String) -> bool:
 	var id: String = _get_safe_id(deck_name)
-	var error: Error = delete(id)
+	var result: Result = delete(id)
 	
-	if error == OK:
+	if result.is_ok():
 		_deck_cache.erase(id)
 		return true
 		

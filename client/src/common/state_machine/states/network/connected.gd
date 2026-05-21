@@ -16,13 +16,16 @@ func _ready() -> void:
 	WS.packet_received.connect(_on_ws_packet_received)
 	
 	# Connect to server
-	var url : String = UrlBuilder.ws() \
-		.host("localhost") \
-		.port(80) \
+	var url : String = UrlBuilder.wss() \
+		#.host("5.158.14.69") \
+		.host("dev.turntide.bfibraga.me") \
+		#.host("localhost") \
+		.port(443) \
 		.path("ws") \
 		.build()
-	
-	WS.connect_to_url(url)
+		
+	Global.logger.info("Connecting to %s" % url)
+	WS.connect_to_url(url, TLSOptions.client())
 	
 	RepositoryFactory.new_card_repository()
 	Global.card_repository.open()
@@ -44,3 +47,4 @@ func _on_ws_packet_received(packet: packets.Packet) -> void:
 func _handle_id_msg(_sender_id: int, id_msg: packets.IdMessage) -> void:
 	var client_id: int = id_msg.get_id()
 	Global.client_id = client_id
+	Global.debug.add_debug_property("client_id", client_id, "Client ID: ", 120)
