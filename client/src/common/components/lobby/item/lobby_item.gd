@@ -22,6 +22,8 @@ class Data extends Reactive:
 			"max_capacity": max_capacity.value,
 		})
 	
+const packets : Script = preload("res://src/common/network/packets/packets.gd")
+
 var data: Data = Data.new()
 
 @export var lobby_name_label: RichTextLabel
@@ -31,13 +33,14 @@ var data: Data = Data.new()
 
 @export var join_button: Button
 
+func setup(lobby_info: packets.LobbyInfo) -> void:
+	data.lobby_name.value = lobby_info.get_name()
+	data.format.value = lobby_info.get_format()
+	data.is_private.value = lobby_info.get_is_private()
+	data.capacity.value = lobby_info.get_current_players()
+	data.max_capacity.value = lobby_info.get_max_players()
+
 func _ready() -> void:
-	#data.lobby_name.reactive_changed.connect(func(r: Reactive) -> void: update_lobby_name_label(r.value))
-	#data.format.reactive_changed.connect(func(r: Reactive) -> void: update_format_label(r.value))
-	#data.is_private.reactive_changed.connect(func(r: Reactive) -> void: update_public_indicator_label(r.value))
-	#data.capacity.reactive_changed.connect(func(r: Reactive) -> void: update_capacity_label(r.value, data.max_capacity.value))
-	#data.max_capacity.reactive_changed.connect(func(r: Reactive) -> void: update_capacity_label(data.capacity.value, r.value))
-	#
 	data.reactive_changed.connect(func(reactive: Data) -> void:
 		print(reactive)
 		
@@ -76,27 +79,3 @@ func _ready() -> void:
 
 func _enter_tree() -> void:
 	data.manually_emit()
-	
-#func update_lobby_name_label(lobby_name: String) -> void:
-	#lobby_name_label.clear()
-	#lobby_name_label.push_bold()
-	#lobby_name_label.append_text(lobby_name)
-	#lobby_name_label.pop()
-#
-#func update_format_label(format: String) -> void:
-	#format_label.clear()
-	#format_label.push_italics()
-	#format_label.append_text(format)
-	#format_label.pop()
-	#
-#func update_public_indicator_label(is_private: bool) -> void:
-	#public_indicator_label.clear()
-	#
-	#var color: Color = Color.CRIMSON if is_private else Color.WEB_GREEN
-	#var text: String = "Private" if is_private else "Public"
-	#
-	#public_indicator_label.append_text("[pulse][color=#%s]%s[/color][/pulse]" % [color.to_html(), text])
-	#
-#func update_capacity_label(capacity: int, max_capacity: int) -> void:
-	#capacity_label.clear()
-	#capacity_label.append_text("%d / %d" % [capacity, max_capacity])

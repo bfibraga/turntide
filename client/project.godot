@@ -41,6 +41,7 @@ enabled=PackedStringArray("res://addons/godobuf/plugin.cfg", "res://addons/godot
 [file_customization]
 
 folder_colors={
+"res://addons/": "purple",
 "res://assets/": "red",
 "res://src/": "orange",
 "res://test/": "teal"
@@ -78,6 +79,7 @@ flip_card={
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+viewport/hdr_2d=true
 
 [shader_globals]
 

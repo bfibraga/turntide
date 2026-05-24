@@ -24,12 +24,10 @@ shader_parameter/_cornerRadius = 60.00000285
 material = SubResource("ShaderMaterial_kn0ba")
 anchors_preset = -1
 anchor_right = 0.19500001
-anchor_bottom = 0.46300003
+anchor_bottom = 0.48600003
 offset_right = 0.35998535
-offset_bottom = -0.024017334
-pivot_offset = Vector2(125, 175)
-size_flags_horizontal = 3
-size_flags_vertical = 3
+offset_bottom = 0.07199097
+pivot_offset = Vector2(112, 157)
 script = ExtResource("2_l0amn")
 front_art = ExtResource("3_84040")
 tilt_scale = 0.075
@@ -37,7 +35,7 @@ tilt_scale = 0.075
 [node name="SubViewport" type="SubViewport" parent="." unique_id=1785722354]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(225, 300)
+size = Vector2i(225, 315)
 render_target_update_mode = 4
 
 [node name="Art" type="TextureRect" parent="SubViewport" unique_id=874565429]

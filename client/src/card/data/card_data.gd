@@ -1,3 +1,4 @@
+@tool @icon("res://addons/icodot/ui/blocks/icon-block-isometric-ui.svg")
 class_name CardData
 extends Resource
 
@@ -19,12 +20,17 @@ class Builder extends RefCounted:
 
 @export_category("Metadata")
 
-# Identity
+#region Identity
+
 @export_group("Identity")
 @export var uuid: String = ""
 @export var name: String = ""
 @export var number: String = ""
 @export var rarity: String = ""
+
+#endregion
+
+#region Printing & Release
 
 @export_group("Printing & Release")
 @export var setCode: String = ""
@@ -34,6 +40,8 @@ class Builder extends RefCounted:
 @export var rebalancedPrintings: String = ""
 @export var promoTypes: String = ""
 @export var finishes: String = ""
+
+#endregion
 
 @export_group("IDs")
 @export var scryfall_id: String = ""

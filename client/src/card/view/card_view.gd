@@ -1,6 +1,6 @@
 # An example of a simulating a 3D card with a 2D TextureRect
 # using the Faux 3D Perspective shader by CodeVogel (https://github.com/codevogel/faux-3d-perspective-shader-godot)
-@tool
+@tool @icon("res://addons/icodot/ui/games/icon-card-back-light-ui.svg")
 class_name CardView2
 extends SubViewportContainer
 

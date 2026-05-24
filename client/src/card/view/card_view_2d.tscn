@@ -1,9 +1,8 @@
 [gd_scene format=3 uid="uid://d2n1kg476gxh5"]
 
 [ext_resource type="Shader" uid="uid://6bh6uf8nbbf5" path="res://assets/shaders/card/faux_3d_perspective_shader.gdshader.gdshader" id="1_vthfw"]
-[ext_resource type="Script" uid="uid://bv0jo2dijkdoy" path="res://src/card/view/card_view.gd" id="2_85q02"]
 [ext_resource type="Shader" uid="uid://cmmkabcp8y12j" path="res://assets/shaders/card/card_node.gdshader" id="3_byqp2"]
-[ext_resource type="Texture2D" uid="uid://ndgwx01xn1rc" path="res://assets/card/back/back_card.png" id="4_n3tw1"]
+[ext_resource type="Texture2D" uid="uid://dlmphhaqs33pi" path="res://assets/card/front/test_card (1).jpg" id="3_jm2iv"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vthfw"]
 shader = ExtResource("1_vthfw")
@@ -14,17 +13,46 @@ shader_parameter/rot_y_deg = 0.0
 shader_parameter/rot_x_deg = 0.0
 shader_parameter/inset = 0.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ib4qj"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_vthfw"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jm2iv"]
+size = Vector2(335, 468)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_85q02"]
+resource_local_to_scene = true
 shader = ExtResource("3_byqp2")
-shader_parameter/_cornerRadius = 0.0
+shader_parameter/_cornerRadius = 60.00000285
 
-[node name="CanvasLayer" type="SubViewportContainer" unique_id=1095951496]
+[node name="Card2D" type="Node2D" unique_id=51566549]
 material = SubResource("ShaderMaterial_vthfw")
-script = ExtResource("2_85q02")
 
-[node name="SubViewport" type="SubViewport" parent="." unique_id=1042557623]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=456882088]
+scale = Vector2(0.5, 0.5)
+texture = SubResource("ViewportTexture_vthfw")
 
-[node name="Sprite2D" type="Sprite2D" parent="SubViewport" unique_id=862660088]
-material = SubResource("ShaderMaterial_ib4qj")
-texture = ExtResource("4_n3tw1")
-centered = false
+[node name="Area2D" type="Area2D" parent="." unique_id=145024796]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1326635278]
+shape = SubResource("RectangleShape2D_jm2iv")
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=1234930360]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(672, 936)
+render_target_update_mode = 4
+
+[node name="Art" type="TextureRect" parent="SubViewport" unique_id=501263701]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_85q02")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(125, 175)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("3_jm2iv")
+expand_mode = 1
+stretch_mode = 5

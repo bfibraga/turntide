@@ -1,3 +1,4 @@
+@tool @icon("res://addons/icodot/ui/games/icon-card-back-dark-ui.svg")
 class_name CardUI extends Node
 
 class Data extends Reactive:

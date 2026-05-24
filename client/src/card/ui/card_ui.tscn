@@ -18,11 +18,11 @@ shader_parameter/inset = 0.0
 
 [node name="Card" type="PanelContainer" unique_id=2067653633]
 anchors_preset = -1
-anchor_right = 0.098000005
-anchor_bottom = 0.231
-offset_right = 112.104
-offset_bottom = 150.312
-scale = Vector2(0.5, 0.5)
+anchor_right = 0.19500001
+anchor_bottom = 0.48600003
+offset_right = 0.35998535
+offset_bottom = 0.07199097
+pivot_offset = Vector2(112, 157)
 theme_override_styles/panel = SubResource("StyleBoxEmpty_vloml")
 script = ExtResource("1_rm57c")
 

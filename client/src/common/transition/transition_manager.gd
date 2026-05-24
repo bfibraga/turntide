@@ -1,3 +1,4 @@
+@icon("res://addons/icodot/ui/office/icon-map-ui.svg")
 class_name TransitionManager
 extends Node
 
