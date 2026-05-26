@@ -4,8 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://b3qw3f5376ssa" path="res://src/card/view/card_view.tscn" id="2_t8bav"]
 [ext_resource type="Shader" uid="uid://6bh6uf8nbbf5" path="res://assets/shaders/card/faux_3d_perspective_shader.gdshader.gdshader" id="3_cixhd"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vloml"]
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_n6nm8"]
 resource_local_to_scene = true
 shader = ExtResource("3_cixhd")
@@ -16,17 +14,35 @@ shader_parameter/rot_y_deg = 0.0
 shader_parameter/rot_x_deg = 0.0
 shader_parameter/inset = 0.0
 
-[node name="Card" type="PanelContainer" unique_id=2067653633]
+[node name="Card" type="Button" unique_id=685804938 node_paths=PackedStringArray("view")]
 anchors_preset = -1
 anchor_right = 0.19500001
 anchor_bottom = 0.48600003
 offset_right = 0.35998535
 offset_bottom = 0.07199097
+grow_horizontal = 2
+grow_vertical = 2
 pivot_offset = Vector2(112, 157)
-theme_override_styles/panel = SubResource("StyleBoxEmpty_vloml")
+size_flags_horizontal = 3
+size_flags_vertical = 3
+flat = true
 script = ExtResource("1_rm57c")
+view = NodePath("View")
+hover_y_offset = -200.0
+hover_duration = 0.25
+default_rotation = null
+hover_rotation = null
+drag_offset = null
+drag_speed = null
 
 [node name="View" parent="." unique_id=960405069 instance=ExtResource("2_t8bav")]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_n6nm8")
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2

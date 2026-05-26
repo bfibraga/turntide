@@ -25,7 +25,7 @@ func _ready() -> void:
 			child.queue_free()
 		
 		for card_data: CardData in reactive.cards.value:
-			var card: CardUI = CardScene.instantiate()
+			var card: Card = CardScene.instantiate()
 			card.data.card_data.value = card_data
 			
 			card.ready.connect(func() -> void:

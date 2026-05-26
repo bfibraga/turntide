@@ -49,11 +49,7 @@ func _handle_lobby_list(response: packets.LobbyListResponse) -> void:
 		#hbox.add_child(join_btn)
 
 		var item: LobbyItem = LobbyItemScene.instantiate()
-		item.data.lobby_name.value = lobby.get_name()
-		item.data.format.value = lobby.get_format()
-		item.data.is_private.value = lobby.get_is_private()
-		item.data.capacity.value = lobby.get_current_players()
-		item.data.max_capacity.value = lobby.get_max_players()
+		item.setup(lobby)
 		
 		item.join_button.pressed.connect(func() -> void: _on_join_pressed(lobby.get_id()))
 		
@@ -63,8 +59,10 @@ func _handle_lobby_joined_response(response: packets.LobbyJoinedResponse) -> voi
 	Global.logger.info("Joined in lobby")
 	
 	var lobby_data: Dictionary = {
+		"lobby_id": response.get_lobby_id(),
 		"lobby_name": response.get_lobby_name(),
 		"hostname": response.get_host_username(),
+		"players": response.get_players(),
 	}
 	
 	Global.game_controller.gui_transition_to(InLobbyState.Name(), lobby_data)

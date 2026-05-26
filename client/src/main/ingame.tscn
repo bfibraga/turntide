@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://clmqyay2x5fer"]
+
+[ext_resource type="Script" uid="uid://df0kwdogcaxqh" path="res://src/main/hand.gd" id="1_3i4jf"]
+[ext_resource type="PackedScene" uid="uid://bnaxd014g5r0b" path="res://src/common/background/balatro/balatro_background.tscn" id="1_qtb3k"]
+[ext_resource type="PackedScene" uid="uid://fpjf6itsqwha" path="res://src/card/view/card_view_3d.tscn" id="2_vks3f"]
+
+[sub_resource type="Curve" id="Curve_vks3f"]
+_limits = [0.0, 1.0, -1.0, 1.0]
+_data = [Vector2(-1, 0), 0.0, 0.5, 0, 1, Vector2(1, 1), 0.5, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_qtb3k"]
+_limits = [0.0, 1.0, -1.0, 1.0]
+_data = [Vector2(-1, 0), 0.0, 0.0, 0, 0, Vector2(0.0033004284, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_m2n8j"]
+_limits = [0.0, 1.0, -1.0, 1.0]
+_data = [Vector2(-1, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Environment" id="Environment_qtb3k"]
+background_mode = 1
+background_energy_multiplier = 2.51
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vks3f"]
+albedo_color = Color(0.18717614, 0.18717614, 0.18717614, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_m2n8j"]
+material = SubResource("StandardMaterial3D_vks3f")
+size = Vector2(15, 7)
+orientation = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qtb3k"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_m2n8j"]
+material = SubResource("StandardMaterial3D_qtb3k")
+size = Vector3(1, 1.4, 0.5)
+
+[node name="Ingame" type="Node3D" unique_id=1464085676]
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=625857311]
+
+[node name="Hand" type="Node3D" parent="UI" unique_id=442716762]
+transform = Transform3D(1, 0, 0, 0, 0.0871558, 0.99619466, 0, -0.99619466, 0.0871558, 0, 2.8524733, 2.0989149)
+script = ExtResource("1_3i4jf")
+position_curve = SubResource("Curve_vks3f")
+lifting_curve = SubResource("Curve_qtb3k")
+rotation_curve = SubResource("Curve_m2n8j")
+card_scene = ExtResource("2_vks3f")
+
+[node name="Background" parent="UI" unique_id=367467080 instance=ExtResource("1_qtb3k")]
+visible = false
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=431070147]
+environment = SubResource("Environment_qtb3k")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1757657475]
+mesh = SubResource("QuadMesh_m2n8j")
+
+[node name="Camera Anchor" type="Node3D" parent="." unique_id=92655334]
+transform = Transform3D(1, 0, 0, 0, -4.3711385e-08, 0.99999994, 0, -0.99999994, -4.3711385e-08, 0, 5, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Camera Anchor" unique_id=1955523851]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Camera Anchor/Camera3D" unique_id=358165682]
+omni_range = 469.363
+
+[node name="Library" type="Node3D" parent="." unique_id=580931695]
+transform = Transform3D(-1, -8.742278e-08, 3.821371e-15, 0, -4.371139e-08, -1, 8.742278e-08, -1, 4.371139e-08, -4.775285, 0.5131285, -1.9515512)
+
+[node name="Card3D" parent="Library" unique_id=2063039326 instance=ExtResource("2_vks3f")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Library" unique_id=1038843851]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.2666481)
+mesh = SubResource("BoxMesh_m2n8j")

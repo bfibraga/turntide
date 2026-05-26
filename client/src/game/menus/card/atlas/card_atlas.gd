@@ -55,8 +55,6 @@ var search_on_scroll: bool = false
 
 #@onready var card_content: RichTextLabel = $"MarginContainer/VBoxContainer/Main/Card Details/Content"
 
-@onready var CardScene: PackedScene = preload("res://src/card/ui/card_ui.tscn")
-
 func _ready() -> void:
 	card_name_search.executed_search.connect(func(query: String) -> void:
 		search_data.card_name.value = query
@@ -139,26 +137,11 @@ func _search_card(
 	var cards: Array[CardData] = Global.card_repository.search_cards(params)
 	
 	for card_data: CardData in cards:
-		var card: CardUI = CardScene.instantiate()
-		card.data.card_data.value = card_data
+		var card: Card = CardFactory.create_card(card_data)
 		
 		grid.add_child.call_deferred(card)
 	
 	search_on_scroll = cards.size() >= view_data.page_size.value
-	
-	Global.logger.info("Downloaded %d printings" % cards.size())
-	Global.logger.info("Cards: %s" % str(cards))
-
-#func _on_card_name_search(card_name: String) -> void:
-	#data.page.value = 1
-	#cleanup_search()
-	#_search_card({"name": card_name, "setCode": setcode_search.text }, data.page.value, data.page_size.value)
-	#
-#func _on_setcode_search(setcode: String) -> void:
-	#data.page.value = 1
-	#cleanup_search()
-	#_search_card({"name": card_name_search.text, "setCode": setcode }, data.page.value, data.page_size.value)
-
 
 func cleanup_search() -> void:
 	for child: Node in grid.get_children():

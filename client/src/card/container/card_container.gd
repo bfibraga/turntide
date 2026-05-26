@@ -1,5 +1,5 @@
 @tool @icon("res://addons/icodot/ui/fantasy/icon-book-ui.svg")
-class_name CardContainer extends Panel
+class_name CardContainer extends Control
 
 #region Signals
 
@@ -18,3 +18,6 @@ signal container_empty()
 		max_cards = value
 
 #endregion
+
+func organize_cards() -> void:
+	pass

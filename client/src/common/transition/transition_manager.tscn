@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://byiuvyakhj5fc" path="res://src/common/transition/transition_manager.gd" id="1_sb1xu"]
 [ext_resource type="Shader" uid="uid://y52jvwqc5u5k" path="res://assets/shaders/ui/transition.gdshader" id="2_t501d"]
+[ext_resource type="AnimationLibrary" uid="uid://3siqnfsqdpjc" path="res://assets/animations/transitions/transitions.res" id="3_rewjh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_25rj4"]
 resource_local_to_scene = true
@@ -107,132 +108,9 @@ tracks/5/keys = {
 "values": [Vector2(10, 10)]
 }
 
-[sub_resource type="Animation" id="Animation_twqac"]
-resource_name = "diagonal_popping_squares"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer20/ColorRect:material:shader_parameter/transition_type")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer20/ColorRect:material:shader_parameter/position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0.5, 0.5)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("CanvasLayer20/ColorRect:material:shader_parameter/grid_size")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(10, 10)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("CanvasLayer20/ColorRect:material:shader_parameter/progress_bias")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(10, 10)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("CanvasLayer20/ColorRect:material:shader_parameter/progress")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.0, 19.0]
-}
-
-[sub_resource type="Animation" id="Animation_wf0ff"]
-resource_name = "fade"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer20/ColorRect:material:shader_parameter/progress")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.0, 2.0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer20/ColorRect:material:shader_parameter/grid_size")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("CanvasLayer20/ColorRect:material:shader_parameter/basic_feather")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [1.0]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("CanvasLayer20/ColorRect:material:shader_parameter/transition_type")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-
-[sub_resource type="Animation" id="Animation_sb1xu"]
-resource_name = "none"
-length = 0.001
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_vi7lc"]
 _data = {
-&"RESET": SubResource("Animation_wksuf"),
-&"diagonal_popping_squares": SubResource("Animation_twqac"),
-&"fade": SubResource("Animation_wf0ff"),
-&"none": SubResource("Animation_sb1xu")
+&"RESET": SubResource("Animation_wksuf")
 }
 
 [node name="TransitionManager" type="Node" unique_id=1630646984]
@@ -244,7 +122,6 @@ layer = 20
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer20" unique_id=1517042086]
 unique_name_in_owner = true
-visible = false
 material = SubResource("ShaderMaterial_25rj4")
 anchors_preset = 15
 anchor_right = 1.0
@@ -256,3 +133,4 @@ color = Color(0, 0, 0, 1)
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1510980545]
 unique_name_in_owner = true
 libraries/ = SubResource("AnimationLibrary_vi7lc")
+libraries/transitions = ExtResource("3_rewjh")

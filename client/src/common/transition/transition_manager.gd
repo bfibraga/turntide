@@ -1,11 +1,9 @@
-@icon("res://addons/icodot/ui/office/icon-map-ui.svg")
-class_name TransitionManager
-extends Node
+@icon("res://addons/icodot/node/office/icon-map.svg")
+class_name TransitionManager extends Node
 
 signal transition_completed
 signal scene_instantiated(scene_instance: Node)
 
-@export var target_node_name: String = "ContentContainer"
 @export var content_container: Node = null
 
 var _current_node: Node = null
@@ -18,77 +16,55 @@ func _init(container: Node = null) -> void:
 
 func _ready() -> void:
 	if not content_container:
-		call_deferred("find_content_container")
-		
-
-func find_content_container() -> void:
-	var root: Node = get_tree().root
-	var containers: Array = root.find_children(target_node_name, "", true, false)
-
-	if containers.is_empty():
+		push_error("TransitionManager: content node not set.")
 		return
-
-	var deepest: Node = null
-	var max_depth: int = -1
-
-	for node: Node in containers:
-		var depth: int = node.get_path().get_name_count()
-		if depth > max_depth:
-			max_depth = depth
-			deepest = node
-
-	content_container = deepest
-
+	
+	color_rect.hide()
+	
 func transition_to(
 	scene: PackedScene, 
-	transition_in_name: String = "fade", 
-	transition_out_name: String = "fade",
+	transition_in_animation: Animation, 
+	transition_out_animation: Animation,
 	parameters: Dictionary = {},
 ) -> void:
-	# Validate scene
 	if not scene:
 		push_warning("transition_to() called with null scene. Aborting transition.")
 		return
 	
-	# Play transition in (hide current scene)
-	await transition_in(transition_in_name)
+	await transition_in(transition_in_animation)
 	
-	# Swap the scene while hidden
 	_swap_scene(scene, parameters)
 	
-	# Play transition out (reveal new scene)
-	await transition_out(transition_out_name)
+	await transition_out(transition_out_animation)
 	
-	# Signal completion
 	transition_completed.emit()
 
-func transition_in(animation: String = "fade") -> void:
-	print("IN: %s" % animation)
+func transition_in(animation: Animation) -> void:
+	if not animation:
+		push_warning("TransitionManager: no transition_in animation provided")
+		return
 	
 	# Show the overlay
 	color_rect.show()
 	
-	# Play the animation
-	if not animation_player.has_animation(animation):
-		push_warning("Animation '%s' not found. Using 'fade' as fallback." % animation)
-		animation = "fade"
+	var animation_library : AnimationLibrary = animation_player.get_animation_library("")
+	animation_library.add_animation("dynamic_in", animation)
 	
-	animation_player.play(animation)
+	animation_player.play("dynamic_in")
 	await animation_player.animation_finished
 
-func transition_out(animation: String = "fade") -> void:
-	print("OUT: %s" % animation)
+func transition_out(animation: Animation) -> void:
+	if not animation:
+		push_warning("TransitionManager: no transition_out animation provided")
+		color_rect.hide()
+		return
 	
-	# Check if animation exists, fall back if not
-	if not animation_player.has_animation(animation):
-		push_warning("Animation '%s' not found. Using 'fade' as fallback." % animation)
-		animation = "fade"
+	var animation_library : AnimationLibrary = animation_player.get_animation_library("")
+	animation_library.add_animation("dynamic_out", animation)
 	
-	# Play animation backwards (revealing overlay)
-	animation_player.play_backwards(animation)
+	animation_player.play_backwards("dynamic_out")
 	await animation_player.animation_finished
 	
-	# Hide the overlay when done
 	color_rect.hide()
 
 func _swap_scene(scene: PackedScene, parameters: Dictionary = {}) -> void:
@@ -115,6 +91,8 @@ func _swap_scene(scene: PackedScene, parameters: Dictionary = {}) -> void:
 	
 	scene_instantiated.emit(new_scene)
 
+## Verify if the [obj] has valid [code]_init[/code] method, in order to 
+## initialize the target object.
 func _has_valid_init_signature(obj: Object) -> bool:
 	for method: Dictionary in obj.get_method_list():
 		if method["name"] == "_init":

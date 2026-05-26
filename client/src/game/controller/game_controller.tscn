@@ -7,10 +7,29 @@
 [ext_resource type="Script" uid="uid://ckwpv8qfylam6" path="res://src/common/state_machine/states/network/closed_state.gd" id="3_wksuf"]
 [ext_resource type="Script" uid="uid://c06xj1g5oewu4" path="res://src/common/state_machine/scene_state.gd" id="4_t3ua1"]
 [ext_resource type="PackedScene" uid="uid://dw64jlmj7t5t" path="res://src/game/menus/login/login.tscn" id="5_wf0ff"]
+[ext_resource type="Animation" uid="uid://bu6es4d66y6ub" path="res://assets/animations/transitions/diagonal_popping_squares_bottom_left.res" id="6_6gbpy"]
+[ext_resource type="Animation" uid="uid://c4f1qchultux8" path="res://assets/animations/transitions/diagonal_popping_squares_top_left.res" id="7_5adum"]
 [ext_resource type="PackedScene" uid="uid://df5pqld7y87h" path="res://src/game/menus/register/register.tscn" id="8_13gk1"]
+[ext_resource type="PackedScene" uid="uid://clmqyay2x5fer" path="res://src/main/ingame.tscn" id="9_cxnu6"]
 [ext_resource type="Script" uid="uid://dwbc0pee0vhur" path="res://src/common/state_machine/states/gui/entered_state.gd" id="10_shnkw"]
 [ext_resource type="Script" uid="uid://djtvn14k7bmpo" path="res://src/debug/debug_menu.gd" id="13_fpu5w"]
 [ext_resource type="PackedScene" uid="uid://b8gd3m7b136nk" path="res://src/main/main.tscn" id="14_py7vm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w3ehc"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0.41960785)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.15847227, 0.15847233, 0.15847221, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
 [node name="GameController" type="Node" unique_id=532916498 node_paths=PackedStringArray("gui_state_machine")]
 script = ExtResource("1_oy6oc")
@@ -28,24 +47,30 @@ metadata/_custom_type_script = "uid://bb50oxlatsq3p"
 [node name="Entered" type="Node" parent="GUIStateMachine" unique_id=1344573301 node_paths=PackedStringArray("transition_manager")]
 script = ExtResource("10_shnkw")
 packed_scene = ExtResource("14_py7vm")
-transition_in = "diagonal_popping_squares"
-transition_out = "diagonal_popping_squares"
+transition_in = ExtResource("7_5adum")
+transition_out = ExtResource("6_6gbpy")
 transition_manager = NodePath("../../TransitionManager")
 metadata/_custom_type_script = "uid://dwbc0pee0vhur"
 
 [node name="Login" type="Node" parent="GUIStateMachine" unique_id=1723029804 node_paths=PackedStringArray("transition_manager")]
 script = ExtResource("4_t3ua1")
 packed_scene = ExtResource("5_wf0ff")
-transition_in = "diagonal_popping_squares"
-transition_out = "diagonal_popping_squares"
+transition_in = ExtResource("6_6gbpy")
+transition_out = ExtResource("7_5adum")
 transition_manager = NodePath("../../TransitionManager")
 metadata/_custom_type_script = "uid://c06xj1g5oewu4"
 
 [node name="Register" type="Node" parent="GUIStateMachine" unique_id=1423894975 node_paths=PackedStringArray("transition_manager")]
 script = ExtResource("4_t3ua1")
 packed_scene = ExtResource("8_13gk1")
-transition_in = "diagonal_popping_squares"
-transition_out = "diagonal_popping_squares"
+transition_in = ExtResource("7_5adum")
+transition_out = ExtResource("6_6gbpy")
+transition_manager = NodePath("../../TransitionManager")
+metadata/_custom_type_script = "uid://c06xj1g5oewu4"
+
+[node name="Ingame" type="Node" parent="GUIStateMachine" unique_id=863968563 node_paths=PackedStringArray("transition_manager")]
+script = ExtResource("4_t3ua1")
+packed_scene = ExtResource("9_cxnu6")
 transition_manager = NodePath("../../TransitionManager")
 metadata/_custom_type_script = "uid://c06xj1g5oewu4"
 
@@ -65,31 +90,35 @@ metadata/_custom_type_script = "uid://ckwpv8qfylam6"
 
 [node name="ContentContainer" type="CanvasLayer" parent="." unique_id=56803864]
 
-[node name="Debug Menu" type="Control" parent="." unique_id=1947856106]
-layout_mode = 3
-anchor_right = 0.17400001
+[node name="Debug99" type="CanvasLayer" parent="." unique_id=390954469]
+layer = 99
+
+[node name="Debug Menu" type="Panel" parent="Debug99" unique_id=1052743651]
+custom_minimum_size = Vector2(200, 100)
+anchors_preset = 2
+anchor_top = 1.0
 anchor_bottom = 1.0
-offset_right = -0.4480133
-grow_vertical = 2
-size_flags_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 0
 size_flags_vertical = 2
 focus_behavior_recursive = 1
 mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_w3ehc")
 script = ExtResource("13_fpu5w")
 
-[node name="Panel" type="Panel" parent="Debug Menu" unique_id=910467799]
+[node name="MarginContainer" type="MarginContainer" parent="Debug99/Debug Menu" unique_id=1535359252]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Debug Menu" unique_id=1129383513]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="VBoxContainer" type="VBoxContainer" parent="Debug99/Debug Menu/MarginContainer" unique_id=1129383513]
+unique_name_in_owner = true
+layout_mode = 2
 alignment = 2

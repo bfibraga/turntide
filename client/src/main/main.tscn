@@ -12,11 +12,11 @@
 [ext_resource type="PackedScene" uid="uid://bhsjcwk4ki45f" path="res://src/game/menus/lobby/room/lobby_room.tscn" id="9_muem4"]
 [ext_resource type="PackedScene" uid="uid://cpjp8o5nseqhm" path="res://src/game/menus/deck/builder/deck_builder.tscn" id="9_ya4ey"]
 [ext_resource type="PackedScene" uid="uid://pgd2yhn11go0" path="res://src/common/background/fractal/fractal_background.tscn" id="12_eb6dy"]
-[ext_resource type="Texture2D" uid="uid://f7agqmviudck" path="res://assets/mana_symbols/colorless/colorless_mana_symbol.svg" id="12_nqfqj"]
-[ext_resource type="Texture2D" uid="uid://bharq87hp8em7" path="res://assets/mana_symbols/red/red_phyrexian_mana_symbol.png" id="12_w0wra"]
-[ext_resource type="Texture2D" uid="uid://bi71l73nxjle5" path="res://assets/mana_symbols/red/red_mana_symbol.png" id="13_4tqcc"]
-[ext_resource type="Texture2D" uid="uid://cmlj3qhsspb8g" path="res://assets/mana_symbols/blue/blue_mana_symbol.png" id="14_nqfqj"]
-[ext_resource type="Texture2D" uid="uid://yuf6f3nj2v8t" path="res://assets/mana_symbols/blue/blue_phyrexian_mana_symbol.png" id="15_hmxxs"]
+[ext_resource type="Texture2D" uid="uid://cdnyhlm3lr77j" path="res://addons/icodot/node/office/icon-home.svg" id="13_hmxxs"]
+[ext_resource type="Texture2D" uid="uid://c5qvwhs5wclfi" path="res://addons/icodot/node/office/icon-gamepad.svg" id="14_2jinp"]
+[ext_resource type="Texture2D" uid="uid://c8ihsntjssv8c" path="res://addons/icodot/node/fantasy/icon-book.svg" id="15_6iek0"]
+[ext_resource type="Texture2D" uid="uid://rfunrxatno1m" path="res://addons/icodot/node/office/icon-person.svg" id="16_v0ijp"]
+[ext_resource type="Texture2D" uid="uid://c8owvjg3llc24" path="res://addons/icodot/node/office/icon-gear.svg" id="17_nevsn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0wfyh"]
 bg_color = Color(0, 0, 0, 0.6666667)
@@ -120,14 +120,14 @@ size_flags_vertical = 2
 unique_name_in_owner = true
 layout_mode = 2
 text = "Home"
-icon = ExtResource("12_nqfqj")
+icon = ExtResource("13_hmxxs")
 expand_icon = true
 
 [node name="Play" type="Button" parent="HBoxContainer/Sidebar/MarginContainer/VBoxContainer" unique_id=65979924]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Play"
-icon = ExtResource("12_w0wra")
+icon = ExtResource("14_2jinp")
 expand_icon = true
 
 [node name="Decks" type="Button" parent="HBoxContainer/Sidebar/MarginContainer/VBoxContainer" unique_id=1353447991]
@@ -135,7 +135,7 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Decks
 "
-icon = ExtResource("13_4tqcc")
+icon = ExtResource("15_6iek0")
 expand_icon = true
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/Sidebar/MarginContainer" unique_id=1708571572]
@@ -147,14 +147,14 @@ alignment = 2
 unique_name_in_owner = true
 layout_mode = 2
 text = "Account"
-icon = ExtResource("14_nqfqj")
+icon = ExtResource("16_v0ijp")
 expand_icon = true
 
 [node name="Settings" type="Button" parent="HBoxContainer/Sidebar/MarginContainer/VBoxContainer2" unique_id=884690006]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Settings"
-icon = ExtResource("15_hmxxs")
+icon = ExtResource("17_nevsn")
 expand_icon = true
 
 [node name="ContentContainer" type="MarginContainer" parent="HBoxContainer" unique_id=19938072]

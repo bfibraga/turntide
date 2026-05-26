@@ -21,7 +21,6 @@ class Data extends Reactive:
 
 const packets := preload("res://src/common/network/packets/packets.gd")
 
-@onready var logger: Log = Global.logger
 @onready var ready_button: Button = $%Ready
 @onready var start_button: Button = $%Start
 @onready var leave_button: Button = $%Leave
@@ -35,6 +34,7 @@ var data: Data = Data.new()
 func _init(parameters: Dictionary = {}) -> void:
 	data.lobby_name.value = parameters.get("lobby_name", "")
 	data.hostname.value = parameters.get("hostname", "")
+	#data.players.value = parameters.get("players", {})
 
 func _ready() -> void:
 	
@@ -68,7 +68,7 @@ func _on_ws_packet_received(packet: packets.Packet) -> void:
 		_handle_game_start()
 
 func _handle_player_joined(msg: packets.LobbyPlayerJoined) -> void:
-	logger.info("Player joined: %s" % msg.get_player().get_username())
+	Global.logger.info("Player joined: %s" % msg.get_player().get_username())
 	# TODO: update UI list when scene is implemented
 	if not msg.has_player():
 		push_error("Empty player infomation, rolling back...")
@@ -77,25 +77,21 @@ func _handle_player_joined(msg: packets.LobbyPlayerJoined) -> void:
 	var player_data: packets.LobbyPlayer = msg.get_player()
 	data.players.value[player_data.get_client_id()] = player_data
 	
-	_refresh_player_list()
-
 func _handle_player_left(msg: packets.LobbyPlayerLeft) -> void:
-	logger.info("Player left: %d" % msg.get_client_id())
+	Global.logger.info("Player left: %d" % msg.get_client_id())
 	# TODO: update UI list when scene is implemented
-	if not msg.has_player():
+	if not msg.has_client_id():
 		push_error("Empty player infomation, rolling back...")
 		return
 	
-	var player_data: packets.LobbyPlayer = msg.get_player()
-	data.players.value.erase(player_data.get_client_id())
+	var player_id: int = msg.get_client_id()
+	data.players.value.erase(player_id)
 	
-	_refresh_player_list()
-
 func _handle_player_ready(msg: packets.LobbyPlayerReady) -> void:
-	logger.info("Player %d ready: %s" % [msg.get_client_id(), msg.get_ready()])
+	Global.logger.info("Player %d ready: %s" % [msg.get_client_id(), msg.get_ready()])
 
 func _handle_game_start() -> void:
-	logger.info("Game starting!")
+	Global.logger.info("Game starting!")
 	#transition_requested.emit(IngameState.Name())
 	Global.game_controller.gui_transition_to("ingame")
 

@@ -16,7 +16,7 @@ class ConnectionStatus:
 
 var properties: Dictionary[StringName, RichTextLabel] = {}
 
-@onready var container: Container = $VBoxContainer
+@onready var container: Container = %VBoxContainer
 
 func _ready() -> void:
 	Global.debug = self

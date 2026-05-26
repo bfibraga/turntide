@@ -1,6 +1,7 @@
+@icon("res://addons/icodot/node/fantasy/icon-book.svg")
 class_name DeckData extends Resource
 
-class Builder extends RefCounted:
+class Builder:
 	var _properties: Dictionary[String, Variant] = {}
 	
 	func from_dict(data: Dictionary) -> Builder:
@@ -56,7 +57,9 @@ class Builder extends RefCounted:
 				_: result.set(property, _properties.get(property))
 		
 		return result
-	
+
+#region Exports
+
 @export_category("Identity")
 @export var deck_name: String = ""
 @export var format: BaseFormat
@@ -67,6 +70,17 @@ class Builder extends RefCounted:
 @export var mainboard: Dictionary[CardData, int] = {}
 @export var sideboard: Dictionary[CardData, int] = {}
 
+#endregion
+
+## Returns a duplicate of the card list of the mainboard
+func get_mainboard_cards() -> Array[CardData]:
+	return mainboard.keys().duplicate(true)
+
+## Returns a duplicate of the card list of the sideboard
+func get_sideboard_cards() -> Array[CardData]:
+	return mainboard.keys().duplicate(true)
+
+## Returns a [code]Dictionary[/code] version of the deck data.
 func to_dict() -> Dictionary:
 	var mainboard_content: Dictionary = {}
 	for card: CardData in mainboard:
@@ -78,7 +92,7 @@ func to_dict() -> Dictionary:
 	
 	return {
 		"deck_name": deck_name,
-		"format": format.display_name() if format else "",
+		"format": format.display_name(),
 		"tags": tags.values(),
 		"color_identity": color_identity.values(),
 		"mainboard": mainboard_content,
