@@ -1,7 +1,0 @@
-{"type":"server-started","port":51588,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:51588","screen_dir":"/home/bfbraga/Documents/Programming/turntide/client/.superpowers/brainstorm/59974-1777895182/content","state_dir":"/home/bfbraga/Documents/Programming/turntide/client/.superpowers/brainstorm/59974-1777895182/state"}
-{"type":"screen-added","file":"/home/bfbraga/Documents/Programming/turntide/client/.superpowers/brainstorm/59974-1777895182/content/transition-goal.html"}
-{"type":"server-stopped","reason":"idle timeout"}
-{"source":"user-event","type":"click","text":"C\n    \n      Both\n      Full redesign with visual effects, proper architecture, and clean integration with the state machine","choice":"both","id":null,"timestamp":1777898065613}
-{"source":"user-event","type":"click","text":"C\n    \n      Both\n      Full redesign with visual effects, proper architecture, and clean integration with the state machine","choice":"both","id":null,"timestamp":1777898072976}
-{"source":"user-event","type":"click","text":"C\n    \n      Both\n      Full redesign with visual effects, proper architecture, and clean integration with the state machine","choice":"both","id":null,"timestamp":1777898073531}
-{"source":"user-event","type":"click","text":"C\n    \n      Both\n      Full redesign with visual effects, proper architecture, and clean integration with the state machine","choice":"both","id":null,"timestamp":1777898073711}
