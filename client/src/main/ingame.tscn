@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://clmqyay2x5fer"]
 
-[ext_resource type="Script" uid="uid://df0kwdogcaxqh" path="res://src/main/hand.gd" id="1_3i4jf"]
+[ext_resource type="Script" uid="uid://df0kwdogcaxqh" path="res://src/card/container/hand.gd" id="1_3i4jf"]
 [ext_resource type="PackedScene" uid="uid://bnaxd014g5r0b" path="res://src/common/background/balatro/balatro_background.tscn" id="1_qtb3k"]
 [ext_resource type="PackedScene" uid="uid://fpjf6itsqwha" path="res://src/card/view/card_view_3d.tscn" id="2_vks3f"]
+
 
 [sub_resource type="Curve" id="Curve_vks3f"]
 _limits = [0.0, 1.0, -1.0, 1.0]

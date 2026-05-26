@@ -242,7 +242,7 @@ class MoveConfig:
 
 func move_to(target: CardContainer, config: MoveConfig = null) -> void:
 	if not target: return
-	#if not target.can_accept_card(self): return
+	if not target.can_accept_card(self): return
 	if not config: 
 		config = MoveConfig.new() 
 

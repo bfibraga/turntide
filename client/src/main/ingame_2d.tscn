@@ -2,7 +2,21 @@
 
 [ext_resource type="PackedScene" uid="uid://pgd2yhn11go0" path="res://src/common/background/fractal/fractal_background.tscn" id="1_4pc1b"]
 [ext_resource type="Script" uid="uid://bpgqmnloqfdd4" path="res://src/main/ingame_2d.gd" id="1_jdgky"]
-[ext_resource type="Script" uid="uid://df0kwdogcaxqh" path="res://src/main/hand.gd" id="2_f0cxm"]
+[ext_resource type="Script" uid="uid://df0kwdogcaxqh" path="res://src/card/container/hand.gd" id="2_f0cxm"]
+[ext_resource type="Shader" uid="uid://b5ayojt5kv2ry" path="res://assets/shaders/background/gradient_background.tres" id="3_ukx2i"]
+[ext_resource type="Texture2D" uid="uid://ndgwx01xn1rc" path="res://assets/card/back/back_card.png" id="4_oiphq"]
+[ext_resource type="Script" uid="uid://gbpeybhabdv1" path="res://src/card/container/library.gd" id="5_p6y70"]
+[ext_resource type="Script" uid="uid://cfwl1uxgu7cv2" path="res://src/card/container/card_container.gd" id="6_ccgli"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oiphq"]
+shader = ExtResource("3_ukx2i")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p6y70"]
+bg_color = Color(0, 0, 0, 0.4627451)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="Curve" id="Curve_jdgky"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
@@ -19,11 +33,13 @@ _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, -1), 0.0, 2.0, 0, 1, Vector2(1, 1), 2.0, 0.0, 1, 0]
 point_count = 2
 
-[node name="Ingame" type="Control" unique_id=124049430 node_paths=PackedStringArray("hand", "draw_button", "draw_7_button", "discard_button", "discard_hand_button")]
+[node name="Ingame" type="Control" unique_id=124049430 node_paths=PackedStringArray("hand", "library", "graveyard", "draw_button", "draw_7_button", "discard_button", "discard_hand_button")]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_jdgky")
 hand = NodePath("HandLayer/Hand")
+library = NodePath("BattlefieldLayer/Library/MarginContainer/VBoxContainer/Library")
+graveyard = NodePath("BattlefieldLayer/Library/MarginContainer/VBoxContainer/Graveyard")
 draw_button = NodePath("UI/MarginContainer/VBoxContainer/HBoxContainer/Draw")
 draw_7_button = NodePath("UI/MarginContainer/VBoxContainer/HBoxContainer/Draw7")
 discard_button = NodePath("UI/MarginContainer/VBoxContainer/HBoxContainer/Discard")
@@ -32,6 +48,91 @@ discard_hand_button = NodePath("UI/MarginContainer/VBoxContainer/HBoxContainer/D
 [node name="BattlefieldLayer" type="CanvasLayer" parent="." unique_id=754130974]
 
 [node name="Fractal Background" parent="BattlefieldLayer" unique_id=1618489495 instance=ExtResource("1_4pc1b")]
+low = Color(0.30949876, 0.16654786, 0.20205775, 1)
+mid_red = Color(0.094985, 0.16081661, 0.20439276, 1)
+high = Color(0.2640616, 0.33097926, 0.20976156, 1)
+
+[node name="Gradient Background" type="ColorRect" parent="BattlefieldLayer" unique_id=1806750103]
+visible = false
+material = SubResource("ShaderMaterial_oiphq")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Library" type="Control" parent="BattlefieldLayer" unique_id=1072714281]
+layout_mode = 3
+anchors_preset = 9
+anchor_bottom = 1.0
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="BattlefieldLayer/Library" unique_id=810235689]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 112.0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BattlefieldLayer/Library/MarginContainer" unique_id=720528689]
+layout_mode = 2
+alignment = 1
+
+[node name="Library" type="TextureRect" parent="BattlefieldLayer/Library/MarginContainer/VBoxContainer" unique_id=540766960]
+custom_minimum_size = Vector2(112, 157)
+layout_mode = 2
+texture = ExtResource("4_oiphq")
+expand_mode = 4
+script = ExtResource("5_p6y70")
+
+[node name="Graveyard" type="Panel" parent="BattlefieldLayer/Library/MarginContainer/VBoxContainer" unique_id=1969097889]
+custom_minimum_size = Vector2(112, 157)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_p6y70")
+script = ExtResource("6_ccgli")
+
+[node name="MarginContainer" type="MarginContainer" parent="BattlefieldLayer/Library/MarginContainer/VBoxContainer/Graveyard" unique_id=562518021]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="BattlefieldLayer/Library/MarginContainer/VBoxContainer/Graveyard/MarginContainer" unique_id=889873299]
+layout_mode = 2
+text = "Graveyard"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Exile" type="Panel" parent="BattlefieldLayer/Library/MarginContainer/VBoxContainer" unique_id=472752371]
+custom_minimum_size = Vector2(112, 157)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_p6y70")
+
+[node name="MarginContainer" type="MarginContainer" parent="BattlefieldLayer/Library/MarginContainer/VBoxContainer/Exile" unique_id=1985573235]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Label" type="Label" parent="BattlefieldLayer/Library/MarginContainer/VBoxContainer/Exile/MarginContainer" unique_id=732897578]
+layout_mode = 2
+text = "Exile"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="HandLayer" type="CanvasLayer" parent="." unique_id=689819661]
 layer = 2
@@ -49,10 +150,11 @@ offset_right = 20.0
 grow_horizontal = 2
 grow_vertical = 0
 pivot_offset = Vector2(400, 150)
-color = Color(0, 0, 0, 0.105882354)
+color = Color(0, 0, 0, 0.039215688)
 script = ExtResource("2_f0cxm")
 width_curve = SubResource("Curve_jdgky")
 height_curve = SubResource("Curve_oiphq")
+y_offset = -71.25
 rotation_curve = SubResource("Curve_ukx2i")
 max_rotation_angle = 0.15
 metadata/_custom_type_script = "uid://df0kwdogcaxqh"
