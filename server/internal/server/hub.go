@@ -17,9 +17,11 @@ type Hub struct {
 	Lobbies     *components.LobbyRegistry
 }
 
-func NewHub(logger *slog.Logger, userService *user.Service) *Hub {
-	lobbyReg := components.NewLobbyRegistry(components.DefaultLobbyConfig())
-
+func NewHub(logger *slog.Logger, userService *user.Service, lobbyConfig *components.LobbyConfig) *Hub {
+	lobbyReg := components.NewLobbyRegistry(lobbyConfig)
+	clientReg := components.NewClientRegistry()
+	messageBroker := components.NewMessageBroker()
+	
 	// Placeholder lobby for testing
 	lobbyReg.CreateLobby(
 		uint64(99),
@@ -34,8 +36,8 @@ func NewHub(logger *slog.Logger, userService *user.Service) *Hub {
 	return &Hub{
 		Logger:      logger,
 		UserService: userService,
-		Registry:    components.NewClientRegistry(),
-		Broker:      components.NewMessageBroker(),
+		Registry:    clientReg,
+		Broker:      messageBroker,
 		Lobbies:     lobbyReg,
 	}
 }

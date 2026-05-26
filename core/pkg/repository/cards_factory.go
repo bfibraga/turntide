@@ -38,10 +38,6 @@ type CardsFactory struct {
 }
 
 func NewCardsFactory(dbPath string, logger *slog.Logger) (*CardsFactory, error) {
-	if dbPath == "" {
-		dbPath = DefaultCardsDBPath
-	}
-
 	dir := filepath.Dir(dbPath)
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		return nil, fmt.Errorf("failed to create database directory: %w", err)

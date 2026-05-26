@@ -1,5 +1,5 @@
 /*
-Copyright © 2026 Bruno Braga bf.braga@campus.fct.unl.pt
+Copyright © 2026 Bruno Braga
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -51,7 +51,6 @@ func (a *Authenticated) Name() string {
 func (a *Authenticated) SetClient(client server.ClientInterfacer) {
 	a.client = client
 	a.logger = a.logger.With(
-		"client_id", a.client.Id(),
 		"username", a.username,
 	)
 }
@@ -70,14 +69,20 @@ func (a *Authenticated) HandleMessage(senderId uint64, message packets.Msg) {
 		a.handleCreateLobby(senderId, message)
 	case *packets.Packet_LobbyJoinRequest:
 		a.handleJoinLobby(senderId, message)
-	case *packets.Packet_LobbyLeaveRequest:
-		// a.handleLeaveLobby(senderId, message)
 	case *packets.Packet_LobbyPlayerJoined:
-		// a.handleLobbyPlayerJoined(senderId, message)
+		a.handleLobbyList()
 	case *packets.Packet_Chat:
-		// a.handleChat(senderId, message)
+		a.handleChat(senderId, message)
 	default:
 		// Ignore other messages in authenticated state
+	}
+}
+
+func (a *Authenticated) handleChat(senderId uint64, message *packets.Packet_Chat) {
+	if senderId == a.client.Id() {
+		a.client.Broadcast(message)
+	} else {
+		a.client.SocketSendAs(senderId, message)
 	}
 }
 

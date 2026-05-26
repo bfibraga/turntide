@@ -38,10 +38,6 @@ type ServerFactory struct {
 }
 
 func NewServerFactory(dbPath string, logger *slog.Logger) (*ServerFactory, error) {
-	if dbPath == "" {
-		dbPath = DefaultServerDBPath
-	}
-
 	dir := filepath.Dir(dbPath)
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		return nil, fmt.Errorf("failed to create database directory: %w", err)

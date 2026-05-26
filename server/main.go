@@ -14,6 +14,7 @@ import (
 	"github.com/bfibraga/turntide/core/pkg/repository"
 	"github.com/bfibraga/turntide/server/internal/server"
 	"github.com/bfibraga/turntide/server/internal/server/clients"
+	"github.com/bfibraga/turntide/server/internal/server/components"
 	"github.com/bfibraga/turntide/server/internal/server/logger"
 	"github.com/bfibraga/turntide/server/internal/server/user"
 	"github.com/joho/godotenv"
@@ -43,7 +44,7 @@ func main() {
 		WithLevel(slog.LevelDebug).
 		Build()
 	slog.SetDefault(logger)
-	
+
 	// Load config
 	flag.Parse()
 
@@ -51,31 +52,35 @@ func main() {
 	cfg, err := LoadConfig(defaultConfig)
 	if err != nil {
 		logger.Error("failed to load config file, defaulting to env vars", "error", err)
-	}	
+	}
 	cfg.DBPath, err = cfg.coalescePaths(cfg.DBPath, dockerMountedDataDir, ".")
 	if err != nil {
 		logger.Error("failed to coalesce paths", "error", err)
 		os.Exit(1)
 	}
-	
+
 	// Setup server factory, repositories and services
 	factory, err := repository.NewServerFactory(cfg.DBPath, logger)
-	userRepo := factory.CreateUserRepository()
+	if err != nil {
+		logger.Error("failed to create server factory", "error", err)
+		os.Exit(1)
+	}
 
+	userRepo := factory.CreateUserRepository()
 	userService := user.NewService(userRepo)
 
-	// Initialize hub  
-	hub := server.NewHub(logger, userService)
+	// Initialize hub
+	hub := server.NewHub(logger, userService, components.DefaultLobbyConfig())
 	hub.Initialize()
 
-	// Define handler for serving the client HTML5 page	
+	// Define handler for serving the client HTML5 page
   exportPath, err := cfg.coalescePaths(cfg.ClientHTML5Path, filepath.Join(cfg.DBPath, "html5"))
   if err != nil {
   	logger.Error("failed to coalesce paths", "error", err)
   	os.Exit(1)
   }
 	http.Handle("/", addHTML5ExportHeaders(http.StripPrefix("/", http.FileServer(http.Dir(exportPath)))))
-	
+
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		hub.Serve(clients.NewWebSocketClient, w, r)
 	})
@@ -85,7 +90,7 @@ func main() {
 
 	addr := fmt.Sprintf(":%d", cfg.Port)
 
-	cfg.CertPath, err = cfg.coalescePaths(cfg.CertPath)	
+	cfg.CertPath, err = cfg.coalescePaths(cfg.CertPath)
 	cfg.KeyPath, err = cfg.coalescePaths(cfg.KeyPath)
 	if err != nil {
 		logger.Error("failed to coalesce paths", "error", err)
@@ -94,7 +99,7 @@ func main() {
 
 	logger.Info(fmt.Sprintf("Starting the server at %s", addr))
 	logger.Debug(fmt.Sprintf("Using cert %s, key %s", cfg.CertPath, cfg.KeyPath))
-	
+
 	err = http.ListenAndServeTLS(addr, cfg.CertPath, cfg.KeyPath, nil)
 	if err != nil {
 		logger.Warn("Failed to start server with TLS", "error", err)

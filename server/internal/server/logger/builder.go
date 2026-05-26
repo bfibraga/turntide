@@ -15,7 +15,7 @@ type LogFormat int
 
 const (
 	FormatText LogFormat = iota // Tinted/Colorized text
-	FormatJSON                 // Structured JSON
+	FormatJSON                  // Structured JSON
 )
 
 // Builder coordinates the configuration of the slog logger.
@@ -97,6 +97,7 @@ func (b *Builder) Build() *slog.Logger {
 		handler = slog.NewJSONHandler(b.writer, &slog.HandlerOptions{
 			Level:       b.level,
 			ReplaceAttr: b.replaceAttr,
+			AddSource:   true,
 		})
 
 	case FormatText:
@@ -117,8 +118,9 @@ func (b *Builder) Build() *slog.Logger {
 			TimeFormat:  b.timeFormat,
 			NoColor:     noColor,
 			ReplaceAttr: b.replaceAttr,
+			AddSource:   true,
 		}
-		
+
 		// Wrap with colorable for cross-platform/Windows terminal support
 		handler = tint.NewHandler(colorable.NewColorable(b.writer.(*os.File)), options)
 	}

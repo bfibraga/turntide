@@ -32,10 +32,10 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-const (
+/* const (
 	DefaultCardsDBPath  = "shared/resources/cards.db"
 	DefaultServerDBPath = "resources/server.db"
-)
+) */
 
 // RepositoryFactory is the abstract factory interface for creating repositories
 type RepositoryFactory interface {
