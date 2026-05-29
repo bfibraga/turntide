@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://dt015w8s8ha3f"]
+
+[ext_resource type="Script" uid="uid://mdy3wq7u468p" path="res://src/card/ui/tooltip/card_tooltip.gd" id="1_dyeop"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ihks"]
+bg_color = Color(0, 0, 0, 0.64705884)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="CardTooltip" type="Panel" unique_id=1452410614 node_paths=PackedStringArray("keywords_container")]
+custom_minimum_size = Vector2(225, 315)
+offset_right = 200.0
+offset_bottom = 315.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_1ihks")
+script = ExtResource("1_dyeop")
+keywords_container = NodePath("MarginContainer/ScrollContainer/Keywords")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1722261869]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer" unique_id=1454022693]
+layout_mode = 2
+
+[node name="Keywords" type="VBoxContainer" parent="MarginContainer/ScrollContainer" unique_id=368010810]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Keywords" unique_id=1317331389]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/Keywords/VBoxContainer" unique_id=260461022]
+layout_mode = 2
+bbcode_enabled = true
+text = "Title"
+fit_content = true
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="MarginContainer/ScrollContainer/Keywords/VBoxContainer" unique_id=920601786]
+layout_mode = 2
+bbcode_enabled = true
+text = "[font_size=12][i]Description[/i][/font_size]"
+fit_content = true
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/ScrollContainer/Keywords" unique_id=2081638836]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/ScrollContainer/Keywords/VBoxContainer2" unique_id=1641829050]
+layout_mode = 2
+bbcode_enabled = true
+text = "Title"
+fit_content = true
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="MarginContainer/ScrollContainer/Keywords/VBoxContainer2" unique_id=317199681]
+layout_mode = 2
+bbcode_enabled = true
+text = "[font_size=12][i]Description[/i][/font_size]"
+fit_content = true
