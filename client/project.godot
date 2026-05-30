@@ -23,6 +23,7 @@ RepositoryFactory="*uid://dkqb8gptj1f7a"
 Global="*uid://cg33kihswuayp"
 PacketFactory="*uid://buqxsmypo5gce"
 WS="*uid://d07d5mlkr1hfa"
+HttpRequestManager="*uid://b1whl1dmyd33t"
 
 [debug]
 
@@ -32,7 +33,10 @@ gdscript/warnings/inference_on_variant=1
 
 [display]
 
-window/stretch/aspect="keep_height"
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/scale_mode="integer"
+mouse_cursor/custom_image="uid://da700jfwlnf5y"
 
 [editor_plugins]
 

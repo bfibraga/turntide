@@ -3,9 +3,38 @@ class_name CardRepository extends SQLRepository
 const _table_name : String = "cards"
 const DEFAULT_DB_PATH : String = "user://cache/database/cards.db"
 
-func _init(db: SQLite) -> void:
+func _init(db: SQLite, path: String = DEFAULT_DB_PATH) -> void:
 	super._init(db)
+	
 	self._db.read_only = true
+
+func open() -> Result:
+	self.ensure_db_ready()
+	
+	return super.open()
+
+func ensure_db_ready() -> void:
+	var db_path: String = _db.path
+	
+	if FileAccess.file_exists(db_path):
+		return
+
+	var db_dir: String = db_path.get_base_dir()
+	DirAccess.make_dir_recursive_absolute(db_dir)
+	
+	HttpRequestManager.request(
+		func(http: HTTPRequest) -> void:
+			var download_path: String = ProjectSettings.globalize_path(db_path)
+			http.download_file = download_path
+			http.timeout = 0.0,
+		func(result: int, response_code: int, _headers: PackedStringArray, _body: PackedByteArray) -> void:
+			if result != HTTPRequest.RESULT_SUCCESS or response_code != 200:
+				push_error("Failed to download MTGJSON database: result=%d, http=%d" % [result, response_code])
+				return
+
+			Global.logger.info("MTGJSON database downloaded successfully"),
+		MTGJSONProvider.get_download_url()
+	)
 
 func count_cards() -> int:
 	var query : String = "SELECT COUNT(*) FROM %s;" % _table_name
@@ -57,7 +86,9 @@ func search_cards(params: Dictionary[String, Variant] = {}) -> Array[CardData]:
 	var where_clause: String = "WHERE " + " AND ".join(conditions) if conditions.size() > 0 else ""
 
 	var query: String = """
-        SELECT * FROM cards 
+        SELECT * 
+		FROM cards c INNER JOIN cardIdentifiers ci 
+			ON c.uuid = ci.uuid
         %s 
         ORDER BY %s %s 
         LIMIT :limit OFFSET :offset
@@ -75,8 +106,10 @@ func search_cards(params: Dictionary[String, Variant] = {}) -> Array[CardData]:
 
 func get_card_by_uuid(uuid: String) -> Result:
 	var query: String = """
-		SELECT * FROM cards
-		WHERE uuid = :uuid 
+		SELECT c.*, ci.* 
+		FROM cards c INNER JOIN cardIdentifiers ci 
+			ON c.uuid = ci.uuid
+		WHERE uuid = :uuid
 	"""
 	
 	if not self._db.query_with_named_bindings(query, { "uuid": uuid }):
@@ -94,16 +127,16 @@ func get_card_by_uuid(uuid: String) -> Result:
 	return result
 
 func get_cards_by_uuids(uuids: Array[String]) -> Array[CardData]:
-
 	var uuids_string: String = ", ".join(uuids.map(func(uuid: String) -> String: return "('%s')" % uuid))
 	var query: String = """
 		WITH uuids_table_input(uuid) as (
 			VALUES 
 				%s
 		)
-		SELECT * 
+		SELECT c.*, ci.*
 		FROM cards c
-		JOIN uuids_table_input ui ON c.uuid = ui.uuid 
+			INNER JOIN cardIdentifiers ci ON c.uuid = ci.uuid 
+			JOIN uuids_table_input ui ON c.uuid = ui.uuid 
 		;
 	""" % [uuids_string]
 	

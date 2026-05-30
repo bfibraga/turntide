@@ -92,7 +92,7 @@ func to_dict() -> Dictionary:
 	
 	return {
 		"deck_name": deck_name,
-		"format": format.display_name(),
+		"format": format.display_name() if format else UnknownFormat.display_name(),
 		"tags": tags.values(),
 		"color_identity": color_identity.values(),
 		"mainboard": mainboard_content,

@@ -95,7 +95,7 @@ func _ready() -> void:
 		)
 	)
 	
-	view_data.reactive_changed.connect(func(reactive: ViewData) -> void:
+	view_data.reactive_changed.connect(func(reactive: ViewData) -> void:		
 		WorkerThreadPool.add_task(func() -> void:
 			_search_card({
 					"name": search_data.card_name.value, 
@@ -137,7 +137,9 @@ func _search_card(
 	var cards: Array[CardData] = Global.card_repository.search_cards(params)
 	
 	for card_data: CardData in cards:
-		var card: Card = CardFactory.create_card(card_data)
+		var card: Card = CardFactory.create_card(card_data) \
+			.add_behavior(FollowBehaviour.new()) \
+			.add_behavior(TooltipBehaviour.new())
 		
 		grid.add_child.call_deferred(card)
 	

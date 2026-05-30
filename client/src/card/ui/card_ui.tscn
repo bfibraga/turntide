@@ -15,26 +15,22 @@ shader_parameter/rot_x_deg = 0.0
 shader_parameter/inset = 0.0
 
 [node name="Card" type="Button" unique_id=685804938 node_paths=PackedStringArray("view")]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -112.5
-offset_top = -157.5
-offset_right = 112.5
-offset_bottom = 157.5
+anchors_preset = -1
+anchor_left = 0.41200003
+anchor_top = 0.28100002
+anchor_right = 0.588
+anchor_bottom = 0.71900004
+offset_left = 0.13995361
+offset_top = 0.17999268
+offset_right = -0.14001465
+offset_bottom = -0.18005371
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(112, 157)
-size_flags_horizontal = 3
 size_flags_vertical = 3
 flat = true
 script = ExtResource("1_rm57c")
 view = NodePath("View")
-hover_y_offset = -200.0
-hover_duration = 0.25
-drag_z_index = 0.0
 
 [node name="View" parent="." unique_id=960405069 instance=ExtResource("2_t8bav")]
 unique_name_in_owner = true

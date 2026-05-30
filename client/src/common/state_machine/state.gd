@@ -4,6 +4,8 @@ extends Node
 @warning_ignore("unused_signal")
 signal Transitioned(state: State, new_state_name: String, data: Dictionary)
 
+var can_transition_away: bool = true
+
 static func Name() -> String:
 	return ""
 

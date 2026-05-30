@@ -1,13 +1,14 @@
 [gd_scene format=3 uid="uid://dhefdbfetcb1v"]
 
 [ext_resource type="Script" uid="uid://4i6ssscj0rku" path="res://src/game/menus/deck/preview/card_category/card_category.gd" id="1_vkbui"]
+[ext_resource type="Script" uid="uid://ds3ik4uojxsuq" path="res://src/common/components/extensible_scroll_container/extensable_scroll_container.gd" id="2_ve38l"]
 
 [node name="Card Column" type="VBoxContainer" unique_id=244964237]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+custom_minimum_size = Vector2(225, 0)
+offset_right = 225.0
+offset_bottom = 54.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_vkbui")
 
 [node name="Header" type="MarginContainer" parent="." unique_id=532866392]
@@ -51,8 +52,15 @@ fit_content = true
 autowrap_mode = 0
 vertical_alignment = 1
 
-[node name="Cards" type="VBoxContainer" parent="." unique_id=919096177]
-unique_name_in_owner = true
+[node name="ExtensibleScrollContainer" type="ScrollContainer" parent="." unique_id=1858923110]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = -265
+script = ExtResource("2_ve38l")
+metadata/_custom_type_script = "uid://ds3ik4uojxsuq"
+
+[node name="Cards" type="VBoxContainer" parent="ExtensibleScrollContainer" unique_id=919096177]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 2
+theme_override_constants/separation = -270

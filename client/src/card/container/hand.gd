@@ -12,32 +12,16 @@ class_name Hand extends CardContainer
 @export var rotation_curve: Curve
 @export_range(0, 30) var max_rotation_angle: float = 15
 
-var _hovered_card: Card
-
 func _ready() -> void:
 	clip_contents = false
-
-#func draw(card_data: CardData) -> void:
-	#var new_card: Card = CardFactory.create_card(card_data)
-	#new_card.pivot_offset = Card.DEFAULT_SIZE / 2
-	#
-	#new_card.view.on_mouse_enter.connect(func() -> void:
-		#_hovered_card = new_card
-		#print("Hovering: ", _hovered_card)
-	#)
-	#new_card.hover_y_offset = -Card.DEFAULT_SIZE.y + size.y / 2
-	#
-	#add_child(new_card)
-	#organize_cards()
-#
-#func discard() -> void:
-	#if get_child_count() < 1:
-		#return
-	#
-	#var child: Node = get_child(-1)
-	#child.reparent(get_tree().root)
-	#child.queue_free()
-	#organize_cards()
+	card_behaviours = [
+		FollowBehaviour.new(),
+		HoverBehavior.new(),
+		DragBehavior.new(self.card_container_manager),
+		TooltipBehaviour.new(),
+	]
+	
+	super._ready()
 
 func organize_cards(config: Card.MoveConfig = null) -> void:
 	var hand_size: int = get_child_count()
@@ -55,10 +39,7 @@ func organize_cards(config: Card.MoveConfig = null) -> void:
 	var spread_width: float = final_x_sep * max(hand_size - 1, 0)
 	var center_x: float = size.x * 0.5
 
-	for card: Card in get_children():
-		#if card.is_dragging:
-			#continue
-		
+	for card: Card in self.get_children():
 		var i: int = card.get_index()
 
 		var ratio : float = 0.5
@@ -75,8 +56,6 @@ func organize_cards(config: Card.MoveConfig = null) -> void:
 				* max_rotation_angle
 			)
 		
-		card.default_rotation = angle
-
 		card.move_to_position(
 			Vector2(x, y),
 			angle,

@@ -10,6 +10,15 @@
     "mode": "debug",
     "program": "${ZED_WORKTREE_ROOT}/server",
     "cwd": "${ZED_WORKTREE_ROOT}/server",
-    "args": ["--", "--config", "${ZED_WORKTREE_ROOT}/server/.env.dev"],
+    "args": ["--config", ".env.dev"],
+  },
+  {
+    "adapter": "Delve",
+    "label": "Turntide Fetcher (Delve)",
+    "request": "launch",
+    "mode": "debug",
+    "program": "${ZED_WORKTREE_ROOT}/fetcher",
+    "cwd": "${ZED_WORKTREE_ROOT}/fetcher",
+    "args": ["images", "Sol Ring"],
   },
 ]

@@ -1,22 +1,29 @@
 [gd_scene format=3 uid="uid://j5jedvsjtm60"]
 
-[ext_resource type="PackedScene" uid="uid://pgd2yhn11go0" path="res://src/common/background/fractal/fractal_background.tscn" id="1_4pc1b"]
 [ext_resource type="Script" uid="uid://bpgqmnloqfdd4" path="res://src/main/ingame_2d.gd" id="1_jdgky"]
 [ext_resource type="Script" uid="uid://df0kwdogcaxqh" path="res://src/card/container/hand.gd" id="2_f0cxm"]
-[ext_resource type="Shader" uid="uid://b5ayojt5kv2ry" path="res://assets/shaders/background/gradient_background.tres" id="3_ukx2i"]
-[ext_resource type="Texture2D" uid="uid://ndgwx01xn1rc" path="res://assets/card/back/back_card.png" id="4_oiphq"]
+[ext_resource type="Script" uid="uid://bb7fyweedqc0w" path="res://src/card/container/card_container_manager.gd" id="2_hqyfx"]
+[ext_resource type="Shader" uid="uid://sn08m4hl2hyx" path="res://assets/shaders/background/fractal_background.gdshader" id="3_ccgli"]
+[ext_resource type="PackedScene" uid="uid://bpeolwe1ggl3w" path="res://src/main/life_counter.tscn" id="4_c5afc"]
+[ext_resource type="Texture2D" uid="uid://bsdvhdnxicqae" path="res://assets/card/back/back_card.png" id="4_oiphq"]
 [ext_resource type="Script" uid="uid://gbpeybhabdv1" path="res://src/card/container/library.gd" id="5_p6y70"]
 [ext_resource type="Script" uid="uid://cfwl1uxgu7cv2" path="res://src/card/container/card_container.gd" id="6_ccgli"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_oiphq"]
-shader = ExtResource("3_ukx2i")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c5afc"]
+resource_local_to_scene = true
+shader = ExtResource("3_ccgli")
+shader_parameter/u_speed = 0.05
+shader_parameter/u_color_low = Color(0.3735266, 0.47049952, 0.55031455, 1)
+shader_parameter/u_color_mid_red = Color(0.17932355, 0.2991985, 0.41658497, 1)
+shader_parameter/u_color_high = Color(0.24510852, 0.43623415, 0.38865352, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p6y70"]
-bg_color = Color(0, 0, 0, 0.4627451)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hqyfx"]
+resource_local_to_scene = true
+bg_color = Color(0.9384497, 0.9384497, 0.9384497, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
 [sub_resource type="Curve" id="Curve_jdgky"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
@@ -35,109 +42,204 @@ point_count = 2
 
 [node name="Ingame" type="Control" unique_id=124049430 node_paths=PackedStringArray("hand", "library", "graveyard", "draw_button", "draw_7_button", "discard_button", "discard_hand_button")]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource("1_jdgky")
 hand = NodePath("HandLayer/Hand")
-library = NodePath("BattlefieldLayer/Library/MarginContainer/VBoxContainer/Library")
-graveyard = NodePath("BattlefieldLayer/Library/MarginContainer/VBoxContainer/Graveyard")
+library = NodePath("BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer3/VBoxContainer/Library")
+graveyard = NodePath("BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer3/VBoxContainer/Graveyard")
 draw_button = NodePath("UI/MarginContainer/VBoxContainer/HBoxContainer/Draw")
 draw_7_button = NodePath("UI/MarginContainer/VBoxContainer/HBoxContainer/Draw7")
 discard_button = NodePath("UI/MarginContainer/VBoxContainer/HBoxContainer/Discard")
 discard_hand_button = NodePath("UI/MarginContainer/VBoxContainer/HBoxContainer/Discard Hand")
 
+[node name="CardContainerManager" type="Node" parent="." unique_id=888917077]
+script = ExtResource("2_hqyfx")
+metadata/_custom_type_script = "uid://bb7fyweedqc0w"
+
 [node name="BattlefieldLayer" type="CanvasLayer" parent="." unique_id=754130974]
 
-[node name="Fractal Background" parent="BattlefieldLayer" unique_id=1618489495 instance=ExtResource("1_4pc1b")]
-low = Color(0.30949876, 0.16654786, 0.20205775, 1)
-mid_red = Color(0.094985, 0.16081661, 0.20439276, 1)
-high = Color(0.2640616, 0.33097926, 0.20976156, 1)
-
-[node name="Gradient Background" type="ColorRect" parent="BattlefieldLayer" unique_id=1806750103]
-visible = false
-material = SubResource("ShaderMaterial_oiphq")
+[node name="ColorRect" type="ColorRect" parent="BattlefieldLayer" unique_id=1153401142]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 1)
+color = Color(0.096204735, 0.09620475, 0.096204735, 1)
 
-[node name="Library" type="Control" parent="BattlefieldLayer" unique_id=1072714281]
-layout_mode = 3
-anchors_preset = 9
+[node name="PlayerGrid" type="GridContainer" parent="BattlefieldLayer" unique_id=551459710]
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="BattlefieldLayer/Library" unique_id=810235689]
-layout_mode = 1
-anchors_preset = 9
-anchor_bottom = 1.0
-offset_right = 112.0
-grow_vertical = 2
+[node name="Battlefield" type="MarginContainer" parent="BattlefieldLayer/PlayerGrid" unique_id=276070972]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Background" type="Panel" parent="BattlefieldLayer/PlayerGrid/Battlefield" unique_id=1421152869]
+material = SubResource("ShaderMaterial_c5afc")
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hqyfx")
+
+[node name="MarginContainer" type="MarginContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield" unique_id=1198134358]
+layout_mode = 2
 theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BattlefieldLayer/Library/MarginContainer" unique_id=720528689]
+[node name="Orientation" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer" unique_id=1586383292]
 layout_mode = 2
-alignment = 1
 
-[node name="Library" type="TextureRect" parent="BattlefieldLayer/Library/MarginContainer/VBoxContainer" unique_id=540766960]
-custom_minimum_size = Vector2(112, 157)
+[node name="HBoxContainer" type="HBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation" unique_id=607785910]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer" unique_id=864517822]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer3" unique_id=1331771032]
+custom_minimum_size = Vector2(85, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Library" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer3/VBoxContainer" unique_id=818540718 node_paths=PackedStringArray("card_container_manager")]
+layout_mode = 2
+size_flags_vertical = 3
 texture = ExtResource("4_oiphq")
-expand_mode = 4
+expand_mode = 2
+stretch_mode = 4
 script = ExtResource("5_p6y70")
+card_container_manager = NodePath("../../../../../../../../../CardContainerManager")
 
-[node name="Graveyard" type="Panel" parent="BattlefieldLayer/Library/MarginContainer/VBoxContainer" unique_id=1969097889]
-custom_minimum_size = Vector2(112, 157)
+[node name="Graveyard" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer3/VBoxContainer" unique_id=80609340 node_paths=PackedStringArray("card_container_manager")]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_p6y70")
+size_flags_vertical = 3
+texture = ExtResource("4_oiphq")
+expand_mode = 2
+stretch_mode = 4
 script = ExtResource("6_ccgli")
+card_container_manager = NodePath("../../../../../../../../../CardContainerManager")
 
-[node name="MarginContainer" type="MarginContainer" parent="BattlefieldLayer/Library/MarginContainer/VBoxContainer/Graveyard" unique_id=562518021]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Exile" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer3/VBoxContainer" unique_id=586983455 node_paths=PackedStringArray("card_container_manager")]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("4_oiphq")
+expand_mode = 2
+stretch_mode = 4
+script = ExtResource("6_ccgli")
+card_container_manager = NodePath("../../../../../../../../../CardContainerManager")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer3" unique_id=1713153929]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer" unique_id=1558866398]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Lands" type="HBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer2" unique_id=901766443]
+layout_mode = 2
+
+[node name="Creatures" type="HBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer2" unique_id=1413405026]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer" unique_id=143472817]
+layout_mode = 2
+
+[node name="Life Counter" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer4" unique_id=974741975 instance=ExtResource("4_c5afc")]
+layout_mode = 2
+
+[node name="Battlefield2" type="MarginContainer" parent="BattlefieldLayer/PlayerGrid" unique_id=1772718269]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Background" type="Panel" parent="BattlefieldLayer/PlayerGrid/Battlefield2" unique_id=779772357]
+material = SubResource("ShaderMaterial_c5afc")
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hqyfx")
+
+[node name="MarginContainer" type="MarginContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield2" unique_id=2104830820]
+layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="Label" type="Label" parent="BattlefieldLayer/Library/MarginContainer/VBoxContainer/Graveyard/MarginContainer" unique_id=889873299]
+[node name="Orientation" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer" unique_id=342878043]
 layout_mode = 2
-text = "Graveyard"
-horizontal_alignment = 1
-vertical_alignment = 1
 
-[node name="Exile" type="Panel" parent="BattlefieldLayer/Library/MarginContainer/VBoxContainer" unique_id=472752371]
-custom_minimum_size = Vector2(112, 157)
+[node name="HBoxContainer" type="HBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/Orientation" unique_id=1570584304]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_p6y70")
+size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="BattlefieldLayer/Library/MarginContainer/VBoxContainer/Exile" unique_id=1985573235]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="Label" type="Label" parent="BattlefieldLayer/Library/MarginContainer/VBoxContainer/Exile/MarginContainer" unique_id=732897578]
+[node name="VBoxContainer3" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/Orientation/HBoxContainer" unique_id=1611129181]
 layout_mode = 2
-text = "Exile"
-horizontal_alignment = 1
-vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/Orientation/HBoxContainer/VBoxContainer3" unique_id=852306252]
+custom_minimum_size = Vector2(85, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Library" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/Orientation/HBoxContainer/VBoxContainer3/VBoxContainer" unique_id=891711544 node_paths=PackedStringArray("card_container_manager")]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("4_oiphq")
+expand_mode = 3
+stretch_mode = 4
+script = ExtResource("5_p6y70")
+card_container_manager = NodePath("../../../../../../../../../CardContainerManager")
+
+[node name="Graveyard" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/Orientation/HBoxContainer/VBoxContainer3/VBoxContainer" unique_id=1658821910 node_paths=PackedStringArray("card_container_manager")]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("4_oiphq")
+expand_mode = 3
+stretch_mode = 4
+script = ExtResource("6_ccgli")
+card_container_manager = NodePath("../../../../../../../../../CardContainerManager")
+
+[node name="Exile" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/Orientation/HBoxContainer/VBoxContainer3/VBoxContainer" unique_id=812482753 node_paths=PackedStringArray("card_container_manager")]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("4_oiphq")
+expand_mode = 3
+stretch_mode = 4
+script = ExtResource("6_ccgli")
+card_container_manager = NodePath("../../../../../../../../../CardContainerManager")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/Orientation/HBoxContainer/VBoxContainer3" unique_id=501508890]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/Orientation/HBoxContainer" unique_id=685026959]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="HandLayer" type="CanvasLayer" parent="." unique_id=689819661]
 layer = 2
 
-[node name="Hand" type="ColorRect" parent="HandLayer" unique_id=525728039]
+[node name="Hand" type="ColorRect" parent="HandLayer" unique_id=525728039 node_paths=PackedStringArray("card_container_manager")]
 custom_minimum_size = Vector2(800, 150)
 anchors_preset = 7
 anchor_left = 0.5
@@ -150,21 +252,29 @@ offset_right = 20.0
 grow_horizontal = 2
 grow_vertical = 0
 pivot_offset = Vector2(400, 150)
-color = Color(0, 0, 0, 0.039215688)
+color = Color(0, 0, 0, 0)
 script = ExtResource("2_f0cxm")
 width_curve = SubResource("Curve_jdgky")
 height_curve = SubResource("Curve_oiphq")
 y_offset = -71.25
 rotation_curve = SubResource("Curve_ukx2i")
 max_rotation_angle = 0.15
+card_container_manager = NodePath("../../CardContainerManager")
 metadata/_custom_type_script = "uid://df0kwdogcaxqh"
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1871874080]
 layer = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="UI" unique_id=1123328841]
-offset_right = 166.0
-offset_bottom = 71.0
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -361.0
+offset_top = -71.0
+grow_horizontal = 0
+grow_vertical = 0
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20

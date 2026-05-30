@@ -10,8 +10,10 @@ func _init(p_hand: Hand, p_graveyard: CardContainer) -> void:
 func execute() -> void:
 	var card: Card = hand.pop_top_card()
 	if not card:
-		push_warning("DrawCommand: drawing from empty library")
+		push_warning("DiscardCommand: discarding from empty hand")
 		return
 	
-	Global.add_child(card)
+	hand.add_child(card)
 	card.move_to(graveyard, null)
+	card.rotation = 0
+	hand.organize_cards()

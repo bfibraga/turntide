@@ -13,7 +13,7 @@ func _ready() -> void:
 	
 	text_changed.connect(_on_text_changed)
 	
-	text_submitted.connect(_execute_search)
+	text_submitted.connect(_execute_search.bind(text))
 	_search_timer.timeout.connect(_execute_search)
 	
 	self.add_child(_search_timer)
@@ -22,7 +22,7 @@ func _on_text_changed(_new_text: String) -> void:
 	_search_timer.stop()
 	_search_timer.start(delay_time)
 	
-func _execute_search(text: String = "") -> void:
+func _execute_search() -> void:
 	var query : String = text.strip_edges()
 	
 	if query.is_empty():

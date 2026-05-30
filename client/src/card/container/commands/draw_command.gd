@@ -13,5 +13,5 @@ func execute() -> void:
 		push_warning("DrawCommand: drawing from empty library")
 		return
 	
-	Global.add_child(card)
-	card.move_to(hand, null)
+	library.add_child(card)
+	card.move_to(hand)

@@ -10,6 +10,9 @@ func _init(initial_value: Array[Variant] = [], initial_owner: Reactive = null) -
 	value = initial_value
 	super._init(initial_owner)
 
+func size() -> int:
+	return value.size()
+
 func get_at(index: int) -> Variant:
 	return value[index]
 
@@ -51,6 +54,9 @@ func pop_front() -> Variant:
 	var result: Variant = value.pop_front()
 	reactive_changed.emit(self)
 	return result 
+
+func peek() -> Variant:
+	return value.get(value.size() - 1)
 
 func push_back(v: Variant) -> void:
 	append(v)

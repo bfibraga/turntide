@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://cdnyhlm3lr77j" path="res://addons/icodot/node/office/icon-home.svg" id="13_hmxxs"]
 [ext_resource type="Texture2D" uid="uid://c5qvwhs5wclfi" path="res://addons/icodot/node/office/icon-gamepad.svg" id="14_2jinp"]
 [ext_resource type="Texture2D" uid="uid://c8ihsntjssv8c" path="res://addons/icodot/node/fantasy/icon-book.svg" id="15_6iek0"]
+[ext_resource type="Texture2D" uid="uid://mvubex3lilpx" path="res://addons/icodot/3d/components/icon-comp-sword-3d.svg" id="16_2jinp"]
 [ext_resource type="Texture2D" uid="uid://rfunrxatno1m" path="res://addons/icodot/node/office/icon-person.svg" id="16_v0ijp"]
 [ext_resource type="Texture2D" uid="uid://c8owvjg3llc24" path="res://addons/icodot/node/office/icon-gear.svg" id="17_nevsn"]
 
@@ -136,6 +137,16 @@ layout_mode = 2
 text = "Decks
 "
 icon = ExtResource("15_6iek0")
+expand_icon = true
+
+[node name="PLAYTEST" type="Button" parent="HBoxContainer/Sidebar/MarginContainer/VBoxContainer" unique_id=1332134692]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92156863, 0.28235295, 0.37254903, 1)
+theme_override_font_sizes/font_size = 24
+text = "TEST
+"
+icon = ExtResource("16_2jinp")
 expand_icon = true
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/Sidebar/MarginContainer" unique_id=1708571572]

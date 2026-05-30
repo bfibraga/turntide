@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://bpeolwe1ggl3w"]
+
+[ext_resource type="Script" uid="uid://c378ofysg611o" path="res://src/main/life_counter.gd" id="1_vkvxy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ccgli"]
+bg_color = Color(0.09803922, 0.09803922, 0.09803922, 1)
+border_color = Color(0.28851813, 0.28851795, 0.28851792, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="Life Counter" type="Panel" unique_id=974741975]
+custom_minimum_size = Vector2(100, 50)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -25.0
+offset_right = 50.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ccgli")
+script = ExtResource("1_vkvxy")
+
+[node name="VBoxContainer" type="HBoxContainer" parent="." unique_id=2109210671]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Plus" type="Button" parent="VBoxContainer" unique_id=497143245]
+unique_name_in_owner = true
+layout_mode = 2
+text = "+"
+flat = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=436823436]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Life" type="RichTextLabel" parent="VBoxContainer/HBoxContainer" unique_id=775499234]
+unique_name_in_owner = true
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=white][font_size=26][b]25[/b][/font_size][/color]"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Minus" type="Button" parent="VBoxContainer" unique_id=2068439354]
+unique_name_in_owner = true
+layout_mode = 2
+text = "-"
+flat = true
+icon_alignment = 1

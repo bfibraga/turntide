@@ -27,3 +27,16 @@ func new_deck_repository(
 		return repo if result.is_ok() else null
 	
 	return repo
+
+func new_keyword_repository(
+	auto_open: bool = true,
+	path: String = KeywordRepository.KEYWORDS_DIR
+) -> KeywordRepository:
+	var repo: KeywordRepository = KeywordRepository.new(path)
+	
+	if auto_open:
+		var result: Result = repo.open()
+		
+		return repo if result.is_ok() else null
+	
+	return repo

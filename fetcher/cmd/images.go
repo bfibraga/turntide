@@ -102,3 +102,4 @@ func init() {
 	imagesCmd.Flags().StringVarP(&format, "format", "f", "png", "Output format (png, jpg, webp)")
 	imagesCmd.Flags().StringVarP(&output, "output", "o", "", "Output directory")
 
+}

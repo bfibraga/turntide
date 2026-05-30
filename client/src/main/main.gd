@@ -7,6 +7,8 @@ extends Control
 @onready var decks_button: Button = $%Decks
 @onready var account_button: Button = $%Account
 @onready var settings_button: Button = $%Settings
+@onready var playtest_button: Button = %PLAYTEST
+
 @onready var logger: Log = ConsoleLogger.new()
 
 func _ready() -> void:
@@ -17,6 +19,8 @@ func _ready() -> void:
 	decks_button.pressed.connect(func() -> void: _on_decks_button_pressed())
 	account_button.pressed.connect(func() -> void: _on_account_button_pressed())
 	settings_button.pressed.connect(func() -> void: _on_settings_button_pressed())
+
+	playtest_button.pressed.connect(func() -> void: _on_playtest_button_pressed())
 
 func _on_home_button_pressed() -> void:
 	Global.game_controller.gui_transition_to("home")
@@ -47,3 +51,7 @@ func _on_settings_button_pressed() -> void:
 			#gui_state_machine.current_state,
 			#"settings"
 		#)
+
+func _on_playtest_button_pressed() -> void:
+	Global.game_controller.rollback_state_machine()
+	Global.game_controller.gui_transition_to("ingame")

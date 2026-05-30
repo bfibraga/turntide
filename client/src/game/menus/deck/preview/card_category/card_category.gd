@@ -15,6 +15,7 @@ const CardScene: PackedScene = preload("res://src/card/ui/card_ui.tscn")
 
 func _init() -> void:
 	self.ready.connect(func() -> void: data.manually_emit())
+	self.custom_minimum_size = Vector2(Card.DEFAULT_SIZE.x, 0.0)
 
 func _ready() -> void:
 	data.reactive_changed.connect(func(reactive: Data) -> void:
@@ -25,15 +26,14 @@ func _ready() -> void:
 			child.queue_free()
 		
 		for card_data: CardData in reactive.cards.value:
-			var card: Card = CardScene.instantiate()
-			card.data.card_data.value = card_data
+			var card: Card = CardFactory.create_card(card_data)
 			
-			card.ready.connect(func() -> void:
-				card.view.on_mouse_enter.connect(func() -> void:
-					print("On enter")
-					card.view.tooltip_text = card.data.card_data.value.name
-				)
-			)
+			#card.ready.connect(func() -> void:
+				#card.view.on_mouse_enter.connect(func() -> void:
+					#print("On enter")
+					#card.view.tooltip_text = card.data.card_data.value.name
+				#)
+			#)
 			
 			cards_container.add_child.call_deferred(card)
 	)

@@ -122,6 +122,7 @@ layer = 20
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer20" unique_id=1517042086]
 unique_name_in_owner = true
+visible = false
 material = SubResource("ShaderMaterial_25rj4")
 anchors_preset = 15
 anchor_right = 1.0

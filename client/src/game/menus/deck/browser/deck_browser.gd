@@ -129,7 +129,7 @@ func _create_decks() -> void:
 func _ready() -> void:
 	Global.deck_repository.open()
 	
-	#_create_decks()
+	_create_decks()
 
 	var on_deck_selected: Callable = func(deck_data: DeckData) -> void:
 		self.open_deck.emit(deck_data)

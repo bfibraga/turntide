@@ -27,195 +27,62 @@ class Data extends Reactive:
 
 #endregion
 
-#region Signals
-
-signal card_drag_started(card: Card)
-signal card_drag_ended(card: Card)
-
-#endregion
-
 const DEFAULT_SIZE : Vector2 = Vector2(225, 315)
 
 @export_category("Dependencies")
 @export var card_data: CardData
 @export var view: CardView
 
-@export_category("Hover")
-@export var hover_y_offset: float = -Card.DEFAULT_SIZE.y
-@export var hover_duration: float = 0.15
-@export var default_z_index: int = 0
-@export var hover_z_index: int = 10
-@export var default_rotation: float = 0
-@export var hover_rotation: float = 0
+var data: Data = Data.new()
 
-@export_category("Drag")
-@export var drag_offset: Vector2 = Vector2.ZERO
-@export var drag_speed: float = 5.0
-@export var drag_z_index: float = self.default_z_index
-
-var _data: Data = Data.new()
-
-var _base_position: Vector2 = Vector2.ZERO
-var _move_tween: Tween
-
-var _hover_tween: Tween
-var _hovered: bool = false
-
-var is_dragging: bool = false
-var _original_container: CardContainer
-var _original_position: Vector2 = Vector2.ZERO
+var base_position: Vector2 = Vector2.ZERO
+var move_tween: Tween
 
 func _init(initial_card_data: CardData = null) -> void:
 	self.setup(initial_card_data)
 	
-func setup(initial_card_data: CardData = null) -> void:
-	#if Engine.is_editor_hint(): return
-	
+func setup(initial_card_data: CardData = null) -> void:	
 	if initial_card_data:
-		_data.card_data.value = initial_card_data
+		data.card_data.value = initial_card_data
 	
-	self.size = DEFAULT_SIZE
+	self.custom_minimum_size = DEFAULT_SIZE
+	#self.size = DEFAULT_SIZE
 	self.mouse_filter = Control.MOUSE_FILTER_STOP
-	self.z_index = default_z_index
 	
 func _ready() -> void:	
-	_data.reactive_changed.connect(func(reactive: Data) -> void:
+	data.reactive_changed.connect(func(reactive: Data) -> void:
 		view.front_art = reactive.printing.value
 	)
 	
 	Global.printings_manager.card_printing_ready.connect(func(key: String, path: String) -> void:
-		if key == _data.key.value:
+		if key == data.key.value:
 			_start_async_texture_load(path)
 	)
-	view.gui_input.connect(func(event: InputEvent) -> void:
-		if event is InputEventMouseMotion:
-			view.follow()
-		
-		if event is InputEventMouseButton:
-			var mouse_event: InputEventMouseButton = event as InputEventMouseButton
-			
-			if mouse_event.button_index == MOUSE_BUTTON_LEFT:
-				if mouse_event.pressed:
-					_start_drag()
-				elif is_dragging:
-					_end_drag() 
-	)
-	view.on_mouse_enter.connect(func() -> void:
-		_hovered = true
-		z_index = hover_z_index
-		
-		_update_hover()
-	)
-	view.on_mouse_exit.connect(func() -> void:
-		_hovered = false
-		z_index = default_z_index
-		
-		_update_hover()
-	)
 	
-	#view.tap_card.connect(func() -> void: print("Tapping"))
-	#view.flip_card.connect(func() -> void: print("Flipping"))
-	
-	#button_down.connect(_on_button_down)
-	#button_up.connect(_on_button_up)
-	
-	var info: Dictionary = Global.printings_manager.get_card_info(_data.key.value)
+	var info: Dictionary = Global.printings_manager.get_card_info(data.key.value)
 	
 	if info.status == "ready":
 		_start_async_texture_load(info.path)
 	else:
-		Global.printings_manager.request_download(_data.card_data.value)
-			
+		Global.printings_manager.request_download(data.card_data.value)
 		
-	_data.manually_emit()
+	data.manually_emit()
 
-func _process(delta: float) -> void:
-	if is_dragging:
-		#global_position = lerp(global_position, get_global_mouse_position() - drag_offset, delta * drag_speed)
-		global_position = get_global_mouse_position() - drag_offset
+#region Behaviour Management
 
-#region Hover
-
-func _update_hover() -> void:
-	if _hover_tween:
-		_hover_tween.kill()
-
-	var target_position: Vector2 = _base_position
-	var target_rotation: float = default_rotation
-
-	if _hovered:
-		target_position.y += hover_y_offset
-		target_rotation = hover_rotation
-
-	_hover_tween = create_tween().set_parallel() \
-		.set_trans(Tween.TRANS_CUBIC) \
-		.set_ease(Tween.EASE_OUT)
-
-	_hover_tween.tween_property(
-		self,
-		"position",
-		target_position,
-		hover_duration
-	)
+func add_behavior(behavior: CardBehavior) -> Card:
+	add_child(behavior)
+	behavior.setup(self)
 	
-	_hover_tween.tween_property(
-		self,
-		"rotation",
-		target_rotation,
-		hover_duration
-	)
+	return self
 
-#endregion
-
-#region Drag
-
-func _start_drag() -> void:
-	if is_dragging:
-		return
-
-	is_dragging = true
-
-	_original_container = get_parent()
-	_original_position = position
-
-	z_index = drag_z_index
-
-	if _move_tween:
-		_move_tween.kill()
-
-	if _hover_tween:
-		_hover_tween.kill()
-
-	drag_offset = (
-		get_global_mouse_position()
-		- global_position
-	)
-
-	card_drag_started.emit(self)
-
-
-func _end_drag() -> void:
-	is_dragging = false
-
-	z_index = 0
-
-	var target := CardContainer.new() # TODO: implement find nearest card container
-
-	if target:
-		move_to(
-			target,
-			MoveConfig.new({
-				"duration":0.2,
-				"stagger":0.03
-			})
-		)
-	else:
-		move_to_position(
-			_original_position,
-			rotation
-		)
-
-	card_drag_ended.emit(self)
+func clear_behaviors() -> void:
+	for child: Node in get_children():
+		if child is CardBehavior:
+			var behaviour: CardBehavior = child as CardBehavior
+			
+			behaviour.teardown()
+			behaviour.queue_free()
 
 #endregion
 
@@ -226,7 +93,7 @@ class MoveConfig:
 	var index: int = 0
 	var stagger: float = 0.0
 	var transition: Tween.TransitionType = Tween.TRANS_BACK
-	var ease: Tween.EaseType = Tween.EASE_OUT
+	var ease_type: Tween.EaseType = Tween.EASE_OUT
 	var position_callable: Callable
 
 	func _init(parameters: Dictionary = {}) -> void:
@@ -247,9 +114,10 @@ func move_to(target: CardContainer, config: MoveConfig = null) -> void:
 		config = MoveConfig.new() 
 
 	var old_global : Vector2 = global_position
+
 	reparent(target)
-	
-	global_position = old_global
+	#global_position = old_global
+	position = Vector2.ZERO
 	target.organize_cards()
 	
 func move_to_position(
@@ -265,26 +133,28 @@ func move_to_position(
 			target_position
 		)
 
-	_base_position = target_position
+	base_position = target_position
 
-	if _hovered:
-		target_position.y += hover_y_offset
+	for child: Node in self.get_children():
+		if child is HoverBehavior:
+			var hb: HoverBehavior = child as HoverBehavior
+			hb.default_rotation = target_rotation
 
-	if _move_tween:
-		_move_tween.kill()
+	if move_tween:
+		move_tween.kill()
 
-	_move_tween = create_tween().set_parallel(true) \
+	move_tween = create_tween().set_parallel(true) \
 		.set_trans(config.transition) \
-		.set_ease(config.ease)
+		.set_ease(config.ease_type)
 
-	_move_tween.tween_property(
+	move_tween.tween_property(
 		self,
 		"position",
 		target_position,
 		config.duration
 	)
 
-	_move_tween.tween_property(
+	move_tween.tween_property(
 		self,
 		"rotation",
 		target_rotation,
@@ -316,6 +186,6 @@ func set_printing(printing_path: String) -> void:
 		push_error("Failed to load card image: ", printing_path, " error: ", err )
 		return
 	
-	_data.printing.value = ImageTexture.create_from_image(image)
+	data.printing.value = ImageTexture.create_from_image(image)
 
 #endregion

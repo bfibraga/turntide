@@ -1,3 +1,4 @@
+@icon("res://addons/icodot/ui/office/icon-gamepad-ui.svg")
 extends Control
 
 @export var hand: Hand
@@ -16,8 +17,12 @@ func _ready() -> void:
 	if draw_button:
 		draw_button.pressed.connect(func() -> void: 
 			draw_command.execute()
-			#library.draw()
 		)
+	
+	library.gui_input.connect(func(event: InputEvent) -> void:
+		if event.is_action_released("ui_accept"):
+			draw_command.execute()
+	)
 	
 	if draw_7_button:
 		draw_7_button.pressed.connect(func() -> void: 
@@ -31,4 +36,12 @@ func _ready() -> void:
 	if discard_button:
 		discard_button.pressed.connect(func() -> void:
 			discard_command.execute()
+		)
+	
+	if discard_hand_button:
+		discard_hand_button.pressed.connect(func() -> void:
+			while hand.has_cards():
+				await get_tree().create_timer(0.25).timeout
+				
+				discard_command.execute()
 		)

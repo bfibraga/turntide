@@ -16,19 +16,15 @@ func _ready() -> void:
 	WS.packet_received.connect(_on_ws_packet_received)
 	
 	# Connect to server
-	var url : String = UrlBuilder.wss() \
-		#.host("5.158.14.69") \
-		.host("dev.turntide.bfibraga.me") \
-		#.host("localhost") \
-		.port(443) \
+	var url : String = UrlBuilder.ws() \
+		#.host("dev.turntide.bfibraga.me") \
+		.host("localhost") \
+		.port(4000) \
 		.path("ws") \
 		.build()
 		
 	Global.logger.info("Connecting to %s" % url)
 	WS.connect_to_url(url, TLSOptions.client())
-	
-	RepositoryFactory.new_card_repository()
-	Global.card_repository.open()
 	
 func _on_ws_connected_to_server() -> void:
 	logger.success("Connected to server")

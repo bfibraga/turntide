@@ -6,7 +6,7 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
-	"path/filepath"
+	//"path/filepath"
 	"strings"
 
 	_ "modernc.org/sqlite"
@@ -33,7 +33,7 @@ var (
 		"./client/html5",
 		slog.Default(),
 	)
-	configPath    = flag.String("config", ".env.prod", "path to the config file")
+	configPath    = flag.String("config", ".env.dev", "path to the config file")
 )
 
 func main() {
@@ -60,9 +60,9 @@ func main() {
 	}
 
 	// Setup server factory, repositories and services
-	factory, err := repository.NewServerFactory(cfg.DBPath, logger)
+	factory, err := repository.NewServerFactory(cfg.DBPath + "/server.db", logger)
 	if err != nil {
-		logger.Error("failed to create server factory", "error", err)
+		logger.Error("failed to create server factory of the following path " + cfg.DBPath, "error", err)
 		os.Exit(1)
 	}
 
@@ -74,12 +74,12 @@ func main() {
 	hub.Initialize()
 
 	// Define handler for serving the client HTML5 page
-  exportPath, err := cfg.coalescePaths(cfg.ClientHTML5Path, filepath.Join(cfg.DBPath, "html5"))
+  /*exportPath, err := cfg.coalescePaths(cfg.ClientHTML5Path, filepath.Join(cfg.DBPath, "html5"))
   if err != nil {
   	logger.Error("failed to coalesce paths", "error", err)
   	os.Exit(1)
   }
-	http.Handle("/", addHTML5ExportHeaders(http.StripPrefix("/", http.FileServer(http.Dir(exportPath)))))
+	http.Handle("/", addHTML5ExportHeaders(http.StripPrefix("/", http.FileServer(http.Dir(exportPath)))))*/
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		hub.Serve(clients.NewWebSocketClient, w, r)
@@ -93,8 +93,7 @@ func main() {
 	cfg.CertPath, err = cfg.coalescePaths(cfg.CertPath)
 	cfg.KeyPath, err = cfg.coalescePaths(cfg.KeyPath)
 	if err != nil {
-		logger.Error("failed to coalesce paths", "error", err)
-		os.Exit(1)
+		logger.Warn("failed to coalesce certification paths", "error", err)	
 	}
 
 	logger.Info(fmt.Sprintf("Starting the server at %s", addr))

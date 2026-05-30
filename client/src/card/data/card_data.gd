@@ -44,7 +44,7 @@ class Builder extends RefCounted:
 #endregion
 
 @export_group("IDs")
-@export var scryfall_id: String = ""
+@export var scryfallId: String = ""
 
 
 @export_category("Classification & Type")
