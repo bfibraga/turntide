@@ -4,13 +4,6 @@
 [ext_resource type="Script" uid="uid://nv5mq1l585aj" path="res://src/common/components/search_line_edit/search_line_edit.gd" id="1_yd7we"]
 [ext_resource type="Script" uid="uid://ds3ik4uojxsuq" path="res://src/common/components/extensible_scroll_container/extensable_scroll_container.gd" id="3_dpbp3"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iaktf"]
-bg_color = Color(0, 0, 0, 0.39215687)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8e6is"]
 bg_color = Color(0, 0, 0, 0.24313726)
 corner_radius_top_left = 8
@@ -34,7 +27,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_iaktf")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=39341589]
 layout_mode = 1
@@ -114,6 +106,13 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 text = "Create"
+icon_alignment = 1
+expand_icon = true
+
+[node name="Refresh" type="Button" parent="HBoxContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=1051378919]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Refresh"
 
 [node name="Panel" type="Panel" parent="HBoxContainer/VBoxContainer/VBoxContainer" unique_id=1783891559]
 layout_mode = 2

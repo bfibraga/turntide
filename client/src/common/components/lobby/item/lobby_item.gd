@@ -33,10 +33,10 @@ var data: Data = Data.new()
 
 @export var join_button: Button
 
-func setup(lobby_info: packets.LobbyInfo) -> void:
+func setup(lobby_info: packets.LobbyData) -> void:
 	data.lobby_name.value = lobby_info.get_name()
-	data.format.value = lobby_info.get_format()
-	data.is_private.value = lobby_info.get_is_private()
+#	data.format.value = lobby_info.get_format()
+#	data.is_private.value = lobby_info.get_is_private()
 	data.capacity.value = lobby_info.get_current_players()
 	data.max_capacity.value = lobby_info.get_max_players()
 

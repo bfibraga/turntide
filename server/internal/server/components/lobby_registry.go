@@ -231,6 +231,67 @@ type LobbyInfo struct {
 	IsPrivate      bool
 }
 
+type ListLobbyFilter func(lobby *Lobby) bool
+
+type ListLobbiesOptions struct {
+	Page     int
+	PageSize int
+
+	Filters []ListLobbyFilter
+}
+
+func NewListLobbiesOptions(page, page_size int, filters ...ListLobbyFilter) *ListLobbiesOptions {
+	return &ListLobbiesOptions{
+		Page:     page,
+		PageSize: page_size,
+		Filters:  filters,
+	}
+}
+
+type ListLobbiesResult struct {
+	Count   int
+	Lobbies []*Lobby
+}
+
+func (r *LobbyRegistry) ListLobbies(options *ListLobbiesOptions) *ListLobbiesResult {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	page := max(1, options.Page) // 1-indexed
+	pageSize := max(1, min(50, options.PageSize))
+	offset := (page - 1) * pageSize
+
+	all := r.lobbies.Filter(func(_ uint64, lobby *Lobby) bool {
+		isValid := true
+
+		for _, filter := range options.Filters {
+			isValid = isValid && filter(lobby)
+		}
+
+		return isValid
+	}).Items()
+
+	total := len(all)
+	if offset >= total {
+		return &ListLobbiesResult{
+			Count:   0,
+			Lobbies: make([]*Lobby, 0),
+		}
+	}
+
+	end := min(offset+pageSize, total)
+
+	result := make([]*Lobby, 0, end-offset)
+	for _, info := range all[offset:end] {
+		result = append(result, info)
+	}
+
+	return &ListLobbiesResult{
+		Count:   len(result),
+		Lobbies: result,
+	}
+}
+
 func (r *LobbyRegistry) ListPublicLobbies() []LobbyInfo {
 	r.mu.RLock()
 	defer r.mu.RUnlock()

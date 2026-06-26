@@ -47,27 +47,18 @@ func (i *InLobby) OnEnter() {
 		return
 	}
 
-	var players []*packets.LobbyPlayer
+	var players []*packets.LobbyPlayerData
 	for _, p := range lobby.Players {
-		players = append(players, &packets.LobbyPlayer{
+		players = append(players, &packets.LobbyPlayerData{
 			ClientId: p.ClientID,
 			Username: p.Username,
-			Ready:    p.Ready,
+			IsReady:  p.Ready,
 		})
 	}
-
-	i.client.SocketSend(packets.NewLobbyJoinedResponse(
-		i.lobbyID,
-		lobby.Name,
-		lobby.HostUsername,
-		players,
-	))
-
-	i.broadcastToLobby(packets.NewLobbyPlayerJoined(packets.NewLobbyPlayer(i.username, i.client.Id(), false)))
 }
 
 func (i *InLobby) HandleMessage(senderId uint64, message packets.Msg) {
-	switch message := message.(type) {
+	/*switch message := message.(type) {
 	case *packets.Packet_LobbyLeaveRequest:
 		i.handleLeave(senderId)
 	case *packets.Packet_LobbyReadyRequest:
@@ -82,10 +73,10 @@ func (i *InLobby) HandleMessage(senderId uint64, message packets.Msg) {
 		i.handleChat(senderId, message)
 	default:
 		//i.broadcastToLobby(message)
-	}
+	}*/
 }
 
-func (i *InLobby) handleChat(senderId uint64, message *packets.Packet_Chat) {
+/*func (i *InLobby) handleChat(senderId uint64, message *packets.Packet_Chat) {
 	if senderId == i.client.Id() {
 		i.broadcastToLobby(message)
 	} else {
@@ -141,7 +132,7 @@ func (i *InLobby) handleStart(senderId uint64) {
 
 func (i *InLobby) handleGameStart() {
 	i.client.SetState(NewInGame(i.logger, i.lobbyID))
-}
+}*/
 
 func (i *InLobby) broadcastToLobby(msg packets.Msg) {
 	lobby, ok := i.lobbyReg.FindLobby(i.lobbyID)
@@ -164,5 +155,5 @@ func (i *InLobby) OnExit() {
 
 	// Ensure the client is removed from the lobby when leaving the state
 	// This covers disconnections and explicit transitions away from InLobby.
-	i.client.SocketSend(packets.NewLobbyLeaveRequest())
+	//i.client.SocketSend(packets.NewLobbyLeaveRequest())
 }

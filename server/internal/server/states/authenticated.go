@@ -1,24 +1,3 @@
-/*
-Copyright © 2026 Bruno Braga
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-*/
 package states
 
 import (
@@ -63,14 +42,8 @@ func (a *Authenticated) HandleMessage(senderId uint64, message packets.Msg) {
 	a.logger.Debug("received message from authenticated client", "sender_id", senderId, "message_type", message)
 
 	switch message := message.(type) {
-	case *packets.Packet_LobbyListRequest:
-		a.handleLobbyList()
-	case *packets.Packet_LobbyCreateRequest:
-		a.handleCreateLobby(senderId, message)
-	case *packets.Packet_LobbyJoinRequest:
-		a.handleJoinLobby(senderId, message)
-	case *packets.Packet_LobbyPlayerJoined:
-		a.handleLobbyList()
+	case *packets.Packet_ListLobbiesRequest:
+		a.handleLobbyList(message)
 	case *packets.Packet_Chat:
 		a.handleChat(senderId, message)
 	default:
@@ -86,26 +59,31 @@ func (a *Authenticated) handleChat(senderId uint64, message *packets.Packet_Chat
 	}
 }
 
-func (a *Authenticated) handleLobbyList() {
-	lobbies := a.lobbyReg.ListPublicLobbies()
+func (a *Authenticated) handleLobbyList(message *packets.Packet_ListLobbiesRequest) {
+	request := message.ListLobbiesRequest
+	options := components.NewListLobbiesOptions(int(request.Page), int(request.PageSize))
 
-	var lobbyInfos []*packets.LobbyInfo
-	for _, l := range lobbies {
-		lobbyInfos = append(lobbyInfos, &packets.LobbyInfo{
-			Id:             l.ID,
+	result := a.lobbyReg.ListLobbies(options)
+
+	var lobbyDataList []*packets.LobbyData
+	for _, l := range result.Lobbies {
+		lobbyDataList = append(lobbyDataList, &packets.LobbyData{
+			//Id:             l.ID,
 			Name:           l.Name,
-			Format:         l.Format,
-			CurrentPlayers: int32(l.CurrentPlayers),
+			CurrentPlayers: int32(len(l.Players)),
 			MaxPlayers:     int32(l.MaxPlayers),
-			HostUsername:   l.HostUsername,
-			IsPrivate:      l.IsPrivate,
+			//Format:         l.Format,
+			//CurrentPlayers: int32(l.CurrentPlayers),
+			//MaxPlayers:     int32(l.MaxPlayers),
+			//HostUsername:   l.HostUsername,
+			//IsPrivate:      l.IsPrivate,
 		})
 	}
 
-	a.client.SocketSend(packets.NewLobbyListResponse(lobbyInfos))
+	a.client.SocketSend(packets.NewListLobbiesResponse(int32(result.Count), lobbyDataList...))
 }
 
-func (a *Authenticated) handleCreateLobby(senderId uint64, message *packets.Packet_LobbyCreateRequest) {
+/*func (a *Authenticated) handleCreateLobby(senderId uint64, message *packets.Packet_LobbyCreateRequest) {
 	msg := message.LobbyCreateRequest
 
 	var password string
@@ -143,13 +121,13 @@ func (a *Authenticated) handleJoinLobby(senderId uint64, message *packets.Packet
 
 	a.logger.Debug("joined lobby", "lobby_id", msg.LobbyId)
 
-	playerPkt := packets.NewLobbyPlayer(a.username, senderId, false)
+	playerPkt := packets.NewLobbyPlayer(a.client.Id(), a.username, false)
 	joinPkt := packets.NewLobbyPlayerJoined(playerPkt)
 	a.broadcastToLobby(senderId, joinPkt, msg.LobbyId)
 
 	// Transition to InLobby state
 	a.client.SetState(NewInLobby(a.logger, a.lobbyReg, a.client, msg.LobbyId, a.username))
-}
+}*/
 
 func (a *Authenticated) broadcastToLobby(senderId uint64, msg packets.Msg, lobbyID uint64) {
 	lobby, ok := a.lobbyReg.FindLobby(lobbyID)

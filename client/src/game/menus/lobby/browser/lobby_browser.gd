@@ -5,72 +5,68 @@ class SearchData extends Reactive:
 	var format: ReactiveObject = ReactiveObject.new(null, self)
 	
 
+class PageData extends Reactive:
+	var page: ReactiveValue = ReactiveValue.Int(1, self)
+	var page_size: ReactiveValue = ReactiveValue.Int(20, self)
+
 const LobbyItemScene: PackedScene = preload("res://src/common/components/lobby/item/lobby_item.tscn")
 const packets := preload("res://src/common/network/packets/packets.gd")
 
+var page_data: PageData = PageData.new()
+
 @onready var create_button: Button = $%Create
+@onready var refresh_button: Button = %Refresh
+
 @onready var lobby_list: Control = $%LobbyList
 @onready var extensible_scroll_container: ExtensibleScrollContainer = %ExtensibleScrollContainer
 
 func _ready() -> void:
+	page_data.reactive_changed.connect(func(reactive: PageData) -> void:
+		send_list_lobbies_request(reactive.page.value, reactive.page_size.value)
+	)
+	
 	WS.packet_received.connect(_on_ws_packet_received)
 	
 	create_button.pressed.connect(_on_create_button_pressed)
-	extensible_scroll_container.vertical_threshold_reached.connect(func() -> void: print("Reached vertical threshold"))
-	extensible_scroll_container.horizontal_threshold_reached.connect(func() -> void: print("Reached horizontal threshold"))
+	refresh_button.pressed.connect(_on_refresh_button_pressed)
+	extensible_scroll_container.vertical_threshold_reached.connect(func() -> void: page_data.page.value += 1)
 	
-	var packet: packets.Packet = PacketFactory.new_lobby_list_req()
-	WS.send(packet)
+	page_data.manually_emit()
 	
 func _on_ws_packet_received(packet: packets.Packet) -> void:
-	if packet.has_lobby_list_response():
-		_handle_lobby_list(packet.get_lobby_list_response())
-	elif packet.has_lobby_joined_response():
-		_handle_lobby_joined_response(packet.get_lobby_joined_response())
+	if packet.has_list_lobbies_response():
+		_handle_lobby_list(packet.get_list_lobbies_response())
+	#elif packet.has_lobby_joined_response():
+		#_handle_lobby_joined_response(packet.get_lobby_joined_response())
 		
-func _handle_lobby_list(response: packets.LobbyListResponse) -> void:
+func _handle_lobby_list(response: packets.ListLobbiesResponse) -> void:
 	Global.logger.info("Received lobby list %s" % response)
-	# TODO: populate UI with response.get_lobbies()
-	var lobbies: Array[packets.LobbyInfo] = response.get_lobbies()
-	
-	# Clear existing list
-	for child: Node in lobby_list.get_children():
-		child.queue_free()
+	var lobbies: Array[packets.LobbyData] = response.get_lobbies()
 
-	for lobby: packets.LobbyInfo in lobbies:
-		#var hbox: HBoxContainer = HBoxContainer.new()
-		#var label: Label = Label.new()
-		#label.text = "%s (%d/%d) - %s" % [lobby.get_name(), lobby.get_current_players(), lobby.get_max_players(), lobby.get_host_username()]
-		#hbox.add_child(label)
-#
-		#var join_btn: Button = Button.new()
-		#join_btn.text = "Join (pw)" if lobby.get_is_private() else "Join"
-		#join_btn.pressed.connect(func() -> void: _on_join_pressed(lobby.get_id()))
-		#hbox.add_child(join_btn)
-
+	for lobby: packets.LobbyData in lobbies:
 		var item: LobbyItem = LobbyItemScene.instantiate()
 		item.setup(lobby)
 		
-		item.join_button.pressed.connect(func() -> void: _on_join_pressed(lobby.get_id()))
+		item.join_button.pressed.connect(func() -> void: join_lobby(lobby.get_id()))
 		
 		lobby_list.add_child(item)
 
-func _handle_lobby_joined_response(response: packets.LobbyJoinedResponse) -> void:
-	Global.logger.info("Joined in lobby")
-	
-	var lobby_data: Dictionary = {
-		"lobby_id": response.get_lobby_id(),
-		"lobby_name": response.get_lobby_name(),
-		"hostname": response.get_host_username(),
-		"players": response.get_players(),
-	}
-	
-	Global.game_controller.gui_transition_to(InLobbyState.Name(), lobby_data)
+#func _handle_lobby_joined_response(response: packets.ListLobbiesResponse) -> void:
+	#Global.logger.info("Joined in lobby")
+	#
+	#var lobby_data: Dictionary = {
+		#"lobby_id": response.get_lobby_id(),
+		#"lobby_name": response.get_lobby_name(),
+		#"hostname": response.get_host_username(),
+		#"players": response.get_players(),
+	#}
+	#
+	#Global.game_controller.gui_transition_to(InLobbyState.Name(), lobby_data)
 	
 func _on_create_button_pressed() -> void:
 	var packet: packets.Packet = PacketFactory.new_lobby_create_req(
 		"Host name",
-		UnknownFormat.display_name(),
+		StandardFormat.display_name(),
 		4,
 		false,
 		""
@@ -78,9 +74,20 @@ func _on_create_button_pressed() -> void:
 	
 	WS.send(packet)
 
-func _on_join_pressed(lobby_id: int) -> void:
-	Global.logger.info("Joining lobby %d" % lobby_id)
-	var packet: packets.Packet = PacketFactory.new_lobby_join_req(lobby_id)
-	WS.send(packet)
+func _on_refresh_button_pressed() -> void:
+	# Clear existing list
+	for child: Node in lobby_list.get_children():
+		child.queue_free()
 	
+	page_data.page.value = 1
+
+func send_list_lobbies_request(page: int = 1, page_size: int = 10) -> void:
+	var packet: packets.Packet = PacketFactory.new_list_lobbies_request(page, page_size)
+	WS.send(packet)
+
+func join_lobby(lobby_id: int) -> void:
+	Global.logger.info("Joining lobby %d" % lobby_id)
+	
+	#var packet: packets.Packet = PacketFactory.new_lobby_join_req(lobby_id)
+	#WS.send(packet)
 	

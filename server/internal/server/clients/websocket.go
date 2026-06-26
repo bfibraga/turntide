@@ -54,10 +54,10 @@ func (c *WebSocketClient) Initialize(id uint64) {
 	c.logger.Debug("Sent ID to client")
 
 	// Register lobby change callback once hub is available
-	if c.hub != nil && c.hub.Lobbies != nil {
-		// set the onChange callback on the registry to broadcast updated lists
-		c.hub.Lobbies.SetOnChange(func() { c.hub.BroadcastLobbyList() })
-	}
+	/*if c.hub != nil && c.hub.Lobbies != nil {
+	// set the onChange callback on the registry to broadcast updated lists
+	c.hub.Lobbies.SetOnChange(func() { c.hub.BroadcastLobbyList() })
+	}*/
 }
 
 func (c *WebSocketClient) ProcessPacket(senderId uint64, message packets.Msg) {

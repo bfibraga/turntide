@@ -4,9 +4,9 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/bfibraga/turntide/core/pkg/packets"
 	"github.com/bfibraga/turntide/server/internal/server/components"
 	"github.com/bfibraga/turntide/server/internal/server/user"
+	"github.com/go-faker/faker/v4"
 )
 
 type Hub struct {
@@ -21,17 +21,6 @@ func NewHub(logger *slog.Logger, userService *user.Service, lobbyConfig *compone
 	lobbyReg := components.NewLobbyRegistry(lobbyConfig)
 	clientReg := components.NewClientRegistry()
 	messageBroker := components.NewMessageBroker()
-	
-	// Placeholder lobby for testing
-	lobbyReg.CreateLobby(
-		uint64(99),
-		"Test User",
-		"Placeholder Lobby",
-		"Casual",
-		10,
-		false,
-		"",
-	)
 
 	return &Hub{
 		Logger:      logger,
@@ -45,15 +34,26 @@ func NewHub(logger *slog.Logger, userService *user.Service, lobbyConfig *compone
 // Initialize registers runtime callbacks for components that need hub access.
 // Call once after creating the hub.
 func (h *Hub) Initialize() {
-	if h.Lobbies != nil {
+	/*if h.Lobbies != nil {
 		// Register onChange to broadcast lobby lists when they change
 		h.Lobbies.SetOnChange(func() { h.BroadcastLobbyList() })
+	}*/
+
+	for i := range 100 {
+		h.Lobbies.CreateLobby(
+			uint64(i),
+			//fmt.Sprintf("host %d", i),
+			faker.FirstName(),
+			//fmt.Sprintf("Lobby %d", i),
+			faker.DomainName(),
+			"Format", 10, false, "",
+		)
 	}
 }
 
 // BroadcastLobbyList broadcasts current public lobbies to all authenticated clients.
 // It is intended to be registered as a callback with the LobbyRegistry.
-func (h *Hub) BroadcastLobbyList() {
+/*func (h *Hub) BroadcastLobbyList() {
 	lobbies := h.Lobbies.ListPublicLobbies()
 
 	var lobbyInfos []*packets.LobbyInfo
@@ -78,7 +78,7 @@ func (h *Hub) BroadcastLobbyList() {
 			client.ProcessPacket(0, msg)
 		}
 	})
-}
+}*/
 
 func (h *Hub) Run() {
 	h.Logger.Info("Waiting for connections...")
