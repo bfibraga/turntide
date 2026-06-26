@@ -13,6 +13,7 @@ config_version=5
 config/name="Turntide Client"
 run/main_scene="uid://c74205nfbvbkq"
 config/features=PackedStringArray("4.6", "GL Compatibility")
+boot_splash/bg_color=Color(0.1344423, 0.13960707, 0.16745555, 1)
 boot_splash/show_image=false
 boot_splash/stretch_mode=0
 boot_splash/use_filter=false
@@ -36,7 +37,7 @@ gdscript/warnings/inference_on_variant=1
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/scale_mode="integer"
-mouse_cursor/custom_image="uid://da700jfwlnf5y"
+mouse_cursor/custom_image="uid://rs3b0epfm78m"
 
 [editor_plugins]
 

@@ -1,0 +1,112 @@
+[gd_scene format=3 uid="uid://cnmhvue801ig5"]
+
+[ext_resource type="Script" uid="uid://cfxjyj23k2wle" path="res://src/utils/keyword_description_builder/keyword_description_builder.gd" id="1_l752l"]
+[ext_resource type="Script" uid="uid://ds3ik4uojxsuq" path="res://src/common/components/extensible_scroll_container/extensable_scroll_container.gd" id="2_ct6ds"]
+
+[node name="Keyword Description Builder" type="MarginContainer" unique_id=2084310094]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+script = ExtResource("1_l752l")
+database_path = "res://assets/keywords/out_keywords.json"
+
+[node name="FileDialog" type="FileDialog" parent="." unique_id=1113916690]
+unique_name_in_owner = true
+oversampling_override = 1.0
+title = "Open a File"
+position = Vector2i(0, 36)
+file_mode = 0
+access = 2
+show_hidden_files = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1366080225]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1181192524]
+layout_mode = 2
+
+[node name="Fetch" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=311660372]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Fetch data"
+
+[node name="Save" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=138744902]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Save"
+
+[node name="Choose File" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1582012932]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Choose File"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=470433440]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("2_ct6ds")
+metadata/_custom_type_script = "uid://ds3ik4uojxsuq"
+
+[node name="KeywordContainer" type="GridContainer" parent="VBoxContainer/ScrollContainer" unique_id=97472241]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 3
+
+[node name="FoldableContainer" type="FoldableContainer" parent="VBoxContainer/ScrollContainer/KeywordContainer" unique_id=1668015612]
+layout_mode = 2
+size_flags_horizontal = 3
+title = "Name"
+
+[node name="TextEdit" type="TextEdit" parent="VBoxContainer/ScrollContainer/KeywordContainer/FoldableContainer" unique_id=559024417]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+placeholder_text = "Description"
+
+[node name="FoldableContainer2" type="FoldableContainer" parent="VBoxContainer/ScrollContainer/KeywordContainer" unique_id=976201319]
+layout_mode = 2
+size_flags_horizontal = 3
+title = "Name"
+
+[node name="TextEdit" type="TextEdit" parent="VBoxContainer/ScrollContainer/KeywordContainer/FoldableContainer2" unique_id=1911666640]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+placeholder_text = "Description"
+
+[node name="FoldableContainer3" type="FoldableContainer" parent="VBoxContainer/ScrollContainer/KeywordContainer" unique_id=56483910]
+layout_mode = 2
+size_flags_horizontal = 3
+title = "Name"
+
+[node name="TextEdit" type="TextEdit" parent="VBoxContainer/ScrollContainer/KeywordContainer/FoldableContainer3" unique_id=753008695]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+placeholder_text = "Description"
+
+[node name="FoldableContainer4" type="FoldableContainer" parent="VBoxContainer/ScrollContainer/KeywordContainer" unique_id=291297533]
+layout_mode = 2
+size_flags_horizontal = 3
+title = "Name"
+
+[node name="TextEdit" type="TextEdit" parent="VBoxContainer/ScrollContainer/KeywordContainer/FoldableContainer4" unique_id=1576826419]
+custom_minimum_size = Vector2(200, 100)
+layout_mode = 2
+placeholder_text = "Description"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=634651484]
+layout_mode = 2
+
+[node name="StatusLabel" type="RichTextLabel" parent="VBoxContainer/HBoxContainer2" unique_id=685195483]
+unique_name_in_owner = true
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=#aaaaaa][pulse]Status[/pulse][/color]"
+fit_content = true
+autowrap_mode = 0

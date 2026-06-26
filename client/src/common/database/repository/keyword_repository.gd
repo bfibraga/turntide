@@ -13,18 +13,15 @@ func open() -> Result:
 func setup() -> void:
 	# Populate with common keywords
 	_data = {
+		"Bargain": "You may sacrifice an artifact, enchantment or token as you cast this spell",
+		"Convoke": "Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.",
 		"Flying" : "This creature can't be blocked except by creatures with flying and/or reach.",
 		"Haste"  : "This creature can attack and {T} as soon as it comes under your control.",
 		"Trample": "This creature can deal excess combat damage to the player or planeswalker it's attacking.",
-	
-		"Convoke": "Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color."
+		"Vigilance": "Attacking doesn't cause this creature to tap.",
 	}
 
 func find(keyword_name: String) -> Result:
-	#var description_opt: Option = Option.dict_get(_data, keyword_name)
-	#
-	#return Result.new({ "name": keyword_name, "description": description }, description != null)
-	
 	return Option.dict_get(_data, keyword_name) \
 		.ok_or(null) \
 		.map(func(description: String) -> Dictionary: return { "name": keyword_name, "description": description })

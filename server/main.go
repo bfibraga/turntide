@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+
 	//"path/filepath"
 	"strings"
 
@@ -27,13 +28,13 @@ const (
 
 var (
 	defaultConfig = NewConfig(
-		4000, "./data/server.db",
+		4000, "./data",
 		strings.Join([]string{dockerMountedCertsDir, "dev.turntide.bfibraga.me.pem"}, "/"),
 		strings.Join([]string{dockerMountedCertsDir, "dev.turntide.bfibraga.me-key.pem"}, "/"),
 		"./client/html5",
 		slog.Default(),
 	)
-	configPath    = flag.String("config", ".env.dev", "path to the config file")
+	configPath = flag.String("config", ".env.dev", "path to the config file")
 )
 
 func main() {
@@ -44,42 +45,42 @@ func main() {
 		WithLevel(slog.LevelDebug).
 		Build()
 	slog.SetDefault(logger)
+	defaultConfig.SetLogger(logger)
 
 	// Load config
 	flag.Parse()
 
 	err := godotenv.Load(*configPath)
+	if err != nil {
+		logger.Warn("no config file found, using defaults", "path", *configPath, "error", err)
+	}
+
 	cfg, err := LoadConfig(defaultConfig)
 	if err != nil {
-		logger.Error("failed to load config file, defaulting to env vars", "error", err)
-	}
-	cfg.DBPath, err = cfg.coalescePaths(cfg.DBPath, dockerMountedDataDir, ".")
-	if err != nil {
-		logger.Error("failed to coalesce paths", "error", err)
+		logger.Error("failed to load config", "error", err)
 		os.Exit(1)
 	}
 
+	if cfg.DBPath == "" {
+		cfg.DBPath, err = cfg.coalescePaths(dockerMountedDataDir, ".")
+		if err != nil {
+			logger.Error("failed to resolve database path", "error", err)
+			os.Exit(1)
+		}
+	}
+
 	// Setup server factory, repositories and services
-	factory, err := repository.NewServerFactory(cfg.DBPath + "/server.db", logger)
+	factory, err := repository.NewServerFactory(cfg.DBPath+"/server.db", logger)
 	if err != nil {
-		logger.Error("failed to create server factory of the following path " + cfg.DBPath, "error", err)
+		logger.Error("failed to create server factory of the following path "+cfg.DBPath, "error", err)
 		os.Exit(1)
 	}
 
 	userRepo := factory.CreateUserRepository()
 	userService := user.NewService(userRepo)
 
-	// Initialize hub
 	hub := server.NewHub(logger, userService, components.DefaultLobbyConfig())
 	hub.Initialize()
-
-	// Define handler for serving the client HTML5 page
-  /*exportPath, err := cfg.coalescePaths(cfg.ClientHTML5Path, filepath.Join(cfg.DBPath, "html5"))
-  if err != nil {
-  	logger.Error("failed to coalesce paths", "error", err)
-  	os.Exit(1)
-  }
-	http.Handle("/", addHTML5ExportHeaders(http.StripPrefix("/", http.FileServer(http.Dir(exportPath)))))*/
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		hub.Serve(clients.NewWebSocketClient, w, r)
@@ -93,7 +94,7 @@ func main() {
 	cfg.CertPath, err = cfg.coalescePaths(cfg.CertPath)
 	cfg.KeyPath, err = cfg.coalescePaths(cfg.KeyPath)
 	if err != nil {
-		logger.Warn("failed to coalesce certification paths", "error", err)	
+		logger.Warn("failed to coalesce certification paths", "error", err)
 	}
 
 	logger.Info(fmt.Sprintf("Starting the server at %s", addr))
@@ -110,7 +111,6 @@ func main() {
 			os.Exit(1)
 		}
 	}
-
 }
 
 // addHTML5ExportHeaders sets the Cross-Origin-Opener-Policy and Cross-Origin-Embedder-Policy headers to enable HTML5 export functionality

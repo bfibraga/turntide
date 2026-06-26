@@ -5,9 +5,11 @@
 [ext_resource type="Script" uid="uid://bb7fyweedqc0w" path="res://src/card/container/card_container_manager.gd" id="2_hqyfx"]
 [ext_resource type="Shader" uid="uid://sn08m4hl2hyx" path="res://assets/shaders/background/fractal_background.gdshader" id="3_ccgli"]
 [ext_resource type="PackedScene" uid="uid://bpeolwe1ggl3w" path="res://src/main/life_counter.tscn" id="4_c5afc"]
-[ext_resource type="Texture2D" uid="uid://bsdvhdnxicqae" path="res://assets/card/back/back_card.png" id="4_oiphq"]
+[ext_resource type="Texture2D" uid="uid://ndgwx01xn1rc" path="res://assets/card/back/back_card.png" id="4_oiphq"]
 [ext_resource type="Script" uid="uid://gbpeybhabdv1" path="res://src/card/container/library.gd" id="5_p6y70"]
+[ext_resource type="Texture2D" uid="uid://vcustbw1i1re" path="res://assets/mana_symbols/white/white_phyrexian_mana_symbol.png" id="6_1ihks"]
 [ext_resource type="Script" uid="uid://cfwl1uxgu7cv2" path="res://src/card/container/card_container.gd" id="6_ccgli"]
+[ext_resource type="Texture2D" uid="uid://bqubyy6soowg1" path="res://assets/mana_symbols/black/black_phyrexian_mana_symbol.png" id="7_sn4yo"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_c5afc"]
 resource_local_to_scene = true
@@ -25,6 +27,34 @@ corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sn4yo"]
+bg_color = Color(0, 0, 0, 0.19607843)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hqyfx"]
+shader = ExtResource("3_ccgli")
+shader_parameter/u_speed = 0.1
+shader_parameter/u_color_low = Color(0.51113236, 0.31132898, 0.24119967, 1)
+shader_parameter/u_color_mid_red = Color(0.48044944, 0.17176285, 0.15011314, 1)
+shader_parameter/u_color_high = Color(0.09239707, 0.09239706, 0.09239706, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1ihks"]
+shader = ExtResource("3_ccgli")
+shader_parameter/u_speed = 0.1
+shader_parameter/u_color_low = Color(0.3392141, 0.39799693, 0.19463336, 1)
+shader_parameter/u_color_mid_red = Color(0.12933552, 0.33358386, 0.24572271, 1)
+shader_parameter/u_color_high = Color(0.18000486, 0.18000486, 0.18000486, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sn4yo"]
+shader = ExtResource("3_ccgli")
+shader_parameter/u_speed = 0.1
+shader_parameter/u_color_low = Color(0.77254903, 0.6392157, 0.14117648, 1)
+shader_parameter/u_color_mid_red = Color(0.39076966, 0.25425798, 0.12472888, 1)
+shader_parameter/u_color_high = Color(0.21950102, 0.21950102, 0.21950102, 1)
+
 [sub_resource type="Curve" id="Curve_jdgky"]
 _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(0.5, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -40,6 +70,13 @@ _limits = [-1.0, 1.0, 0.0, 1.0]
 _data = [Vector2(0, -1), 0.0, 2.0, 0, 1, Vector2(1, 1), 2.0, 0.0, 1, 0]
 point_count = 2
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c5afc"]
+bg_color = Color(0.09803922, 0.09803922, 0.09803922, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
 [node name="Ingame" type="Control" unique_id=124049430 node_paths=PackedStringArray("hand", "library", "graveyard", "draw_button", "draw_7_button", "discard_button", "discard_hand_button")]
 layout_mode = 3
 anchors_preset = 15
@@ -51,8 +88,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_jdgky")
 hand = NodePath("HandLayer/Hand")
-library = NodePath("BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer3/VBoxContainer/Library")
-graveyard = NodePath("BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer3/VBoxContainer/Graveyard")
+library = NodePath("BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/HBoxContainer/VBoxContainer/Library")
+graveyard = NodePath("BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/HBoxContainer/VBoxContainer/Graveyard")
 draw_button = NodePath("UI/MarginContainer/VBoxContainer/HBoxContainer/Draw")
 draw_7_button = NodePath("UI/MarginContainer/VBoxContainer/HBoxContainer/Draw7")
 discard_button = NodePath("UI/MarginContainer/VBoxContainer/HBoxContainer/Discard")
@@ -80,6 +117,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
+columns = 2
 
 [node name="Battlefield" type="MarginContainer" parent="BattlefieldLayer/PlayerGrid" unique_id=276070972]
 layout_mode = 2
@@ -102,70 +140,94 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="Orientation" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer" unique_id=1586383292]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation" unique_id=607785910]
+[node name="HBoxContainer" type="HBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer" unique_id=607785910]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 10
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer" unique_id=864517822]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer3" unique_id=1331771032]
-custom_minimum_size = Vector2(85, 0)
+[node name="VBoxContainer" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/HBoxContainer" unique_id=1331771032]
+custom_minimum_size = Vector2(77, 0)
 layout_mode = 2
 size_flags_vertical = 3
+alignment = 2
 
-[node name="Library" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer3/VBoxContainer" unique_id=818540718 node_paths=PackedStringArray("card_container_manager")]
+[node name="Exile" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/HBoxContainer/VBoxContainer" unique_id=586983455 node_paths=PackedStringArray("card_container_manager")]
+self_modulate = Color(0, 0, 0, 0.39215687)
 layout_mode = 2
-size_flags_vertical = 3
 texture = ExtResource("4_oiphq")
-expand_mode = 2
+expand_mode = 5
+stretch_mode = 4
+script = ExtResource("6_ccgli")
+card_container_manager = NodePath("../../../../../../../CardContainerManager")
+
+[node name="TextureRect" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/HBoxContainer/VBoxContainer/Exile" unique_id=967404225]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(20, 20)
+texture = ExtResource("6_1ihks")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="Graveyard" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/HBoxContainer/VBoxContainer" unique_id=80609340 node_paths=PackedStringArray("card_container_manager")]
+self_modulate = Color(0, 0, 0, 0.39215687)
+layout_mode = 2
+texture = ExtResource("4_oiphq")
+expand_mode = 5
+stretch_mode = 4
+script = ExtResource("6_ccgli")
+card_container_manager = NodePath("../../../../../../../CardContainerManager")
+
+[node name="TextureRect2" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/HBoxContainer/VBoxContainer/Graveyard" unique_id=1771191044]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(20, 20)
+texture = ExtResource("7_sn4yo")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="Library" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/HBoxContainer/VBoxContainer" unique_id=818540718 node_paths=PackedStringArray("card_container_manager")]
+layout_mode = 2
+texture = ExtResource("4_oiphq")
+expand_mode = 5
 stretch_mode = 4
 script = ExtResource("5_p6y70")
-card_container_manager = NodePath("../../../../../../../../../CardContainerManager")
+card_container_manager = NodePath("../../../../../../../CardContainerManager")
 
-[node name="Graveyard" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer3/VBoxContainer" unique_id=80609340 node_paths=PackedStringArray("card_container_manager")]
-layout_mode = 2
-size_flags_vertical = 3
-texture = ExtResource("4_oiphq")
-expand_mode = 2
-stretch_mode = 4
-script = ExtResource("6_ccgli")
-card_container_manager = NodePath("../../../../../../../../../CardContainerManager")
-
-[node name="Exile" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer3/VBoxContainer" unique_id=586983455 node_paths=PackedStringArray("card_container_manager")]
-layout_mode = 2
-size_flags_vertical = 3
-texture = ExtResource("4_oiphq")
-expand_mode = 2
-stretch_mode = 4
-script = ExtResource("6_ccgli")
-card_container_manager = NodePath("../../../../../../../../../CardContainerManager")
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer3" unique_id=1713153929]
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer" unique_id=1558866398]
+[node name="VBoxContainer2" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/HBoxContainer" unique_id=1558866398]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Lands" type="HBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer2" unique_id=901766443]
+[node name="Lands" type="PanelContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/HBoxContainer/VBoxContainer2" unique_id=110987633]
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sn4yo")
 
-[node name="Creatures" type="HBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer2" unique_id=1413405026]
+[node name="Battlefield" type="PanelContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/HBoxContainer/VBoxContainer2" unique_id=277063923]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_sn4yo")
 
-[node name="VBoxContainer4" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer" unique_id=143472817]
-layout_mode = 2
-
-[node name="Life Counter" parent="BattlefieldLayer/PlayerGrid/Battlefield/MarginContainer/Orientation/HBoxContainer/VBoxContainer4" unique_id=974741975 instance=ExtResource("4_c5afc")]
-layout_mode = 2
-
-[node name="Battlefield2" type="MarginContainer" parent="BattlefieldLayer/PlayerGrid" unique_id=1772718269]
+[node name="Battlefield2" type="MarginContainer" parent="BattlefieldLayer/PlayerGrid" unique_id=146935220]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -174,67 +236,321 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="Background" type="Panel" parent="BattlefieldLayer/PlayerGrid/Battlefield2" unique_id=779772357]
-material = SubResource("ShaderMaterial_c5afc")
+[node name="Background" type="Panel" parent="BattlefieldLayer/PlayerGrid/Battlefield2" unique_id=1703313690]
+material = SubResource("ShaderMaterial_hqyfx")
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_hqyfx")
 
-[node name="MarginContainer" type="MarginContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield2" unique_id=2104830820]
+[node name="MarginContainer" type="MarginContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield2" unique_id=1072359614]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="Orientation" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer" unique_id=342878043]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/Orientation" unique_id=1570584304]
+[node name="HBoxContainer" type="HBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer" unique_id=933876937]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 10
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/Orientation/HBoxContainer" unique_id=1611129181]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/Orientation/HBoxContainer/VBoxContainer3" unique_id=852306252]
-custom_minimum_size = Vector2(85, 0)
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Library" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/Orientation/HBoxContainer/VBoxContainer3/VBoxContainer" unique_id=891711544 node_paths=PackedStringArray("card_container_manager")]
-layout_mode = 2
-size_flags_vertical = 3
-texture = ExtResource("4_oiphq")
-expand_mode = 3
-stretch_mode = 4
-script = ExtResource("5_p6y70")
-card_container_manager = NodePath("../../../../../../../../../CardContainerManager")
-
-[node name="Graveyard" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/Orientation/HBoxContainer/VBoxContainer3/VBoxContainer" unique_id=1658821910 node_paths=PackedStringArray("card_container_manager")]
-layout_mode = 2
-size_flags_vertical = 3
-texture = ExtResource("4_oiphq")
-expand_mode = 3
-stretch_mode = 4
-script = ExtResource("6_ccgli")
-card_container_manager = NodePath("../../../../../../../../../CardContainerManager")
-
-[node name="Exile" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/Orientation/HBoxContainer/VBoxContainer3/VBoxContainer" unique_id=812482753 node_paths=PackedStringArray("card_container_manager")]
-layout_mode = 2
-size_flags_vertical = 3
-texture = ExtResource("4_oiphq")
-expand_mode = 3
-stretch_mode = 4
-script = ExtResource("6_ccgli")
-card_container_manager = NodePath("../../../../../../../../../CardContainerManager")
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/Orientation/HBoxContainer/VBoxContainer3" unique_id=501508890]
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/Orientation/HBoxContainer" unique_id=685026959]
+[node name="VBoxContainer2" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/HBoxContainer" unique_id=107268626]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="Lands" type="Panel" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/HBoxContainer/VBoxContainer2" unique_id=2086471630]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sn4yo")
+
+[node name="Battlefield" type="Panel" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/HBoxContainer/VBoxContainer2" unique_id=944244304]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_sn4yo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/HBoxContainer" unique_id=1697325485]
+custom_minimum_size = Vector2(77, 0)
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 2
+
+[node name="Exile" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/HBoxContainer/VBoxContainer" unique_id=779495769 node_paths=PackedStringArray("card_container_manager")]
+self_modulate = Color(0, 0, 0, 0.39215687)
+layout_mode = 2
+texture = ExtResource("4_oiphq")
+expand_mode = 5
+stretch_mode = 4
+script = ExtResource("6_ccgli")
+card_container_manager = NodePath("../../../../../../../CardContainerManager")
+
+[node name="TextureRect" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/HBoxContainer/VBoxContainer/Exile" unique_id=2042132366]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(20, 20)
+texture = ExtResource("6_1ihks")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="Graveyard" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1288605058 node_paths=PackedStringArray("card_container_manager")]
+self_modulate = Color(0, 0, 0, 0.39215687)
+layout_mode = 2
+texture = ExtResource("4_oiphq")
+expand_mode = 5
+stretch_mode = 4
+script = ExtResource("6_ccgli")
+card_container_manager = NodePath("../../../../../../../CardContainerManager")
+
+[node name="TextureRect2" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/HBoxContainer/VBoxContainer/Graveyard" unique_id=1663787151]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(20, 20)
+texture = ExtResource("7_sn4yo")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="Library" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield2/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1052769616 node_paths=PackedStringArray("card_container_manager")]
+layout_mode = 2
+texture = ExtResource("4_oiphq")
+expand_mode = 5
+stretch_mode = 4
+script = ExtResource("5_p6y70")
+card_container_manager = NodePath("../../../../../../../CardContainerManager")
+
+[node name="Battlefield3" type="MarginContainer" parent="BattlefieldLayer/PlayerGrid" unique_id=184922477]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Background" type="Panel" parent="BattlefieldLayer/PlayerGrid/Battlefield3" unique_id=641766313]
+material = SubResource("ShaderMaterial_1ihks")
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hqyfx")
+
+[node name="MarginContainer" type="MarginContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield3" unique_id=1127050132]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield3/MarginContainer" unique_id=1251419855]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield3/MarginContainer/HBoxContainer" unique_id=512721037]
+custom_minimum_size = Vector2(77, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Library" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield3/MarginContainer/HBoxContainer/VBoxContainer" unique_id=579158226 node_paths=PackedStringArray("card_container_manager")]
+layout_mode = 2
+texture = ExtResource("4_oiphq")
+expand_mode = 5
+stretch_mode = 4
+script = ExtResource("5_p6y70")
+card_container_manager = NodePath("../../../../../../../CardContainerManager")
+
+[node name="Graveyard" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield3/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1182229448 node_paths=PackedStringArray("card_container_manager")]
+self_modulate = Color(0, 0, 0, 0.39215687)
+layout_mode = 2
+texture = ExtResource("4_oiphq")
+expand_mode = 5
+stretch_mode = 4
+script = ExtResource("6_ccgli")
+card_container_manager = NodePath("../../../../../../../CardContainerManager")
+
+[node name="TextureRect2" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield3/MarginContainer/HBoxContainer/VBoxContainer/Graveyard" unique_id=1693776642]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(20, 20)
+texture = ExtResource("7_sn4yo")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="Exile" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield3/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1477159724 node_paths=PackedStringArray("card_container_manager")]
+self_modulate = Color(0, 0, 0, 0.39215687)
+layout_mode = 2
+texture = ExtResource("4_oiphq")
+expand_mode = 5
+stretch_mode = 4
+script = ExtResource("6_ccgli")
+card_container_manager = NodePath("../../../../../../../CardContainerManager")
+
+[node name="TextureRect" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield3/MarginContainer/HBoxContainer/VBoxContainer/Exile" unique_id=556149667]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(20, 20)
+texture = ExtResource("6_1ihks")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield3/MarginContainer/HBoxContainer" unique_id=674334709]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Battlefield" type="Panel" parent="BattlefieldLayer/PlayerGrid/Battlefield3/MarginContainer/HBoxContainer/VBoxContainer2" unique_id=1465277694]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_sn4yo")
+
+[node name="Lands" type="Panel" parent="BattlefieldLayer/PlayerGrid/Battlefield3/MarginContainer/HBoxContainer/VBoxContainer2" unique_id=710071798]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sn4yo")
+
+[node name="Battlefield4" type="MarginContainer" parent="BattlefieldLayer/PlayerGrid" unique_id=181432062]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Background" type="Panel" parent="BattlefieldLayer/PlayerGrid/Battlefield4" unique_id=1405154932]
+material = SubResource("ShaderMaterial_sn4yo")
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hqyfx")
+
+[node name="MarginContainer" type="MarginContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield4" unique_id=2137318714]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield4/MarginContainer" unique_id=1783974451]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield4/MarginContainer/HBoxContainer" unique_id=1968900917]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Battlefield" type="Panel" parent="BattlefieldLayer/PlayerGrid/Battlefield4/MarginContainer/HBoxContainer/VBoxContainer2" unique_id=1966624768]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_sn4yo")
+
+[node name="Lands" type="Panel" parent="BattlefieldLayer/PlayerGrid/Battlefield4/MarginContainer/HBoxContainer/VBoxContainer2" unique_id=483772323]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sn4yo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield4/MarginContainer/HBoxContainer" unique_id=1987359080]
+custom_minimum_size = Vector2(77, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Library" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield4/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1556216409 node_paths=PackedStringArray("card_container_manager")]
+layout_mode = 2
+texture = ExtResource("4_oiphq")
+expand_mode = 5
+stretch_mode = 4
+script = ExtResource("5_p6y70")
+card_container_manager = NodePath("../../../../../../../CardContainerManager")
+
+[node name="Graveyard" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield4/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1134585673 node_paths=PackedStringArray("card_container_manager")]
+self_modulate = Color(0, 0, 0, 0.39215687)
+layout_mode = 2
+texture = ExtResource("4_oiphq")
+expand_mode = 5
+stretch_mode = 4
+script = ExtResource("6_ccgli")
+card_container_manager = NodePath("../../../../../../../CardContainerManager")
+
+[node name="TextureRect2" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield4/MarginContainer/HBoxContainer/VBoxContainer/Graveyard" unique_id=1816638195]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(20, 20)
+texture = ExtResource("7_sn4yo")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="Exile" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield4/MarginContainer/HBoxContainer/VBoxContainer" unique_id=483492254 node_paths=PackedStringArray("card_container_manager")]
+self_modulate = Color(0, 0, 0, 0.39215687)
+layout_mode = 2
+texture = ExtResource("4_oiphq")
+expand_mode = 5
+stretch_mode = 4
+script = ExtResource("6_ccgli")
+card_container_manager = NodePath("../../../../../../../CardContainerManager")
+
+[node name="TextureRect" type="TextureRect" parent="BattlefieldLayer/PlayerGrid/Battlefield4/MarginContainer/HBoxContainer/VBoxContainer/Exile" unique_id=1265765099]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(20, 20)
+texture = ExtResource("6_1ihks")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="Orientation" type="VBoxContainer" parent="BattlefieldLayer/PlayerGrid/Battlefield4/MarginContainer" unique_id=250241619]
+layout_mode = 2
 
 [node name="HandLayer" type="CanvasLayer" parent="." unique_id=689819661]
 layer = 2
@@ -302,3 +618,35 @@ text = "Discard"
 [node name="Discard Hand" type="Button" parent="UI/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1292019203]
 layout_mode = 2
 text = "Discard Hand"
+
+[node name="PanelContainer" type="PanelContainer" parent="UI" unique_id=303793628]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -50.0
+offset_right = 100.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_c5afc")
+
+[node name="Grid" type="GridContainer" parent="UI/PanelContainer" unique_id=2103839039]
+layout_mode = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 2
+
+[node name="Life Counter" parent="UI/PanelContainer/Grid" unique_id=974741975 instance=ExtResource("4_c5afc")]
+layout_mode = 2
+
+[node name="Life Counter2" parent="UI/PanelContainer/Grid" unique_id=988145971 instance=ExtResource("4_c5afc")]
+layout_mode = 2
+
+[node name="Life Counter3" parent="UI/PanelContainer/Grid" unique_id=257958183 instance=ExtResource("4_c5afc")]
+layout_mode = 2
+
+[node name="Life Counter4" parent="UI/PanelContainer/Grid" unique_id=357854311 instance=ExtResource("4_c5afc")]
+layout_mode = 2

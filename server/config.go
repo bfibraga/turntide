@@ -10,43 +10,56 @@ import (
 )
 
 type Config struct {
-	Port   int
-	DBPath string
-	CertPath string
-	KeyPath string
+	Port            int
+	DBPath          string
+	CertPath        string
+	KeyPath         string
 	ClientHTML5Path string
-	
-	// Logger is the logger to use for the server.
+
 	Logger *slog.Logger
 }
 
 func NewConfig(port int, dbPath, certPath, keyPath, clientHTML5Path string, logger *slog.Logger) *Config {
 	return &Config{
-		Port: port,
-		DBPath: dbPath,
-		CertPath: certPath,
-		KeyPath: keyPath,
+		Port:            port,
+		DBPath:          dbPath,
+		CertPath:        certPath,
+		KeyPath:         keyPath,
 		ClientHTML5Path: clientHTML5Path,
-		Logger: logger,
+		Logger:          logger,
 	}
 }
 
 func LoadConfig(defaultCfg *Config) (*Config, error) {
- 	var err error
+	var err error
 	cfg := defaultCfg
 
-	cfg.Port, err = strconv.Atoi(os.Getenv("SERVER_PORT"))
-	if err != nil {
-		return nil, err
+	portStr := os.Getenv("SERVER_PORT")
+	if portStr != "" {
+		cfg.Port, err = strconv.Atoi(portStr)
+		if err != nil {
+			return nil, err
+		}
 	}
-	
-	cfg.DBPath = os.Getenv("SERVER_DATA_PATH")
-	cfg.CertPath = os.Getenv("SERVER_CERT_PATH")
-	cfg.KeyPath = os.Getenv("SERVER_KEY_PATH")
 
-	cfg.ClientHTML5Path = os.Getenv("CLIENT_HTML5_PATH")
+	if envDBPath := os.Getenv("SERVER_DATA_PATH"); envDBPath != "" {
+		cfg.DBPath = envDBPath
+	}
+	if envCertPath := os.Getenv("SERVER_CERT_PATH"); envCertPath != "" {
+		cfg.CertPath = envCertPath
+	}
+	if envKeyPath := os.Getenv("SERVER_KEY_PATH"); envKeyPath != "" {
+		cfg.KeyPath = envKeyPath
+	}
+	if envClientPath := os.Getenv("CLIENT_HTML5_PATH"); envClientPath != "" {
+		cfg.ClientHTML5Path = envClientPath
+	}
 
 	return cfg, nil
+}
+
+func (cfg *Config) SetLogger(logger *slog.Logger) {
+	cfg.Logger = logger
 }
 
 func (cfg *Config) resolveLiveCertsPath(certPath string, fallbackPaths ...string) (string, error) {
@@ -54,7 +67,7 @@ func (cfg *Config) resolveLiveCertsPath(certPath string, fallbackPaths ...string
 	pathComponents := strings.Split(normalizedPath, "/live/")
 
 	if len(pathComponents) >= 2 {
-		pathTail := pathComponents[len(pathComponents) - 1]
+		pathTail := pathComponents[len(pathComponents)-1]
 
 		return cfg.coalescePaths(append(fallbackPaths, pathTail)...)
 	}

@@ -26,39 +26,53 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ccgli")
 script = ExtResource("1_vkvxy")
 
-[node name="VBoxContainer" type="HBoxContainer" parent="." unique_id=2109210671]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=436823436]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-alignment = 1
-
-[node name="Plus" type="Button" parent="VBoxContainer" unique_id=497143245]
-unique_name_in_owner = true
-layout_mode = 2
-text = "+"
-flat = true
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=436823436]
-layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="Life" type="RichTextLabel" parent="VBoxContainer/HBoxContainer" unique_id=775499234]
+[node name="Life" type="RichTextLabel" parent="HBoxContainer" unique_id=775499234]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 bbcode_enabled = true
-text = "[color=white][font_size=26][b]25[/b][/font_size][/color]"
+text = "[color=white][font_size=26][b]20[/b][/font_size][/color]"
 fit_content = true
 autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Minus" type="Button" parent="VBoxContainer" unique_id=2068439354]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Life" unique_id=2087657148]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="HBoxContainer" type="VBoxContainer" parent="HBoxContainer/Life/VBoxContainer" unique_id=262649141]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="Plus" type="Button" parent="HBoxContainer/Life/VBoxContainer/HBoxContainer" unique_id=497143245]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 3
+text = "+"
+flat = true
+
+[node name="Minus" type="Button" parent="HBoxContainer/Life/VBoxContainer/HBoxContainer" unique_id=2068439354]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
 text = "-"
 flat = true
 icon_alignment = 1

@@ -1,4 +1,4 @@
-class_name UrlBuilder
+class_name URL
 extends RefCounted
 
 var _scheme: String = ""
@@ -7,26 +7,26 @@ var _port: int = -1
 var _path_parts: Array[String] = []
 var _query_params: Dictionary = {}
 
-func scheme(value: String) -> UrlBuilder:
+func scheme(value: String) -> URL:
 	_scheme = value
 	return self
 
-func host(value: String) -> UrlBuilder:
+func host(value: String) -> URL:
 	_host = value
 	return self
 
-func port(value: int) -> UrlBuilder:
+func port(value: int) -> URL:
 	_port = value
 	return self
 
-func path(segment: String) -> UrlBuilder:
+func path(segment: String) -> URL:
 	if segment.is_empty():
 		return self
 	var cleaned := segment.trim_prefix("/")
 	_path_parts.append(cleaned)
 	return self
 
-func query(key: String, value: String) -> UrlBuilder:
+func query(key: String, value: String) -> URL:
 	_query_params[key] = value
 	return self
 
@@ -70,7 +70,7 @@ func _to_string() -> String:
 	return build()
 
 func _eq(other) -> bool:
-	if other is UrlBuilder:
+	if other is URL:
 		return build() == other.build()
 	elif other is String:
 		return build() == other
@@ -79,14 +79,14 @@ func _eq(other) -> bool:
 func _hash() -> int:
 	return build().hash()
 
-static func ws() -> UrlBuilder:
-	return UrlBuilder.new().scheme("ws")
+static func ws() -> URL:
+	return URL.new().scheme("ws")
 
-static func wss() -> UrlBuilder:
-	return UrlBuilder.new().scheme("wss")
+static func wss() -> URL:
+	return URL.new().scheme("wss")
 
-static func http() -> UrlBuilder:
-	return UrlBuilder.new().scheme("http")
+static func http() -> URL:
+	return URL.new().scheme("http")
 
-static func https() -> UrlBuilder:
-	return UrlBuilder.new().scheme("https")
+static func https() -> URL:
+	return URL.new().scheme("https")

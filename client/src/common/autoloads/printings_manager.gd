@@ -4,11 +4,7 @@ signal card_printing_ready(key: String, path: String)
 
 const IMAGES_PATH: String = "user://cache/images/"
 const TRACKER_FILE: String = "user://cache/printings.json"
-#const DB_PATH: String = CardRepository.DEFAULT_DB_PATH
 const MAX_CONCURRENT_DOWNLOADS: int = 10
-
-#const _ScryfallProvider = preload("res://src/common/download/providers/scryfall.gd")
-#const _MTGJSONProvider = preload("res://src/common/download/providers/mtgjson.gd")
 
 var _registry: Dictionary = {}
 var _registry_mutex: Mutex = Mutex.new()
@@ -18,7 +14,6 @@ var _active_requests: int = 0
 func _init() -> void:
 	load_tracker()
 	DirAccess.make_dir_recursive_absolute(IMAGES_PATH)
-	#ensure_db_ready()
 
 func get_card_info(key: String) -> Dictionary:
 	_registry_mutex.lock()
@@ -56,13 +51,7 @@ func _start_image_download(card_data: CardData, key: String) -> void:
 
 	var image_path: String = get_image_path(card_data)
 	var url: String = ScryfallProvider.build_image_url(card_data.scryfallId)
-
-	#http.download_file = ProjectSettings.globalize_path(image_path)
-	#http.request_completed.connect(
-		#_on_image_downloaded.bind(http, card_data, key, image_path)
-	#)
-	#http.request(url)
-	
+		
 	HttpRequestManager.request(
 		func(http: HTTPRequest) -> void:
 			http.download_file = ProjectSettings.globalize_path(image_path),

@@ -9,11 +9,116 @@ grow_vertical = 2
 tab_alignment = 1
 current_tab = 1
 
-[node name="Control" type="CenterContainer" parent="." unique_id=1438301776]
+[node name="Video" type="MarginContainer" parent="." unique_id=547791055]
 visible = false
 layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 metadata/_tab_index = 0
 
-[node name="Graphics" type="CenterContainer" parent="." unique_id=1649618017]
+[node name="VBoxContainer" type="VBoxContainer" parent="Video" unique_id=796594941]
 layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Resolution" type="HBoxContainer" parent="Video/VBoxContainer" unique_id=1988517732]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Video/VBoxContainer/Resolution" unique_id=1631779900]
+layout_mode = 2
+text = "Resolution"
+fit_content = true
+autowrap_mode = 0
+
+[node name="ResolutionOption" type="OptionButton" parent="Video/VBoxContainer/Resolution" unique_id=1638141447]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Window Mode" type="HBoxContainer" parent="Video/VBoxContainer" unique_id=885516911]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Video/VBoxContainer/Window Mode" unique_id=599771870]
+layout_mode = 2
+text = "Window Mode"
+fit_content = true
+autowrap_mode = 0
+
+[node name="WindowModeOption" type="OptionButton" parent="Video/VBoxContainer/Window Mode" unique_id=1713503463]
+layout_mode = 2
+size_flags_horizontal = 8
+selected = 0
+item_count = 3
+popup/item_0/text = "Window"
+popup/item_0/id = 0
+popup/item_1/text = "Borderless"
+popup/item_1/id = 1
+popup/item_2/text = "Fullscreen"
+popup/item_2/id = 2
+
+[node name="Audio" type="MarginContainer" parent="." unique_id=2146855791]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 metadata/_tab_index = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Audio" unique_id=1459988269]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Master" type="HBoxContainer" parent="Audio/VBoxContainer" unique_id=975497034]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Audio/VBoxContainer/Master" unique_id=270943733]
+layout_mode = 2
+text = "Master"
+fit_content = true
+autowrap_mode = 0
+
+[node name="HSlider" type="HSlider" parent="Audio/VBoxContainer/Master" unique_id=618716053]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Music" type="HBoxContainer" parent="Audio/VBoxContainer" unique_id=1881727775]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Audio/VBoxContainer/Music" unique_id=485355383]
+layout_mode = 2
+text = "Music"
+fit_content = true
+autowrap_mode = 0
+
+[node name="HSlider" type="HSlider" parent="Audio/VBoxContainer/Music" unique_id=383952833]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="SFX" type="HBoxContainer" parent="Audio/VBoxContainer" unique_id=908785667]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Audio/VBoxContainer/SFX" unique_id=387317088]
+layout_mode = 2
+text = "SFX"
+fit_content = true
+autowrap_mode = 0
+
+[node name="HSlider" type="HSlider" parent="Audio/VBoxContainer/SFX" unique_id=1639898923]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Control" type="MarginContainer" parent="." unique_id=1398006323]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2

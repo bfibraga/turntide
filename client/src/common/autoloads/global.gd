@@ -11,6 +11,7 @@ var deck_format_manager: FormatManager
 var printings_manager: PrintingsManager
 
 var client_id : int = -1
+var config: Config
 
 func _init() -> void:
 	if not logger:

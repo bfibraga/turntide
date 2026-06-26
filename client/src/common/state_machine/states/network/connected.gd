@@ -16,9 +16,9 @@ func _ready() -> void:
 	WS.packet_received.connect(_on_ws_packet_received)
 	
 	# Connect to server
-	var url : String = UrlBuilder.ws() \
-		#.host("dev.turntide.bfibraga.me") \
-		.host("localhost") \
+	var url : String = URL.wss() \
+		.host("dev.turntide.bfibraga.me") \
+		#.host("localhost") \
 		.port(4000) \
 		.path("ws") \
 		.build()

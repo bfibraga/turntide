@@ -16,8 +16,5 @@ func _init(compute: Callable, dependencies: Array[Reactive], initial_owner: Reac
 	for dep: Reactive in _dependencies:
 		dep.reactive_changed.connect(_propagate)
 
-func _propagate(_reactive: Reactive = null) -> void:
-	reactive_changed.emit(self)
-
 func manually_emit() -> void:
 	reactive_changed.emit(self)
