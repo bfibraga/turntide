@@ -461,8 +461,12 @@ func (x *LobbyData) GetMaxPlayers() int32 {
 type ListLobbiesRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Pagination
-	Page          int32 `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
-	PageSize      int32 `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	Page     int32 `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
+	PageSize int32 `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	// Filters
+	Name          string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	Format        string `protobuf:"bytes,4,opt,name=format,proto3" json:"format,omitempty"`
+	State         int32  `protobuf:"varint,5,opt,name=state,proto3" json:"state,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -507,6 +511,27 @@ func (x *ListLobbiesRequest) GetPage() int32 {
 func (x *ListLobbiesRequest) GetPageSize() int32 {
 	if x != nil {
 		return x.PageSize
+	}
+	return 0
+}
+
+func (x *ListLobbiesRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ListLobbiesRequest) GetFormat() string {
+	if x != nil {
+		return x.Format
+	}
+	return ""
+}
+
+func (x *ListLobbiesRequest) GetState() int32 {
+	if x != nil {
+		return x.State
 	}
 	return 0
 }
@@ -798,10 +823,13 @@ const file_packets_proto_rawDesc = "" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12'\n" +
 	"\x0fcurrent_players\x18\x02 \x01(\x05R\x0ecurrentPlayers\x12\x1f\n" +
 	"\vmax_players\x18\x03 \x01(\x05R\n" +
-	"maxPlayers\"E\n" +
+	"maxPlayers\"\x87\x01\n" +
 	"\x12ListLobbiesRequest\x12\x12\n" +
 	"\x04page\x18\x01 \x01(\x05R\x04page\x12\x1b\n" +
-	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\"Y\n" +
+	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12\x16\n" +
+	"\x06format\x18\x04 \x01(\tR\x06format\x12\x14\n" +
+	"\x05state\x18\x05 \x01(\x05R\x05state\"Y\n" +
 	"\x13ListLobbiesResponse\x12\x14\n" +
 	"\x05count\x18\x01 \x01(\x05R\x05count\x12,\n" +
 	"\alobbies\x18\x02 \x03(\v2\x12.packets.LobbyDataR\alobbies\"\xe6\x04\n" +

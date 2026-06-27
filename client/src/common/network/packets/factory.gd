@@ -42,12 +42,21 @@ func new_register_request(username: String, password: String) -> packets.Packet:
 	
 # Lobby
 
-func new_list_lobbies_request(page: int = 1, page_size: int = 10) -> packets.Packet:
+func new_list_lobbies_request(
+	name: Option, format: Option, state: Option,
+	page: int = 1, page_size: int = 10,
+	) -> packets.Packet:
 	var packet : packets.Packet = packets.Packet.new()
 	var list_lobbies_request : packets.ListLobbiesRequest = packet.new_list_lobbies_request()
 	
 	list_lobbies_request.set_page(page)
 	list_lobbies_request.set_page_size(page_size)
+	
+	name.map(list_lobbies_request.set_name)
+	format.map(list_lobbies_request.set_format)
+	state.map(list_lobbies_request.set_state)
+	#list_lobbies_request.set_format(format)
+	#list_lobbies_request.set_state(state)
 	
 	return packet
 

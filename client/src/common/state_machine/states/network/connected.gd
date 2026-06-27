@@ -16,14 +16,14 @@ func _ready() -> void:
 	WS.packet_received.connect(_on_ws_packet_received)
 	
 	# Connect to server
-	var url : String = URL.wss() \
-		.host("dev.turntide.bfibraga.me") \
-		#.host("localhost") \
+	var url : String = URL.ws() \
+		#.host("dev.turntide.bfibraga.me") \
+		.host("localhost") \
 		.port(4000) \
 		.path("ws") \
 		.build()
 		
-	Global.logger.info("Connecting to %s" % url)
+	logger.info("Connecting to %s" % url)
 	WS.connect_to_url(url, TLSOptions.client())
 	
 func _on_ws_connected_to_server() -> void:

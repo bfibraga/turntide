@@ -46,7 +46,7 @@ func (h *Hub) Initialize() {
 			faker.FirstName(),
 			//fmt.Sprintf("Lobby %d", i),
 			faker.DomainName(),
-			"Format", 10, false, "",
+			"", 10, false, "",
 		)
 	}
 }

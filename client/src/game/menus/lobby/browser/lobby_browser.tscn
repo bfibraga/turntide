@@ -49,16 +49,17 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="Lobby Name" type="VBoxContainer" parent="HBoxContainer/TabContainer/VBoxContainer" unique_id=1182357798]
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer/TabContainer/VBoxContainer" unique_id=1182357798]
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/TabContainer/VBoxContainer/Lobby Name" unique_id=167201941]
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/TabContainer/VBoxContainer/VBoxContainer2" unique_id=167201941]
 layout_mode = 2
 text = "Search
 "
 fit_content = true
 
-[node name="LobbyNameSearch" type="LineEdit" parent="HBoxContainer/TabContainer/VBoxContainer/Lobby Name" unique_id=676327999]
+[node name="Lobby" type="LineEdit" parent="HBoxContainer/TabContainer/VBoxContainer/VBoxContainer2" unique_id=676327999]
+unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Search"
 script = ExtResource("1_yd7we")
@@ -72,19 +73,17 @@ layout_mode = 2
 text = "Format"
 fit_content = true
 
-[node name="FormatDropdown" type="OptionButton" parent="HBoxContainer/TabContainer/VBoxContainer/VBoxContainer" unique_id=2060276114]
+[node name="Format" type="OptionButton" parent="HBoxContainer/TabContainer/VBoxContainer/VBoxContainer" unique_id=1888280814]
+unique_name_in_owner = true
 layout_mode = 2
-item_count = 2
-popup/item_0/text = "Commander"
-popup/item_0/id = 0
-popup/item_1/text = "Standard"
-popup/item_1/id = 1
 
-[node name="AvailableCheckbox" type="CheckBox" parent="HBoxContainer/TabContainer/VBoxContainer" unique_id=1986920056]
+[node name="Available" type="CheckBox" parent="HBoxContainer/TabContainer/VBoxContainer" unique_id=1986920056]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Available"
 
-[node name="ShowPrivateCheckbox" type="CheckBox" parent="HBoxContainer/TabContainer/VBoxContainer" unique_id=1340726894]
+[node name="Private" type="CheckBox" parent="HBoxContainer/TabContainer/VBoxContainer" unique_id=1340726894]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Private"
 

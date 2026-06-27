@@ -1189,6 +1189,21 @@ class ListLobbiesRequest:
 		service.field = __page_size
 		data[__page_size.tag] = service
 		
+		__name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		service = PBServiceField.new()
+		service.field = __name
+		data[__name.tag] = service
+		
+		__format = PBField.new("format", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		service = PBServiceField.new()
+		service.field = __format
+		data[__format.tag] = service
+		
+		__state = PBField.new("state", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		service = PBServiceField.new()
+		service.field = __state
+		data[__state.tag] = service
+		
 	var data = {}
 	
 	var __page: PBField
@@ -1216,6 +1231,45 @@ class ListLobbiesRequest:
 		__page_size.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
 	func set_page_size(value : int) -> void:
 		__page_size.value = value
+	
+	var __name: PBField
+	func has_name() -> bool:
+		if __name.value != null:
+			return true
+		return false
+	func get_name() -> String:
+		return __name.value
+	func clear_name() -> void:
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_name(value : String) -> void:
+		__name.value = value
+	
+	var __format: PBField
+	func has_format() -> bool:
+		if __format.value != null:
+			return true
+		return false
+	func get_format() -> String:
+		return __format.value
+	func clear_format() -> void:
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__format.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_format(value : String) -> void:
+		__format.value = value
+	
+	var __state: PBField
+	func has_state() -> bool:
+		if __state.value != null:
+			return true
+		return false
+	func get_state() -> int:
+		return __state.value
+	func clear_state() -> void:
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		__state.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_state(value : int) -> void:
+		__state.value = value
 	
 	func _to_string() -> String:
 		return PBPacker.message_to_string(data)

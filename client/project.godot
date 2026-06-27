@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Turntide Client"
 run/main_scene="uid://c74205nfbvbkq"
-config/features=PackedStringArray("4.6", "GL Compatibility")
+config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/bg_color=Color(0.1344423, 0.13960707, 0.16745555, 1)
 boot_splash/show_image=false
 boot_splash/stretch_mode=0

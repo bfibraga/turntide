@@ -3,7 +3,6 @@ extends Control
 class SearchData extends Reactive:
 	var lobby_name: ReactiveValue = ReactiveValue.String("", self)
 	var format: ReactiveObject = ReactiveObject.new(null, self)
-	
 
 class PageData extends Reactive:
 	var page: ReactiveValue = ReactiveValue.Int(1, self)
@@ -12,17 +11,35 @@ class PageData extends Reactive:
 const LobbyItemScene: PackedScene = preload("res://src/common/components/lobby/item/lobby_item.tscn")
 const packets := preload("res://src/common/network/packets/packets.gd")
 
+var search_data: SearchData = SearchData.new()
 var page_data: PageData = PageData.new()
 
 @onready var create_button: Button = $%Create
 @onready var refresh_button: Button = %Refresh
 
+@onready var lobby_search_line_edit: SearchLineEdit = %Lobby
+@onready var format_option: OptionButton = %Format
+
 @onready var lobby_list: Control = $%LobbyList
 @onready var extensible_scroll_container: ExtensibleScrollContainer = %ExtensibleScrollContainer
 
 func _ready() -> void:
+	search_data.reactive_changed.connect(func(reactive: SearchData) -> void:
+		send_list_lobbies_request(
+			reactive.lobby_name.value,
+			reactive.format.value,
+			0,
+			page_data.page.value, page_data.page_size.value
+		)
+	)
+	
 	page_data.reactive_changed.connect(func(reactive: PageData) -> void:
-		send_list_lobbies_request(reactive.page.value, reactive.page_size.value)
+		send_list_lobbies_request(
+			search_data.lobby_name.value,
+			search_data.format.value,
+			0,
+			reactive.page.value, reactive.page_size.value
+		)
 	)
 	
 	WS.packet_received.connect(_on_ws_packet_received)
@@ -30,6 +47,13 @@ func _ready() -> void:
 	create_button.pressed.connect(_on_create_button_pressed)
 	refresh_button.pressed.connect(_on_refresh_button_pressed)
 	extensible_scroll_container.vertical_threshold_reached.connect(func() -> void: page_data.page.value += 1)
+	
+	lobby_search_line_edit.executed_search.connect(func(lobby_name: String) -> void:
+		search_data.lobby_name.value = lobby_name
+	)
+	format_option.item_selected.connect(func(index: int) -> void:
+		search_data.format.value = Global.deck_format_manager.formats.get(index - 1) if index > 0 else null
+	)
 	
 	page_data.manually_emit()
 	
@@ -81,8 +105,13 @@ func _on_refresh_button_pressed() -> void:
 	
 	page_data.page.value = 1
 
-func send_list_lobbies_request(page: int = 1, page_size: int = 10) -> void:
-	var packet: packets.Packet = PacketFactory.new_list_lobbies_request(page, page_size)
+func send_list_lobbies_request(
+	name: String, format: BaseFormat, state: int,
+	page: int = 1, page_size: int = 10) -> void:
+	var packet: packets.Packet = PacketFactory.new_list_lobbies_request(
+		Option.new(name), Option.new(format.display_name() if format else null), Option.new(state),
+		page, page_size
+	)
 	WS.send(packet)
 
 func join_lobby(lobby_id: int) -> void:

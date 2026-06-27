@@ -3,6 +3,7 @@ package components
 import (
 	"crypto/sha256"
 	"fmt"
+	"strings"
 	"sync"
 	"time"
 
@@ -237,14 +238,19 @@ type ListLobbiesOptions struct {
 	Page     int
 	PageSize int
 
-	Filters []ListLobbyFilter
+	Name   *string
+	Format *string
+	State  *LobbyState
 }
 
-func NewListLobbiesOptions(page, page_size int, filters ...ListLobbyFilter) *ListLobbiesOptions {
+func NewListLobbiesOptions(page, page_size int, name, format *string, state *LobbyState) *ListLobbiesOptions {
 	return &ListLobbiesOptions{
 		Page:     page,
 		PageSize: page_size,
-		Filters:  filters,
+
+		Name:   name,
+		Format: format,
+		State:  state,
 	}
 }
 
@@ -262,13 +268,24 @@ func (r *LobbyRegistry) ListLobbies(options *ListLobbiesOptions) *ListLobbiesRes
 	offset := (page - 1) * pageSize
 
 	all := r.lobbies.Filter(func(_ uint64, lobby *Lobby) bool {
-		isValid := true
 
-		for _, filter := range options.Filters {
-			isValid = isValid && filter(lobby)
+		if lobby.IsPrivate {
+			return false
 		}
 
-		return isValid
+		if options.Name != nil && !strings.Contains(lobby.Name, *options.Name) {
+			return false
+		}
+
+		if options.Format != nil && lobby.Format != *options.Format {
+			return false
+		}
+
+		if options.State != nil && *options.State != lobby.State {
+			return false
+		}
+
+		return true
 	}).Items()
 
 	total := len(all)

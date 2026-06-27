@@ -55,6 +55,11 @@ message ListLobbiesRequest {
   // Pagination
   int32 page = 1;
   int32 page_size = 2;
+
+  // Filters
+  string name = 3;
+  string format = 4;
+  int32 state = 5;
 }
 
 message ListLobbiesResponse {

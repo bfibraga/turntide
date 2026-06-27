@@ -5,7 +5,9 @@
 [ext_resource type="Script" uid="uid://bb50oxlatsq3p" path="res://src/common/state_machine/state_machine.gd" id="2_wf0ff"]
 [ext_resource type="Script" uid="uid://bfppetk35xjpo" path="res://src/common/state_machine/states/network/connected.gd" id="3_25rj4"]
 [ext_resource type="Script" uid="uid://ckwpv8qfylam6" path="res://src/common/state_machine/states/network/closed_state.gd" id="3_wksuf"]
+[ext_resource type="Script" uid="uid://djdv18syg8k2r" path="res://src/common/state_machine/states/gui/initialized_state.gd" id="4_n3sy6"]
 [ext_resource type="Script" uid="uid://c06xj1g5oewu4" path="res://src/common/state_machine/scene_state.gd" id="4_t3ua1"]
+[ext_resource type="PackedScene" uid="uid://bc0xhwpp8t7a7" path="res://src/game/initialize_menu.tscn" id="5_l8xlt"]
 [ext_resource type="PackedScene" uid="uid://dw64jlmj7t5t" path="res://src/game/menus/login/login.tscn" id="5_wf0ff"]
 [ext_resource type="Animation" uid="uid://bu6es4d66y6ub" path="res://assets/animations/transitions/diagonal_popping_squares_bottom_left.res" id="6_6gbpy"]
 [ext_resource type="Animation" uid="uid://c4f1qchultux8" path="res://assets/animations/transitions/diagonal_popping_squares_top_left.res" id="7_5adum"]
@@ -43,8 +45,14 @@ content_container = NodePath("../ContentContainer")
 
 [node name="GUIStateMachine" type="Node" parent="." unique_id=921843469 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("2_wf0ff")
-initial_state = NodePath("Installation")
+initial_state = NodePath("Initialized")
 metadata/_custom_type_script = "uid://bb50oxlatsq3p"
+
+[node name="Initialized" type="Node" parent="GUIStateMachine" unique_id=58836705 node_paths=PackedStringArray("transition_manager")]
+script = ExtResource("4_n3sy6")
+packed_scene = ExtResource("5_l8xlt")
+transition_manager = NodePath("../../TransitionManager")
+metadata/_custom_type_script = "uid://c06xj1g5oewu4"
 
 [node name="Installation" type="Node" parent="GUIStateMachine" unique_id=123456789 node_paths=PackedStringArray("transition_manager")]
 script = ExtResource("9_hkqtu")

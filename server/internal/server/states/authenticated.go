@@ -61,7 +61,16 @@ func (a *Authenticated) handleChat(senderId uint64, message *packets.Packet_Chat
 
 func (a *Authenticated) handleLobbyList(message *packets.Packet_ListLobbiesRequest) {
 	request := message.ListLobbiesRequest
-	options := components.NewListLobbiesOptions(int(request.Page), int(request.PageSize))
+	var state *components.LobbyState
+	if request.State != 0 {
+		s := components.LobbyState(request.State)
+		state = &s
+	}
+
+	options := components.NewListLobbiesOptions(
+		int(request.Page), int(request.PageSize),
+		&request.Name, &request.Format, state,
+	)
 
 	result := a.lobbyReg.ListLobbies(options)
 

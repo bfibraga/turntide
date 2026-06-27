@@ -9,7 +9,9 @@ static func Name() -> String:
 	return "Lobby Browser"
 
 func enter(_data: Dictionary = {}) -> void:
-	var packet: packets.Packet = PacketFactory.new_list_lobbies_request()
+	var packet: packets.Packet = PacketFactory.new_list_lobbies_request(
+		Option.None(), Option.None(), Option.None()
+	)
 	WS.send(packet)
 	
 	super.enter()
