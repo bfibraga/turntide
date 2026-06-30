@@ -18,6 +18,15 @@ const (
 	LobbyInGame
 )
 
+func ConvertToLobbyState(rawState int) *LobbyState {
+	var state LobbyState
+	if rawState != 0 {
+		state = LobbyState(rawState)
+	}
+
+	return &state
+}
+
 type LobbyPlayer struct {
 	ClientID uint64
 	Username string
@@ -185,7 +194,7 @@ func (r *LobbyRegistry) SetOnChange(cb func()) {
 	r.onChange = cb
 }
 
-func (r *LobbyRegistry) CreateLobby(hostID uint64, hostUsername, name, format string, maxPlayers int, isPrivate bool, password string) *Lobby {
+func (r *LobbyRegistry) CreateLobby(hostID uint64, hostUsername, name, format string, maxPlayers int, isPrivate bool, password *string) (*Lobby, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -198,14 +207,23 @@ func (r *LobbyRegistry) CreateLobby(hostID uint64, hostUsername, name, format st
 		WithIsPrivate(isPrivate).
 		Build()
 
-	if password != "" {
-		lobby.PasswordHash = hashPassword(password)
+	return r.AddLobby(lobby, password)
+}
+
+func (r *LobbyRegistry) AddLobby(lobby *Lobby, password *string) (*Lobby, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	if password != nil {
+		lobby.PasswordHash = hashPassword(*password)
 	}
 
 	id := r.lobbies.Add(lobby)
 	lobby.ID = id
 
 	// Add host as first player
+	hostID := lobby.HostID
+	hostUsername := lobby.HostUsername
 	lobby.Players[hostID] = NewLobbyPlayer(hostID, hostUsername, false)
 	r.clientToLobby.Store(hostID, id)
 
@@ -219,7 +237,7 @@ func (r *LobbyRegistry) CreateLobby(hostID uint64, hostUsername, name, format st
 		go r.onChange()
 	}
 
-	return lobby
+	return lobby, nil
 }
 
 type LobbyInfo struct {
@@ -277,7 +295,7 @@ func (r *LobbyRegistry) ListLobbies(options *ListLobbiesOptions) *ListLobbiesRes
 			return false
 		}
 
-		if options.Format != nil && lobby.Format != *options.Format {
+		if (options.Format != nil || *options.Format != "") && lobby.Format != *options.Format {
 			return false
 		}
 
@@ -309,36 +327,13 @@ func (r *LobbyRegistry) ListLobbies(options *ListLobbiesOptions) *ListLobbiesRes
 	}
 }
 
-func (r *LobbyRegistry) ListPublicLobbies() []LobbyInfo {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
-	publicLobbies := r.lobbies.Filter(func(_ uint64, lobby *Lobby) bool {
-		return !lobby.IsPrivate
-	})
-
-	result := objects.Map(publicLobbies, func(_ uint64, lobby *Lobby) LobbyInfo {
-		return LobbyInfo{
-			ID:             lobby.ID,
-			Name:           lobby.Name,
-			Format:         lobby.Format,
-			CurrentPlayers: len(lobby.Players),
-			MaxPlayers:     lobby.MaxPlayers,
-			HostUsername:   lobby.HostUsername,
-			IsPrivate:      lobby.IsPrivate,
-		}
-	}).Items()
-
-	return result
-}
-
 func (r *LobbyRegistry) FindLobby(id uint64) (*Lobby, bool) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 	return r.lobbies.Get(id)
 }
 
-func (r *LobbyRegistry) JoinLobby(lobbyID uint64, clientID uint64, username string, password string) error {
+func (r *LobbyRegistry) JoinLobby(lobbyID uint64, clientID uint64, username string, password *string) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -352,10 +347,9 @@ func (r *LobbyRegistry) JoinLobby(lobbyID uint64, clientID uint64, username stri
 	}
 
 	if lobby.PasswordHash != "" {
-		if password == "" {
+		if password == nil {
 			return fmt.Errorf("password required")
-		}
-		if hashPassword(password) != lobby.PasswordHash {
+		} else if hashPassword(*password) != lobby.PasswordHash {
 			return fmt.Errorf("invalid password")
 		}
 	}

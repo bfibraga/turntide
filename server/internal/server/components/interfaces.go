@@ -17,6 +17,7 @@ type ClientInterfacer interface {
 
 	PassToPeer(message packets.Msg, peerId uint64)
 	Broadcast(message packets.Msg)
+	BroadcastToLobby(lobbyID uint64, message packets.Msg)
 	ReadPump()
 	WritePump()
 

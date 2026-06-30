@@ -75,7 +75,18 @@ func NewDenyResponse(reason string) Msg {
 
 // Lobby packets
 
-func NewLobbyPlayer(client_id uint64, username string, is_ready bool) *LobbyPlayerData {
+func NewLobbyData(
+	name string,
+	current_players, max_players int32,
+) *LobbyData {
+	return &LobbyData{
+		Name:           name,
+		CurrentPlayers: current_players,
+		MaxPlayers:     max_players,
+	}
+}
+
+func NewLobbyPlayerData(client_id uint64, username string, is_ready bool) *LobbyPlayerData {
 	return &LobbyPlayerData{
 		ClientId: client_id,
 		Username: username,
@@ -94,6 +105,35 @@ func NewListLobbiesResponse(count int32, lobbies ...*LobbyData) Msg {
 		ListLobbiesResponse: &ListLobbiesResponse{
 			Count:   count,
 			Lobbies: lobbies,
+		},
+	}
+}
+
+// Create
+
+func NewCreateLobbyResponse() Msg {
+	return &Packet_CreateLobbyResponse{
+		CreateLobbyResponse: &CreateLobbyResponse{},
+	}
+}
+
+// Join
+
+func NewJoinedLobbyResponse(lobbyId uint64, lobbyName, hostname string, players []*LobbyPlayerData) Msg {
+	return &Packet_JoinedLobbyResponse{
+		JoinedLobbyResponse: &JoinedLobbyResponse{
+			LobbyId:      lobbyId,
+			LobbyName:    lobbyName,
+			HostUsername: hostname,
+			Players:      players,
+		},
+	}
+}
+
+func NewPlayerJoinedResponse(player *LobbyPlayerData) Msg {
+	return &Packet_PlayerJoinedLobbyResponse{
+		PlayerJoinedLobbyResponse: &PlayerJoinedLobbyResponse{
+			Player: player,
 		},
 	}
 }

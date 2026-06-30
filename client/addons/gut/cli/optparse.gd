@@ -135,7 +135,7 @@
 #
 # value will return the default when it has not been set.
 #-------------------------------------------------------------------------------
-class Option:
+class OptionParse:
 	var _has_been_set = false
 	var _value = null
 	# REMEMBER that when this option is an array, you have to set the value
@@ -236,7 +236,7 @@ class Options:
 	var options = []
 	var positional = []
 	var default_heading = OptionHeading.new()
-	var script_option = Option.new('-s', '?', 'script option provided by Godot')
+	var script_option = OptionParse.new('-s', '?', 'script option provided by Godot')
 
 	var _options_by_name = {"--script": script_option, "-s": script_option}
 	var _options_by_heading = [default_heading]
@@ -494,7 +494,7 @@ func add(op_names, default, desc: String) -> Option:
 	elif bad_alias != -1:
 		push_error(str('Option [', aliases[bad_alias], '] already exists.'))
 	else:
-		new_op = Option.new(op_name, default, desc)
+		new_op = OptionParse.new(op_name, default, desc)
 		options.add(new_op, aliases)
 
 	return new_op
@@ -540,7 +540,7 @@ func add_positional(op_name, default, desc: String) -> Option:
 	if(options.get_by_name(op_name) != null):
 		push_error(str('Positional option [', op_name, '] already exists.'))
 	else:
-		new_op = Option.new(op_name, default, desc)
+		new_op = OptionParse.new(op_name, default, desc)
 		options.add_positional(new_op)
 	return new_op
 

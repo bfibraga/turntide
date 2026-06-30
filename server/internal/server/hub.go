@@ -6,7 +6,6 @@ import (
 
 	"github.com/bfibraga/turntide/server/internal/server/components"
 	"github.com/bfibraga/turntide/server/internal/server/user"
-	"github.com/go-faker/faker/v4"
 )
 
 type Hub struct {
@@ -39,16 +38,16 @@ func (h *Hub) Initialize() {
 		h.Lobbies.SetOnChange(func() { h.BroadcastLobbyList() })
 	}*/
 
-	for i := range 100 {
+	/*for i := range 100 {
 		h.Lobbies.CreateLobby(
 			uint64(i),
 			//fmt.Sprintf("host %d", i),
 			faker.FirstName(),
 			//fmt.Sprintf("Lobby %d", i),
 			faker.DomainName(),
-			"", 10, false, "",
+			"", 10, false, nil,
 		)
-	}
+	}*/
 }
 
 // BroadcastLobbyList broadcasts current public lobbies to all authenticated clients.
@@ -92,6 +91,21 @@ func (h *Hub) Run() {
 		case packet := <-h.Broker.BroadcastChan:
 			h.Registry.ForEach(func(id uint64, client ClientInterfacer) {
 				if id != packet.SenderId {
+					client.ProcessPacket(packet.SenderId, packet.Msg)
+				}
+			})
+		case lobbyBroadcast := <-h.Broker.LobbyBroadcastChan:
+			lobby, ok := h.Lobbies.FindLobby(lobbyBroadcast.LobbyID)
+			if !ok {
+				return
+			}
+
+			packet := lobbyBroadcast.Packet
+
+			h.Registry.ForEach(func(id uint64, client components.ClientInterfacer) {
+				player := lobby.Players[id]
+
+				if player != nil && id != packet.SenderId {
 					client.ProcessPacket(packet.SenderId, packet.Msg)
 				}
 			})

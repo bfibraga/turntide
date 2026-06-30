@@ -6,6 +6,7 @@ import (
 	"github.com/bfibraga/turntide/core/pkg/packets"
 	"github.com/bfibraga/turntide/server/internal/server"
 	"github.com/bfibraga/turntide/server/internal/server/components"
+	"github.com/bfibraga/turntide/server/internal/server/objects"
 )
 
 type Authenticated struct {
@@ -44,112 +45,104 @@ func (a *Authenticated) HandleMessage(senderId uint64, message packets.Msg) {
 	switch message := message.(type) {
 	case *packets.Packet_ListLobbiesRequest:
 		a.handleLobbyList(message)
-	case *packets.Packet_Chat:
-		a.handleChat(senderId, message)
+	case *packets.Packet_CreateLobbyRequest:
+		a.handleCreateLobby(senderId, message)
+	case *packets.Packet_JoinLobbyRequest:
+		a.handleJoinLobby(senderId, message)
 	default:
-		// Ignore other messages in authenticated state
-	}
-}
-
-func (a *Authenticated) handleChat(senderId uint64, message *packets.Packet_Chat) {
-	if senderId == a.client.Id() {
-		a.client.Broadcast(message)
-	} else {
-		a.client.SocketSendAs(senderId, message)
+		HandleMessage(a.client, senderId, message)
 	}
 }
 
 func (a *Authenticated) handleLobbyList(message *packets.Packet_ListLobbiesRequest) {
 	request := message.ListLobbiesRequest
-	var state *components.LobbyState
-	if request.State != 0 {
-		s := components.LobbyState(request.State)
-		state = &s
-	}
 
 	options := components.NewListLobbiesOptions(
 		int(request.Page), int(request.PageSize),
-		&request.Name, &request.Format, state,
+		&request.Name, &request.Format, components.ConvertToLobbyState(int(request.State)),
 	)
 
 	result := a.lobbyReg.ListLobbies(options)
 
-	var lobbyDataList []*packets.LobbyData
-	for _, l := range result.Lobbies {
-		lobbyDataList = append(lobbyDataList, &packets.LobbyData{
-			//Id:             l.ID,
-			Name:           l.Name,
-			CurrentPlayers: int32(len(l.Players)),
-			MaxPlayers:     int32(l.MaxPlayers),
-			//Format:         l.Format,
-			//CurrentPlayers: int32(l.CurrentPlayers),
-			//MaxPlayers:     int32(l.MaxPlayers),
-			//HostUsername:   l.HostUsername,
-			//IsPrivate:      l.IsPrivate,
-		})
-	}
+	/*lobbyDataList = append(lobbyDataList, &packets.LobbyData{
+		//Id:             l.ID,
+		Name:           l.Name,
+		CurrentPlayers: int32(len(l.Players)),
+		MaxPlayers:     int32(l.MaxPlayers),
+		//Format:         l.Format,
+		//CurrentPlayers: int32(l.CurrentPlayers),
+		//MaxPlayers:     int32(l.MaxPlayers),
+		//HostUsername:   l.HostUsername,
+		//IsPrivate:      l.IsPrivate,
+	})*/
 
-	a.client.SocketSend(packets.NewListLobbiesResponse(int32(result.Count), lobbyDataList...))
+	lobbySlice := objects.FromArrayToSharedSlice(result.Lobbies)
+	lobbyDataSlice := objects.MapSlice(lobbySlice, func(i int, l *components.Lobby) *packets.LobbyData {
+		return packets.NewLobbyDataBuilder().
+			WithID(l.ID).
+			WithName(l.Name).
+			WithCurrentPlayers(int32(len(l.Players))).
+			WithMaxPlayers(int32(l.MaxPlayers)).
+			Build()
+	})
+
+	a.client.SocketSend(packets.NewListLobbiesResponse(
+		int32(result.Count), lobbyDataSlice.Items()...,
+	))
 }
 
-/*func (a *Authenticated) handleCreateLobby(senderId uint64, message *packets.Packet_LobbyCreateRequest) {
-	msg := message.LobbyCreateRequest
+func (a *Authenticated) handleCreateLobby(senderId uint64, message *packets.Packet_CreateLobbyRequest) {
+	request := message.CreateLobbyRequest
 
-	var password string
-	if msg.Password != nil {
-		password = *msg.Password
+	/*lobby := a.lobbyReg.CreateLobby(
+	senderId,
+	a.username,
+	request.Name,
+	request.Format,
+	int(request.MaxPlayers),
+	request.IsPrivate,
+	request.Password,
+	)*/
+
+	lobby := components.NewLobbyBuilder().
+		WithHostID(senderId).
+		WithHostUsername(a.username).
+		WithName(request.Name).
+		WithFormat(request.Format).
+		WithMaxPlayers(max(int(request.MaxPlayers), 2)).
+		WithIsPrivate(request.IsPrivate).
+		Build()
+
+	lobby, err := a.lobbyReg.AddLobby(lobby, request.Password)
+	if err != nil {
+		a.logger.Error("error on creating lobby", "error", err)
+		a.client.SocketSend(packets.NewDenyResponse(err.Error()))
+		return
 	}
 
-	lobby := a.lobbyReg.CreateLobby(
-		senderId,
-		a.username,
-		msg.Name,
-		msg.Format,
-		int(msg.MaxPlayers),
-		msg.IsPrivate,
-		password,
-	)
+	a.logger.Info("created lobby", "lobby_id", lobby.ID)
 
-	// Transition to InLobby state
 	a.client.SetState(NewInLobby(a.logger, a.lobbyReg, a.client, lobby.ID, a.username))
 }
 
-func (a *Authenticated) handleJoinLobby(senderId uint64, message *packets.Packet_LobbyJoinRequest) {
-	msg := message.LobbyJoinRequest
-	var password string
-	if msg.Password != nil {
-		password = *msg.Password
-	}
+func (a *Authenticated) handleJoinLobby(senderId uint64, message *packets.Packet_JoinLobbyRequest) {
+	request := message.JoinLobbyRequest
 
-	err := a.lobbyReg.JoinLobby(msg.LobbyId, senderId, a.username, password)
+	err := a.lobbyReg.JoinLobby(request.LobbyId, senderId, a.username, request.Password)
 	if err != nil {
 		a.logger.Error("failed to join lobby", "error", err)
 		a.client.SocketSend(packets.NewDenyResponse(err.Error()))
 		return
 	}
 
-	a.logger.Debug("joined lobby", "lobby_id", msg.LobbyId)
+	a.logger.Debug("joined lobby", "lobby_id", request.LobbyId)
 
-	playerPkt := packets.NewLobbyPlayer(a.client.Id(), a.username, false)
-	joinPkt := packets.NewLobbyPlayerJoined(playerPkt)
-	a.broadcastToLobby(senderId, joinPkt, msg.LobbyId)
+	playerPkt := packets.NewLobbyPlayerData(senderId, a.username, false)
+	joinPkt := packets.NewPlayerJoinedResponse(playerPkt)
+	a.client.BroadcastToLobby(request.LobbyId, joinPkt)
 
 	// Transition to InLobby state
-	a.client.SetState(NewInLobby(a.logger, a.lobbyReg, a.client, msg.LobbyId, a.username))
-}*/
-
-func (a *Authenticated) broadcastToLobby(senderId uint64, msg packets.Msg, lobbyID uint64) {
-	lobby, ok := a.lobbyReg.FindLobby(lobbyID)
-	if !ok {
-		return
-	}
-
-	for clientID := range lobby.Players {
-		if clientID == senderId {
-			continue
-		}
-		a.client.SocketSendAs(senderId, msg)
-	}
+	a.client.SetState(NewInLobby(a.logger, a.lobbyReg, a.client, request.LobbyId, a.username))
 }
 
 func (a *Authenticated) OnExit() {

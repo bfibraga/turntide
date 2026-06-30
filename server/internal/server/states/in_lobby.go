@@ -1,11 +1,13 @@
 package states
 
 import (
+	"cmp"
 	"log/slog"
 
 	"github.com/bfibraga/turntide/core/pkg/packets"
 	"github.com/bfibraga/turntide/server/internal/server"
 	"github.com/bfibraga/turntide/server/internal/server/components"
+	"github.com/bfibraga/turntide/server/internal/server/objects"
 )
 
 type InLobby struct {
@@ -43,6 +45,30 @@ func (i *InLobby) SetClient(client server.ClientInterfacer) {
 func (i *InLobby) OnEnter() {
 	lobby, ok := i.lobbyReg.FindLobby(i.lobbyID)
 	if !ok {
+		i.logger.Error("lobby not found on enter", "lobby_id", i.lobbyID)
+		return
+	}
+
+	i.logger.Info("entered in lobby", "client_id", i.client.Id(), "lobby_id", i.lobbyID)
+
+	playersSlice := objects.FromMapToSharedSlice(lobby.Players).
+		Sort(func(a, b *components.LobbyPlayer) int {
+			return cmp.Compare(a.ClientID, b.ClientID)
+		})
+	playerLobbySlice := objects.MapSlice(playersSlice, func(i int, p *components.LobbyPlayer) *packets.LobbyPlayerData {
+		return packets.NewLobbyPlayerData(p.ClientID, p.Username, p.Ready)
+	})
+
+	joinPkt := packets.NewJoinedLobbyResponse(
+		lobby.ID, lobby.Name, lobby.HostUsername,
+		playerLobbySlice.Items(),
+	)
+
+	i.client.SocketSend(joinPkt)
+	i.client.BroadcastToLobby(lobby.ID, joinPkt)
+
+	/*lobby, ok := i.lobbyReg.FindLobby(i.lobbyID)
+	if !ok {
 		i.logger.Error("lobby not found on enter")
 		return
 	}
@@ -55,25 +81,43 @@ func (i *InLobby) OnEnter() {
 			IsReady:  p.Ready,
 		})
 	}
+
+	i.client.SocketSend(NewLobby)*/
 }
 
 func (i *InLobby) HandleMessage(senderId uint64, message packets.Msg) {
-	/*switch message := message.(type) {
-	case *packets.Packet_LobbyLeaveRequest:
+	switch message := message.(type) {
+	/*case *packets.Packet_LobbyLeaveRequest:
 		i.handleLeave(senderId)
 	case *packets.Packet_LobbyReadyRequest:
 		i.handleReady(senderId, message)
 	case *packets.Packet_LobbyStartRequest:
 		i.handleStart(senderId)
 	case *packets.Packet_LobbyGameStart:
-		i.handleGameStart()
-	case *packets.Packet_LobbyPlayerJoined:
-		i.handleLobbyPlayerJoined(senderId, message)
+		i.handleGameStart()*/
+	case *packets.Packet_JoinedLobbyResponse:
+		i.handleJoinedLobbyResponse(senderId, message)
 	case *packets.Packet_Chat:
-		i.handleChat(senderId, message)
+		i.handleLobbyChat(senderId, message)
 	default:
-		//i.broadcastToLobby(message)
-	}*/
+		HandleMessage(i.client, senderId, message)
+	}
+}
+
+func (i *InLobby) handleLobbyChat(senderId uint64, message *packets.Packet_Chat) {
+	if senderId == i.client.Id() {
+		i.client.BroadcastToLobby(i.lobbyID, message)
+	} else {
+		i.client.SocketSendAs(senderId, message)
+	}
+}
+
+func (i *InLobby) handleJoinedLobbyResponse(senderId uint64, message *packets.Packet_JoinedLobbyResponse) {
+	if senderId == i.client.Id() {
+		i.client.BroadcastToLobby(i.lobbyID, message)
+	} else {
+		i.client.SocketSendAs(senderId, message)
+	}
 }
 
 /*func (i *InLobby) handleChat(senderId uint64, message *packets.Packet_Chat) {
@@ -153,7 +197,7 @@ func (i *InLobby) OnExit() {
 		return
 	}
 
-	// Ensure the client is removed from the lobby when leaving the state
-	// This covers disconnections and explicit transitions away from InLobby.
-	//i.client.SocketSend(packets.NewLobbyLeaveRequest())
+	i.lobbyReg.LeaveLobby(i.client.Id())
+
+	//i.client.SocketSend(packet)
 }

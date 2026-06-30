@@ -25,6 +25,7 @@ Global="*uid://cg33kihswuayp"
 PacketFactory="*uid://buqxsmypo5gce"
 WS="*uid://d07d5mlkr1hfa"
 HttpRequestManager="*uid://b1whl1dmyd33t"
+NodeFactory="*uid://pdtoqtin6ft0"
 
 [debug]
 
@@ -41,7 +42,7 @@ mouse_cursor/custom_image="uid://rs3b0epfm78m"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godobuf/plugin.cfg", "res://addons/godot-sqlite/plugin.cfg", "res://addons/gut/plugin.cfg", "res://addons/optional/plugin.cfg")
+enabled=PackedStringArray("res://addons/at-icons/plugin.cfg", "res://addons/godobuf/plugin.cfg", "res://addons/godot-sqlite/plugin.cfg", "res://addons/gut/plugin.cfg", "res://addons/optional/plugin.cfg")
 
 [file_customization]
 

@@ -15,7 +15,8 @@
   },
   {
     "label": "Generate Protobuf [Client]",
-    "command": "D:\\Godot\\Godot_v4.6.2-stable_win64.exe",
+    //"command": "D:\\Godot\\Godot_v4.6.2-stable_win64.exe",
+    "command": "godot",
     "args": [
       "--headless",
       "-q",

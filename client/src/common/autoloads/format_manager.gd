@@ -22,4 +22,6 @@ func find_from_name(format_name: String) -> Option:
 	if index == -1:
 		return Option.None()
 	
-	return Option.Some(formats[index])
+	return Option.new(formats[index])
+
+var void_method: Callable = func() -> void: pass

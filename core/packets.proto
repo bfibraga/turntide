@@ -45,12 +45,14 @@ message LobbyPlayerData {
 }
 
 message LobbyData {
-  string name = 1;
-  int32 current_players = 2;
-  int32 max_players = 3;
+  uint64 id = 1;
+  string name = 2;
+  int32 current_players = 3;
+  int32 max_players = 4;
 }
 
 // List
+
 message ListLobbiesRequest {
   // Pagination
   int32 page = 1;
@@ -65,6 +67,34 @@ message ListLobbiesRequest {
 message ListLobbiesResponse {
   int32 count = 1;
   repeated LobbyData lobbies = 2;
+}
+
+// Create
+
+message CreateLobbyRequest {
+  string name = 1;
+  string format = 2;
+  int32 max_players = 3;
+  bool is_private = 4;
+  optional string password = 5;
+}
+
+message CreateLobbyResponse {}
+
+message JoinLobbyRequest {
+  uint64 lobby_id = 1;
+  optional string password = 2;
+}
+
+message JoinedLobbyResponse {
+  uint64 lobby_id = 1;
+  string lobby_name = 2;
+  string host_username = 3;
+  repeated LobbyPlayerData players = 4;
+}
+
+message PlayerJoinedLobbyResponse {
+  LobbyPlayerData player = 1;
 }
 
 // Entry
@@ -83,9 +113,15 @@ message Packet {
     DenyResponseMessage deny_response = 8;
 
     // Lobby messages
-    // List
     ListLobbiesRequest list_lobbies_request = 9;
     ListLobbiesResponse list_lobbies_response = 10;
+
+    CreateLobbyRequest create_lobby_request = 11;
+    CreateLobbyResponse create_lobby_response = 12;
+
+    JoinLobbyRequest join_lobby_request = 13;
+    JoinedLobbyResponse joined_lobby_response = 14;
+    PlayerJoinedLobbyResponse player_joined_lobby_response = 15;
 
     // Game messages
   }

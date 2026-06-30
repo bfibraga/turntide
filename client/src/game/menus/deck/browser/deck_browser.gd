@@ -63,9 +63,11 @@ var _show_deck_list: ComputedReactiveValue = ComputedReactiveValue.new(
 	[_data, _deck_list]
 )
 
+var format_options: OptionButton
+
 # Query options
 @onready var deck_name: SearchLineEdit = %Name
-@onready var format: OptionButton = %Format
+@onready var format_container: VBoxContainer = %FormatContainer
 
 # Color Identity
 @onready var red: CheckBox = %Red
@@ -167,21 +169,11 @@ func _ready() -> void:
 	deck_name.execute_search_empty_query.connect(func() -> void:
 		_data.name.value = ""
 	)
-		
-	(func() -> void:
-		format.clear()
-		format.add_item("Any", 0) # Any format
-		
-		var index: int = 1
-		var available_formats: Array[BaseFormat] = Global.deck_format_manager.formats
-		for format_object: BaseFormat in available_formats:
-			format.add_item(format_object.display_name(), index)
-			index += 1
-	).call()
 	
-	format.item_selected.connect(func(index: int) -> void:
+	format_options = Global.deck_format_manager.create_format_option_button(func(index: int) -> void:
 		_data.format.value = Global.deck_format_manager.formats.get(index - 1) if index > 0 else null
 	)
+	format_container.add_child(format_options)
 	
 	red.toggled.connect(change_color_identity.bind("red"))
 	blue.toggled.connect(change_color_identity.bind("blue"))

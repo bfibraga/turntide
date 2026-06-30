@@ -1098,22 +1098,40 @@ class LobbyData:
 	func _init():
 		var service
 		
-		__name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		__id = PBField.new("id", PB_DATA_TYPE.UINT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.UINT64])
+		service = PBServiceField.new()
+		service.field = __id
+		data[__id.tag] = service
+		
+		__name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
 		service = PBServiceField.new()
 		service.field = __name
 		data[__name.tag] = service
 		
-		__current_players = PBField.new("current_players", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__current_players = PBField.new("current_players", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
 		service.field = __current_players
 		data[__current_players.tag] = service
 		
-		__max_players = PBField.new("max_players", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		__max_players = PBField.new("max_players", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
 		service = PBServiceField.new()
 		service.field = __max_players
 		data[__max_players.tag] = service
 		
 	var data = {}
+	
+	var __id: PBField
+	func has_id() -> bool:
+		if __id.value != null:
+			return true
+		return false
+	func get_id() -> int:
+		return __id.value
+	func clear_id() -> void:
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		__id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.UINT64]
+	func set_id(value : int) -> void:
+		__id.value = value
 	
 	var __name: PBField
 	func has_name() -> bool:
@@ -1123,7 +1141,7 @@ class LobbyData:
 	func get_name() -> String:
 		return __name.value
 	func clear_name() -> void:
-		data[1].state = PB_SERVICE_STATE.UNFILLED
+		data[2].state = PB_SERVICE_STATE.UNFILLED
 		__name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
 	func set_name(value : String) -> void:
 		__name.value = value
@@ -1136,7 +1154,7 @@ class LobbyData:
 	func get_current_players() -> int:
 		return __current_players.value
 	func clear_current_players() -> void:
-		data[2].state = PB_SERVICE_STATE.UNFILLED
+		data[3].state = PB_SERVICE_STATE.UNFILLED
 		__current_players.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
 	func set_current_players(value : int) -> void:
 		__current_players.value = value
@@ -1149,7 +1167,7 @@ class LobbyData:
 	func get_max_players() -> int:
 		return __max_players.value
 	func clear_max_players() -> void:
-		data[3].state = PB_SERVICE_STATE.UNFILLED
+		data[4].state = PB_SERVICE_STATE.UNFILLED
 		__max_players.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
 	func set_max_players(value : int) -> void:
 		__max_players.value = value
@@ -1355,6 +1373,359 @@ class ListLobbiesResponse:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
 	
+class CreateLobbyRequest:
+	func _init():
+		var service
+		
+		__name = PBField.new("name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		service = PBServiceField.new()
+		service.field = __name
+		data[__name.tag] = service
+		
+		__format = PBField.new("format", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		service = PBServiceField.new()
+		service.field = __format
+		data[__format.tag] = service
+		
+		__max_players = PBField.new("max_players", PB_DATA_TYPE.INT32, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.INT32])
+		service = PBServiceField.new()
+		service.field = __max_players
+		data[__max_players.tag] = service
+		
+		__is_private = PBField.new("is_private", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 4, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
+		service = PBServiceField.new()
+		service.field = __is_private
+		data[__is_private.tag] = service
+		
+		__password = PBField.new("password", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 5, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		service = PBServiceField.new()
+		service.field = __password
+		data[__password.tag] = service
+		
+	var data = {}
+	
+	var __name: PBField
+	func has_name() -> bool:
+		if __name.value != null:
+			return true
+		return false
+	func get_name() -> String:
+		return __name.value
+	func clear_name() -> void:
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		__name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_name(value : String) -> void:
+		__name.value = value
+	
+	var __format: PBField
+	func has_format() -> bool:
+		if __format.value != null:
+			return true
+		return false
+	func get_format() -> String:
+		return __format.value
+	func clear_format() -> void:
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__format.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_format(value : String) -> void:
+		__format.value = value
+	
+	var __max_players: PBField
+	func has_max_players() -> bool:
+		if __max_players.value != null:
+			return true
+		return false
+	func get_max_players() -> int:
+		return __max_players.value
+	func clear_max_players() -> void:
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__max_players.value = DEFAULT_VALUES_3[PB_DATA_TYPE.INT32]
+	func set_max_players(value : int) -> void:
+		__max_players.value = value
+	
+	var __is_private: PBField
+	func has_is_private() -> bool:
+		if __is_private.value != null:
+			return true
+		return false
+	func get_is_private() -> bool:
+		return __is_private.value
+	func clear_is_private() -> void:
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__is_private.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
+	func set_is_private(value : bool) -> void:
+		__is_private.value = value
+	
+	var __password: PBField
+	func has_password() -> bool:
+		if __password.value != null:
+			return true
+		return false
+	func get_password() -> String:
+		return __password.value
+	func clear_password() -> void:
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		__password.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_password(value : String) -> void:
+		__password.value = value
+	
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
+class CreateLobbyResponse:
+	func _init():
+		var service
+		
+	var data = {}
+	
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
+class JoinLobbyRequest:
+	func _init():
+		var service
+		
+		__lobby_id = PBField.new("lobby_id", PB_DATA_TYPE.UINT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.UINT64])
+		service = PBServiceField.new()
+		service.field = __lobby_id
+		data[__lobby_id.tag] = service
+		
+		__password = PBField.new("password", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		service = PBServiceField.new()
+		service.field = __password
+		data[__password.tag] = service
+		
+	var data = {}
+	
+	var __lobby_id: PBField
+	func has_lobby_id() -> bool:
+		if __lobby_id.value != null:
+			return true
+		return false
+	func get_lobby_id() -> int:
+		return __lobby_id.value
+	func clear_lobby_id() -> void:
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		__lobby_id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.UINT64]
+	func set_lobby_id(value : int) -> void:
+		__lobby_id.value = value
+	
+	var __password: PBField
+	func has_password() -> bool:
+		if __password.value != null:
+			return true
+		return false
+	func get_password() -> String:
+		return __password.value
+	func clear_password() -> void:
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__password.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_password(value : String) -> void:
+		__password.value = value
+	
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
+class JoinedLobbyResponse:
+	func _init():
+		var service
+		
+		__lobby_id = PBField.new("lobby_id", PB_DATA_TYPE.UINT64, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.UINT64])
+		service = PBServiceField.new()
+		service.field = __lobby_id
+		data[__lobby_id.tag] = service
+		
+		__lobby_name = PBField.new("lobby_name", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 2, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		service = PBServiceField.new()
+		service.field = __lobby_name
+		data[__lobby_name.tag] = service
+		
+		__host_username = PBField.new("host_username", PB_DATA_TYPE.STRING, PB_RULE.OPTIONAL, 3, true, DEFAULT_VALUES_3[PB_DATA_TYPE.STRING])
+		service = PBServiceField.new()
+		service.field = __host_username
+		data[__host_username.tag] = service
+		
+		var __players_default: Array[LobbyPlayerData] = []
+		__players = PBField.new("players", PB_DATA_TYPE.MESSAGE, PB_RULE.REPEATED, 4, true, __players_default)
+		service = PBServiceField.new()
+		service.field = __players
+		service.func_ref = Callable(self, "add_players")
+		data[__players.tag] = service
+		
+	var data = {}
+	
+	var __lobby_id: PBField
+	func has_lobby_id() -> bool:
+		if __lobby_id.value != null:
+			return true
+		return false
+	func get_lobby_id() -> int:
+		return __lobby_id.value
+	func clear_lobby_id() -> void:
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		__lobby_id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.UINT64]
+	func set_lobby_id(value : int) -> void:
+		__lobby_id.value = value
+	
+	var __lobby_name: PBField
+	func has_lobby_name() -> bool:
+		if __lobby_name.value != null:
+			return true
+		return false
+	func get_lobby_name() -> String:
+		return __lobby_name.value
+	func clear_lobby_name() -> void:
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__lobby_name.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_lobby_name(value : String) -> void:
+		__lobby_name.value = value
+	
+	var __host_username: PBField
+	func has_host_username() -> bool:
+		if __host_username.value != null:
+			return true
+		return false
+	func get_host_username() -> String:
+		return __host_username.value
+	func clear_host_username() -> void:
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__host_username.value = DEFAULT_VALUES_3[PB_DATA_TYPE.STRING]
+	func set_host_username(value : String) -> void:
+		__host_username.value = value
+	
+	var __players: PBField
+	func get_players() -> Array[LobbyPlayerData]:
+		return __players.value
+	func clear_players() -> void:
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__players.value.clear()
+	func add_players() -> LobbyPlayerData:
+		var element = LobbyPlayerData.new()
+		__players.value.append(element)
+		return element
+	
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
+class PlayerJoinedLobbyResponse:
+	func _init():
+		var service
+		
+		__player = PBField.new("player", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = __player
+		service.func_ref = Callable(self, "new_player")
+		data[__player.tag] = service
+		
+	var data = {}
+	
+	var __player: PBField
+	func has_player() -> bool:
+		if __player.value != null:
+			return true
+		return false
+	func get_player() -> LobbyPlayerData:
+		return __player.value
+	func clear_player() -> void:
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		__player.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_player() -> LobbyPlayerData:
+		__player.value = LobbyPlayerData.new()
+		return __player.value
+	
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
 class Packet:
 	func _init():
 		var service
@@ -1418,6 +1789,36 @@ class Packet:
 		service.func_ref = Callable(self, "new_list_lobbies_response")
 		data[__list_lobbies_response.tag] = service
 		
+		__create_lobby_request = PBField.new("create_lobby_request", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 11, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = __create_lobby_request
+		service.func_ref = Callable(self, "new_create_lobby_request")
+		data[__create_lobby_request.tag] = service
+		
+		__create_lobby_response = PBField.new("create_lobby_response", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 12, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = __create_lobby_response
+		service.func_ref = Callable(self, "new_create_lobby_response")
+		data[__create_lobby_response.tag] = service
+		
+		__join_lobby_request = PBField.new("join_lobby_request", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 13, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = __join_lobby_request
+		service.func_ref = Callable(self, "new_join_lobby_request")
+		data[__join_lobby_request.tag] = service
+		
+		__joined_lobby_response = PBField.new("joined_lobby_response", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 14, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = __joined_lobby_response
+		service.func_ref = Callable(self, "new_joined_lobby_response")
+		data[__joined_lobby_response.tag] = service
+		
+		__player_joined_lobby_response = PBField.new("player_joined_lobby_response", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 15, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = __player_joined_lobby_response
+		service.func_ref = Callable(self, "new_player_joined_lobby_response")
+		data[__player_joined_lobby_response.tag] = service
+		
 	var data = {}
 	
 	enum MsgCase {
@@ -1431,6 +1832,11 @@ class Packet:
 		DENY_RESPONSE = 8,
 		LIST_LOBBIES_REQUEST = 9,
 		LIST_LOBBIES_RESPONSE = 10,
+		CREATE_LOBBY_REQUEST = 11,
+		CREATE_LOBBY_RESPONSE = 12,
+		JOIN_LOBBY_REQUEST = 13,
+		JOINED_LOBBY_RESPONSE = 14,
+		PLAYER_JOINED_LOBBY_RESPONSE = 15,
 	}
 	var _msg_case: int = 0
 
@@ -1474,6 +1880,16 @@ class Packet:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
 		__list_lobbies_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__join_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__player_joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__ping.value = PingMessage.new()
 		return __ping.value
 	
@@ -1504,6 +1920,16 @@ class Packet:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
 		__list_lobbies_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__join_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__player_joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__chat.value = ChatMessage.new()
 		return __chat.value
 	
@@ -1534,6 +1960,16 @@ class Packet:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
 		__list_lobbies_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__join_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__player_joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__id.value = IdMessage.new()
 		return __id.value
 	
@@ -1564,6 +2000,16 @@ class Packet:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
 		__list_lobbies_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__join_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__player_joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__login_request.value = LoginRequestMessage.new()
 		return __login_request.value
 	
@@ -1594,6 +2040,16 @@ class Packet:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
 		__list_lobbies_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__join_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__player_joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__register_request.value = RegisterRequestMessage.new()
 		return __register_request.value
 	
@@ -1624,6 +2080,16 @@ class Packet:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
 		__list_lobbies_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__join_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__player_joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__ok_response.value = OkResponseMessage.new()
 		return __ok_response.value
 	
@@ -1654,6 +2120,16 @@ class Packet:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
 		__list_lobbies_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__join_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__player_joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__deny_response.value = DenyResponseMessage.new()
 		return __deny_response.value
 	
@@ -1684,6 +2160,16 @@ class Packet:
 		_msg_case = 9
 		__list_lobbies_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__join_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__player_joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__list_lobbies_request.value = ListLobbiesRequest.new()
 		return __list_lobbies_request.value
 	
@@ -1714,8 +2200,218 @@ class Packet:
 		data[9].state = PB_SERVICE_STATE.UNFILLED
 		data[10].state = PB_SERVICE_STATE.FILLED
 		_msg_case = 10
+		__create_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__join_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__player_joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__list_lobbies_response.value = ListLobbiesResponse.new()
 		return __list_lobbies_response.value
+	
+	var __create_lobby_request: PBField
+	func has_create_lobby_request() -> bool:
+		return data[11].state == PB_SERVICE_STATE.FILLED
+	func get_create_lobby_request() -> CreateLobbyRequest:
+		return __create_lobby_request.value
+	func clear_create_lobby_request() -> void:
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_create_lobby_request() -> CreateLobbyRequest:
+		__ping.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__chat.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__login_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		__register_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__ok_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__deny_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__list_lobbies_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__list_lobbies_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		data[11].state = PB_SERVICE_STATE.FILLED
+		_msg_case = 11
+		__create_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__join_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__player_joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[15].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_request.value = CreateLobbyRequest.new()
+		return __create_lobby_request.value
+	
+	var __create_lobby_response: PBField
+	func has_create_lobby_response() -> bool:
+		return data[12].state == PB_SERVICE_STATE.FILLED
+	func get_create_lobby_response() -> CreateLobbyResponse:
+		return __create_lobby_response.value
+	func clear_create_lobby_response() -> void:
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_create_lobby_response() -> CreateLobbyResponse:
+		__ping.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__chat.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__login_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		__register_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__ok_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__deny_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__list_lobbies_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__list_lobbies_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		data[12].state = PB_SERVICE_STATE.FILLED
+		_msg_case = 12
+		__join_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__player_joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[15].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_response.value = CreateLobbyResponse.new()
+		return __create_lobby_response.value
+	
+	var __join_lobby_request: PBField
+	func has_join_lobby_request() -> bool:
+		return data[13].state == PB_SERVICE_STATE.FILLED
+	func get_join_lobby_request() -> JoinLobbyRequest:
+		return __join_lobby_request.value
+	func clear_join_lobby_request() -> void:
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__join_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_join_lobby_request() -> JoinLobbyRequest:
+		__ping.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__chat.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__login_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		__register_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__ok_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__deny_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__list_lobbies_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__list_lobbies_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		data[13].state = PB_SERVICE_STATE.FILLED
+		_msg_case = 13
+		__joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__player_joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[15].state = PB_SERVICE_STATE.UNFILLED
+		__join_lobby_request.value = JoinLobbyRequest.new()
+		return __join_lobby_request.value
+	
+	var __joined_lobby_response: PBField
+	func has_joined_lobby_response() -> bool:
+		return data[14].state == PB_SERVICE_STATE.FILLED
+	func get_joined_lobby_response() -> JoinedLobbyResponse:
+		return __joined_lobby_response.value
+	func clear_joined_lobby_response() -> void:
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_joined_lobby_response() -> JoinedLobbyResponse:
+		__ping.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__chat.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__login_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		__register_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__ok_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__deny_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__list_lobbies_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__list_lobbies_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__join_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		data[14].state = PB_SERVICE_STATE.FILLED
+		_msg_case = 14
+		__player_joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[15].state = PB_SERVICE_STATE.UNFILLED
+		__joined_lobby_response.value = JoinedLobbyResponse.new()
+		return __joined_lobby_response.value
+	
+	var __player_joined_lobby_response: PBField
+	func has_player_joined_lobby_response() -> bool:
+		return data[15].state == PB_SERVICE_STATE.FILLED
+	func get_player_joined_lobby_response() -> PlayerJoinedLobbyResponse:
+		return __player_joined_lobby_response.value
+	func clear_player_joined_lobby_response() -> void:
+		data[15].state = PB_SERVICE_STATE.UNFILLED
+		__player_joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_player_joined_lobby_response() -> PlayerJoinedLobbyResponse:
+		__ping.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__chat.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__login_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		__register_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__ok_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__deny_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__list_lobbies_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__list_lobbies_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__join_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		data[15].state = PB_SERVICE_STATE.FILLED
+		_msg_case = 15
+		__player_joined_lobby_response.value = PlayerJoinedLobbyResponse.new()
+		return __player_joined_lobby_response.value
 	
 	func get_msg_case() -> int:
 		return _msg_case
