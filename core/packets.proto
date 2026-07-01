@@ -113,6 +113,10 @@ message UpdatePlayerLobbyStatus {
   LobbyPlayerData updated_player = 1;
 }
 
+message StartGameRequest {}
+
+message LobbyGameStartedResponse {}
+
 // Entry
 message Packet {
   uint64 sender_id = 1;
@@ -143,6 +147,9 @@ message Packet {
 
     ReadyLobbyRequest ready_lobby_request = 17;
     UpdatePlayerLobbyStatus update_player_lobby_status = 18;
+
+    StartGameRequest start_game_request = 19;
+    LobbyGameStartedResponse lobby_game_started_response = 20;
 
     // Game messages
   }

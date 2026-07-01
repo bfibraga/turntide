@@ -5,11 +5,11 @@ import (
 	"context"
 	"log/slog"
 
+	"github.com/bfibraga/turntide/core/pkg/objects"
 	"github.com/bfibraga/turntide/core/pkg/packets"
 	"github.com/bfibraga/turntide/core/pkg/repository"
 	"github.com/bfibraga/turntide/server/internal/server"
 	"github.com/bfibraga/turntide/server/internal/server/lobby"
-	"github.com/bfibraga/turntide/core/pkg/objects"
 )
 
 type InLobby struct {
@@ -90,6 +90,10 @@ func (i *InLobby) HandleMessage(senderId uint64, message packets.Msg) {
 		i.handleReadyLobbyRequest(senderId, message)
 	case *packets.Packet_UpdatePlayerLobbyStatus:
 		i.handleUpdatePlayerLobbyStatus(senderId, message)
+	case *packets.Packet_StartGameRequest:
+		i.handleStartGameRequest(senderId, message)
+	case *packets.Packet_LobbyGameStartedResponse:
+		i.handleLobbyGameStartedResponse(senderId, message)
 	case *packets.Packet_Chat:
 		i.handleLobbyChat(senderId, message)
 	default:
@@ -166,6 +170,30 @@ func (i *InLobby) handleUpdatePlayerLobbyStatus(senderId uint64, message *packet
 	}
 }
 
+func (i *InLobby) handleStartGameRequest(senderId uint64, message *packets.Packet_StartGameRequest) {
+	if err := i.lobbySvc.StartGame(context.Background(), i.lobbyID, senderId); err != nil {
+		i.logger.Error("failed to start the game", "error", err)
+		i.client.SocketSend(packets.NewDenyResponse(err.Error()))
+		return
+	}
+
+	gameStartedPkt := packets.NewLobbyGameStartedResponse()
+	i.client.SocketSend(gameStartedPkt)
+	i.client.BroadcastToLobby(i.lobbyID, gameStartedPkt)
+
+	i.client.SetState(NewInGame(i.logger, i.lobbyID))
+}
+
+func (i *InLobby) handleLobbyGameStartedResponse(senderId uint64, message *packets.Packet_LobbyGameStartedResponse) {
+	if senderId == i.client.Id() {
+		i.client.BroadcastToLobby(i.lobbyID, message)
+	} else {
+		i.client.SocketSendAs(senderId, message)
+	}
+
+	i.client.SetState(NewInGame(i.logger, i.lobbyID))
+}
+
 /*func (i *InLobby) handleChat(senderId uint64, message *packets.Packet_Chat) {
 	if senderId == i.client.Id() {
 		i.broadcastToLobby(message)
@@ -225,7 +253,7 @@ func (i *InLobby) handleGameStart() {
 }*/
 
 func (i *InLobby) OnExit() {
-	clientId := i.client.Id()
+	/*clientId := i.client.Id()
 
 	if i.lobbySvc != nil {
 		i.lobbySvc.LeaveLobby(context.Background(), clientId)
@@ -234,5 +262,5 @@ func (i *InLobby) OnExit() {
 	lobbyId := i.lobbyID
 	if i.client != nil {
 		i.client.BroadcastToLobby(lobbyId, packets.NewLeftLobbyResponse(clientId))
-	}
+	}*/
 }

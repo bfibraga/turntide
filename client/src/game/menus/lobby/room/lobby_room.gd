@@ -49,7 +49,7 @@ func _ready() -> void:
 	WS.connection_closed.connect(func() -> void: leave_lobby())
 	
 	ready_button.pressed.connect(func() -> void: toggle_ready())
-	#start_button.pressed.connect(func() -> void: start_game())
+	start_button.pressed.connect(func() -> void: start_game())
 	leave_button.pressed.connect(func() -> void: leave_lobby())
 	
 	data.manually_emit()
@@ -61,10 +61,10 @@ func _on_ws_packet_received(packet: packets.Packet) -> void:
 		_handle_left_lobby(packet.get_left_lobby_response())
 	elif packet.has_update_player_lobby_status():
 		_handle_update_player_lobby_status(packet.get_update_player_lobby_status())
-	#elif packet.has_lobby_game_start():
-		#_handle_game_start()
-
-func _handle_joined_lobby(msg: packets.JoinedLobbyResponse) -> void:	
+	elif packet.has_lobby_game_started_response():
+		_handle_lobby_game_started()
+	
+func _handle_joined_lobby(msg: packets.JoinedLobbyResponse) -> void:
 	data.players.value = msg.get_players()
 
 func _handle_left_lobby(msg: packets.LeftLobbyResponse) -> void:
@@ -92,24 +92,10 @@ func _handle_update_player_lobby_status(msg: packets.UpdatePlayerLobbyStatus) ->
 	
 	data.players.value = updated_players.duplicate()
 
-#func _handle_player_left(msg: packets.LobbyPlayerLeft) -> void:
-	#Global.logger.info("Player left: %d" % msg.get_client_id())
-	## TODO: update UI list when scene is implemented
-	#if not msg.has_client_id():
-		#push_error("Empty player infomation, rolling back...")
-		#return
-	#
-	#var player_id: int = msg.get_client_id()
-	#data.players.value.erase(player_id)
-	#
-#func _handle_player_ready(msg: packets.LobbyPlayerReady) -> void:
-	#Global.logger.info("Player %d ready: %s" % [msg.get_client_id(), msg.get_ready()])
-#
-#func _handle_game_start() -> void:
-	#Global.logger.info("Game starting!")
-	##transition_requested.emit(IngameState.Name())
-	#Global.game_controller.gui_transition_to("ingame")
-#
+func _handle_lobby_game_started() -> void:
+	Global.game_controller.rollback_state_machine()
+	Global.game_controller.gui_transition_to("ingame")
+
 func _refresh_player_list(players: Array = data.players.value) -> void:
 	# Clear children
 	for child: Node in players_list_container.get_children():
@@ -138,6 +124,6 @@ func toggle_ready() -> void:
 	var packet: packets.Packet = PacketFactory.new_ready_lobby_request(data.is_ready.value)
 	WS.send(packet)
 #
-#func start_game() -> void:
-	#var packet: packets.Packet = PacketFactory.new_lobby_start_req()
-	#WS.send(packet)
+func start_game() -> void:
+	var packet: packets.Packet = PacketFactory.new_start_game_request()
+	WS.send(packet)

@@ -109,6 +109,14 @@ func new_ready_lobby_request(is_ready: bool = false) -> packets.Packet:
 	
 	return packet
 
+func new_start_game_request() -> packets.Packet:
+	var packet : packets.Packet = packets.Packet.new()
+	var _start_game_request : packets.StartGameRequest = packet.new_start_game_request()
+	
+	packet.set_sender_id(Global.client_id)
+	
+	return packet 
+
 #func new_list_lobbies_response(  ) -> packets.Packet:
 	#var packet : packets.Packet = packets.Packet.new()
 	#var list_lobbies_response : packets.ListLobbiesResponse = packet.new_list_lobbies_response()

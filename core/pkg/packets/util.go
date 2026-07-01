@@ -149,3 +149,11 @@ func NewUpdatePlayerLobbyStatus(updatedPlayer *LobbyPlayerData) Msg {
 		},
 	}
 }
+
+// Game Start 
+
+func NewLobbyGameStartedResponse() Msg {
+	return &Packet_LobbyGameStartedResponse{
+		LobbyGameStartedResponse: &LobbyGameStartedResponse{},
+	}
+}
