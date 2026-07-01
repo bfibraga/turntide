@@ -15,7 +15,7 @@ import (
 	"github.com/bfibraga/turntide/core/pkg/repository"
 	"github.com/bfibraga/turntide/server/internal/server"
 	"github.com/bfibraga/turntide/server/internal/server/clients"
-	"github.com/bfibraga/turntide/server/internal/server/components"
+	"github.com/bfibraga/turntide/server/internal/server/lobby"
 	"github.com/bfibraga/turntide/server/internal/server/logger"
 	"github.com/bfibraga/turntide/server/internal/server/user"
 	"github.com/joho/godotenv"
@@ -79,7 +79,10 @@ func main() {
 	userRepo := factory.CreateUserRepository()
 	userService := user.NewService(userRepo)
 
-	hub := server.NewHub(logger, userService, components.DefaultLobbyConfig())
+	lobbyRepo := repository.NewInMemoryLobbyRepository()
+	lobbyService := lobby.NewService(lobbyRepo, lobby.DefaultConfig())
+
+	hub := server.NewHub(logger, userService, lobbyService)
 	hub.Initialize()
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {

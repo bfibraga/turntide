@@ -2,17 +2,19 @@ package states
 
 import (
 	"cmp"
+	"context"
 	"log/slog"
 
 	"github.com/bfibraga/turntide/core/pkg/packets"
+	"github.com/bfibraga/turntide/core/pkg/repository"
 	"github.com/bfibraga/turntide/server/internal/server"
-	"github.com/bfibraga/turntide/server/internal/server/components"
-	"github.com/bfibraga/turntide/server/internal/server/objects"
+	"github.com/bfibraga/turntide/server/internal/server/lobby"
+	"github.com/bfibraga/turntide/core/pkg/objects"
 )
 
 type InLobby struct {
 	client   server.ClientInterfacer
-	lobbyReg *components.LobbyRegistry
+	lobbySvc *lobby.Service
 	logger   *slog.Logger
 	lobbyID  uint64
 	username string
@@ -20,14 +22,14 @@ type InLobby struct {
 
 func NewInLobby(
 	logger *slog.Logger,
-	lobbyReg *components.LobbyRegistry,
+	lobbySvc *lobby.Service,
 	client server.ClientInterfacer,
 	lobbyID uint64,
 	username string,
 ) *InLobby {
 	return &InLobby{
 		logger:   logger,
-		lobbyReg: lobbyReg,
+		lobbySvc: lobbySvc,
 		client:   client,
 		lobbyID:  lobbyID,
 		username: username,
@@ -43,7 +45,7 @@ func (i *InLobby) SetClient(client server.ClientInterfacer) {
 }
 
 func (i *InLobby) OnEnter() {
-	lobby, ok := i.lobbyReg.FindLobby(i.lobbyID)
+	lobby, ok := i.lobbySvc.FindLobby(context.Background(), i.lobbyID)
 	if !ok {
 		i.logger.Error("lobby not found on enter", "lobby_id", i.lobbyID)
 		return
@@ -52,10 +54,10 @@ func (i *InLobby) OnEnter() {
 	i.logger.Info("entered in lobby", "client_id", i.client.Id(), "lobby_id", i.lobbyID)
 
 	playersSlice := objects.FromMapToSharedSlice(lobby.Players).
-		Sort(func(a, b *components.LobbyPlayer) int {
+		Sort(func(a, b *repository.LobbyPlayer) int {
 			return cmp.Compare(a.Username, b.Username)
 		})
-	playerLobbySlice := objects.MapSlice(playersSlice, func(i int, p *components.LobbyPlayer) *packets.LobbyPlayerData {
+	playerLobbySlice := objects.MapSlice(playersSlice, func(i int, p *repository.LobbyPlayer) *packets.LobbyPlayerData {
 		return packets.NewLobbyPlayerData(p.ClientID, p.Username, p.Ready)
 	})
 
@@ -114,7 +116,7 @@ func (i *InLobby) handleJoinedLobbyResponse(senderId uint64, message *packets.Pa
 func (i *InLobby) handleLeaveLobbyRequest(senderId uint64, message *packets.Packet_LeaveLobbyRequest) {
 	clientId := i.client.Id()
 
-	_, err := i.lobbyReg.LeaveLobby(clientId)
+	_, err := i.lobbySvc.LeaveLobby(context.Background(), clientId)
 	if err != nil {
 		i.logger.Error("failed to leave lobby", "error", err)
 		i.client.SocketSend(packets.NewDenyResponse(err.Error()))
@@ -125,7 +127,7 @@ func (i *InLobby) handleLeaveLobbyRequest(senderId uint64, message *packets.Pack
 	i.client.SocketSend(leftPkt)
 	i.client.BroadcastToLobby(i.lobbyID, leftPkt)
 
-	i.client.SetState(NewAuthenticated(i.logger, i.username, i.lobbyReg))
+	i.client.SetState(NewAuthenticated(i.logger, i.username, i.lobbySvc))
 }
 
 func (i *InLobby) handleLeftLobbyResponse(senderId uint64, message *packets.Packet_LeftLobbyResponse) {
@@ -140,7 +142,7 @@ func (i *InLobby) handleReadyLobbyRequest(senderId uint64, message *packets.Pack
 	msg := message.ReadyLobbyRequest
 	isReady := msg.IsReady
 
-	player, err := i.lobbyReg.SetReady(senderId, isReady)
+	player, err := i.lobbySvc.SetReady(context.Background(), senderId, isReady)
 	if err != nil {
 		i.logger.Error("failed to set ready", "error", err)
 		i.client.SocketSend(packets.NewDenyResponse(err.Error()))
@@ -225,14 +227,12 @@ func (i *InLobby) handleGameStart() {
 func (i *InLobby) OnExit() {
 	clientId := i.client.Id()
 
-	if i.lobbyReg != nil {
-		i.lobbyReg.LeaveLobby(clientId)
+	if i.lobbySvc != nil {
+		i.lobbySvc.LeaveLobby(context.Background(), clientId)
 	}
 
 	lobbyId := i.lobbyID
 	if i.client != nil {
 		i.client.BroadcastToLobby(lobbyId, packets.NewLeftLobbyResponse(clientId))
 	}
-
-	//i.client.SocketSend(packet)
 }

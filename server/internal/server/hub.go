@@ -1,32 +1,33 @@
 package server
 
 import (
+	"context"
 	"log/slog"
 	"net/http"
 
 	"github.com/bfibraga/turntide/server/internal/server/components"
+	"github.com/bfibraga/turntide/server/internal/server/lobby"
 	"github.com/bfibraga/turntide/server/internal/server/user"
 )
 
 type Hub struct {
-	Logger      *slog.Logger
-	UserService *user.Service
-	Registry    *components.ClientRegistry
-	Broker      *components.MessageBroker
-	Lobbies     *components.LobbyRegistry
+	Logger       *slog.Logger
+	UserService  *user.Service
+	Registry     *components.ClientRegistry
+	Broker       *components.MessageBroker
+	LobbyService *lobby.Service
 }
 
-func NewHub(logger *slog.Logger, userService *user.Service, lobbyConfig *components.LobbyConfig) *Hub {
-	lobbyReg := components.NewLobbyRegistry(lobbyConfig)
+func NewHub(logger *slog.Logger, userService *user.Service, lobbyService *lobby.Service) *Hub {
 	clientReg := components.NewClientRegistry()
 	messageBroker := components.NewMessageBroker()
 
 	return &Hub{
-		Logger:      logger,
-		UserService: userService,
-		Registry:    clientReg,
-		Broker:      messageBroker,
-		Lobbies:     lobbyReg,
+		Logger:       logger,
+		UserService:  userService,
+		Registry:     clientReg,
+		Broker:       messageBroker,
+		LobbyService: lobbyService,
 	}
 }
 
@@ -95,7 +96,7 @@ func (h *Hub) Run() {
 				}
 			})
 		case lobbyBroadcast := <-h.Broker.LobbyBroadcastChan:
-			lobby, ok := h.Lobbies.FindLobby(lobbyBroadcast.LobbyID)
+			lobby, ok := h.LobbyService.FindLobby(context.Background(), lobbyBroadcast.LobbyID)
 			if !ok {
 				return
 			}

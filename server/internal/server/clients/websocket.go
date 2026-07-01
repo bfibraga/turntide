@@ -50,7 +50,7 @@ func (c *WebSocketClient) Id() uint64 {
 func (c *WebSocketClient) Initialize(id uint64) {
 	c.id = id
 	c.logger = c.hub.Logger.With("client_id", id)
-	c.SetState(states.NewConnected(c.logger, c.hub.UserService, c.hub.Lobbies))
+	c.SetState(states.NewConnected(c.logger, c.hub.UserService, c.hub.LobbyService))
 	c.logger.Debug("Sent ID to client")
 
 	// Register lobby change callback once hub is available

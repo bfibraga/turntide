@@ -37,6 +37,12 @@ func (s *SharedCollection[T]) Get(key uint64) (T, bool) {
 	return v, ok
 }
 
+func (s *SharedCollection[T]) Set(key uint64, value T) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.items[key] = value
+}
+
 func (s *SharedCollection[T]) Delete(key uint64) {
 	s.mu.Lock()
 	defer s.mu.Unlock()

@@ -23,6 +23,7 @@ package repository
 
 import (
 	"context"
+	"time"
 
 	"github.com/bfibraga/turntide/core/internal/db/cards"
 	"github.com/bfibraga/turntide/core/internal/db/server"
@@ -112,4 +113,29 @@ type UserRepository interface {
 
 	// GetByUsername retrieves a user by username
 	GetByUsername(ctx context.Context, username string) (*UserModel, error)
+}
+
+// LobbyRepository defines the interface for lobby data access
+type LobbyRepository interface {
+	// Create inserts a new lobby and returns it with an assigned ID
+	Create(ctx context.Context, lobby *Lobby) (*Lobby, error)
+
+	// GetByID retrieves a lobby by its ID
+	GetByID(ctx context.Context, id uint64) (*Lobby, error)
+
+	// GetByClientID retrieves the lobby a client is currently in
+	GetByClientID(ctx context.Context, clientID uint64) (*Lobby, error)
+
+	// Update saves changes to an existing lobby
+	Update(ctx context.Context, lobby *Lobby) error
+
+	// Delete removes a lobby
+	Delete(ctx context.Context, id uint64) error
+
+	// List returns lobbies matching the filter criteria
+	List(ctx context.Context, options *ListLobbiesOptions) (*ListLobbiesResult, error)
+
+	// SetTTL sets the duration empty lobbies are kept before automatic removal.
+	// Implementations that support TTL-based cleanup should respect this.
+	SetTTL(d time.Duration)
 }

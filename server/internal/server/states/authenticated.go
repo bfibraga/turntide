@@ -1,26 +1,28 @@
 package states
 
 import (
+	"context"
 	"log/slog"
 
 	"github.com/bfibraga/turntide/core/pkg/packets"
+	"github.com/bfibraga/turntide/core/pkg/repository"
 	"github.com/bfibraga/turntide/server/internal/server"
-	"github.com/bfibraga/turntide/server/internal/server/components"
-	"github.com/bfibraga/turntide/server/internal/server/objects"
+	"github.com/bfibraga/turntide/server/internal/server/lobby"
+	"github.com/bfibraga/turntide/core/pkg/objects"
 )
 
 type Authenticated struct {
 	client   server.ClientInterfacer
 	username string
 	logger   *slog.Logger
-	lobbyReg *components.LobbyRegistry
+	lobbySvc *lobby.Service
 }
 
-func NewAuthenticated(logger *slog.Logger, username string, lobbyReg *components.LobbyRegistry) *Authenticated {
+func NewAuthenticated(logger *slog.Logger, username string, lobbySvc *lobby.Service) *Authenticated {
 	return &Authenticated{
 		logger:   logger,
 		username: username,
-		lobbyReg: lobbyReg,
+		lobbySvc: lobbySvc,
 	}
 }
 
@@ -57,27 +59,18 @@ func (a *Authenticated) HandleMessage(senderId uint64, message packets.Msg) {
 func (a *Authenticated) handleLobbyList(message *packets.Packet_ListLobbiesRequest) {
 	request := message.ListLobbiesRequest
 
-	options := components.NewListLobbiesOptions(
-		int(request.Page), int(request.PageSize),
-		&request.Name, &request.Format, components.ConvertToLobbyState(int(request.State)),
-	)
+	options := &repository.ListLobbiesOptions{
+		Page:     int(request.Page),
+		PageSize: int(request.PageSize),
+		Name:     &request.Name,
+		Format:   &request.Format,
+		State:    repository.ConvertToLobbyState(int(request.State)),
+	}
 
-	result := a.lobbyReg.ListLobbies(options)
-
-	/*lobbyDataList = append(lobbyDataList, &packets.LobbyData{
-		//Id:             l.ID,
-		Name:           l.Name,
-		CurrentPlayers: int32(len(l.Players)),
-		MaxPlayers:     int32(l.MaxPlayers),
-		//Format:         l.Format,
-		//CurrentPlayers: int32(l.CurrentPlayers),
-		//MaxPlayers:     int32(l.MaxPlayers),
-		//HostUsername:   l.HostUsername,
-		//IsPrivate:      l.IsPrivate,
-	})*/
+	result := a.lobbySvc.ListLobbies(context.Background(), options)
 
 	lobbySlice := objects.FromArrayToSharedSlice(result.Lobbies)
-	lobbyDataSlice := objects.MapSlice(lobbySlice, func(i int, l *components.Lobby) *packets.LobbyData {
+	lobbyDataSlice := objects.MapSlice(lobbySlice, func(i int, l *repository.Lobby) *packets.LobbyData {
 		return packets.NewLobbyDataBuilder().
 			WithID(l.ID).
 			WithName(l.Name).
@@ -94,26 +87,18 @@ func (a *Authenticated) handleLobbyList(message *packets.Packet_ListLobbiesReque
 func (a *Authenticated) handleCreateLobby(senderId uint64, message *packets.Packet_CreateLobbyRequest) {
 	request := message.CreateLobbyRequest
 
-	/*lobby := a.lobbyReg.CreateLobby(
-	senderId,
-	a.username,
-	request.Name,
-	request.Format,
-	int(request.MaxPlayers),
-	request.IsPrivate,
-	request.Password,
-	)*/
+	lobby := &repository.Lobby{
+		HostID:       senderId,
+		HostUsername: a.username,
+		Name:         request.Name,
+		Format:       request.Format,
+		MaxPlayers:   max(int(request.MaxPlayers), 2),
+		IsPrivate:    request.IsPrivate,
+		Players:      make(map[uint64]*repository.LobbyPlayer),
+		State:        repository.LobbyWaiting,
+	}
 
-	lobby := components.NewLobbyBuilder().
-		WithHostID(senderId).
-		WithHostUsername(a.username).
-		WithName(request.Name).
-		WithFormat(request.Format).
-		WithMaxPlayers(max(int(request.MaxPlayers), 2)).
-		WithIsPrivate(request.IsPrivate).
-		Build()
-
-	lobby, err := a.lobbyReg.AddLobby(lobby, request.Password)
+	lobby, err := a.lobbySvc.AddLobby(context.Background(), lobby, request.Password)
 	if err != nil {
 		a.logger.Error("error on creating lobby", "error", err)
 		a.client.SocketSend(packets.NewDenyResponse(err.Error()))
@@ -122,13 +107,13 @@ func (a *Authenticated) handleCreateLobby(senderId uint64, message *packets.Pack
 
 	a.logger.Info("created lobby", "lobby_id", lobby.ID)
 
-	a.client.SetState(NewInLobby(a.logger, a.lobbyReg, a.client, lobby.ID, a.username))
+	a.client.SetState(NewInLobby(a.logger, a.lobbySvc, a.client, lobby.ID, a.username))
 }
 
 func (a *Authenticated) handleJoinLobby(senderId uint64, message *packets.Packet_JoinLobbyRequest) {
 	request := message.JoinLobbyRequest
 
-	err := a.lobbyReg.JoinLobby(request.LobbyId, senderId, a.username, request.Password)
+	err := a.lobbySvc.JoinLobby(context.Background(), request.LobbyId, senderId, a.username, request.Password)
 	if err != nil {
 		a.logger.Error("failed to join lobby", "error", err)
 		a.client.SocketSend(packets.NewDenyResponse(err.Error()))
@@ -138,7 +123,7 @@ func (a *Authenticated) handleJoinLobby(senderId uint64, message *packets.Packet
 	a.logger.Debug("joined lobby", "lobby_id", request.LobbyId)
 
 	// Transition to InLobby state
-	a.client.SetState(NewInLobby(a.logger, a.lobbyReg, a.client, request.LobbyId, a.username))
+	a.client.SetState(NewInLobby(a.logger, a.lobbySvc, a.client, request.LobbyId, a.username))
 }
 
 func (a *Authenticated) OnExit() {
