@@ -1751,6 +1751,98 @@ class LeftLobbyResponse:
 			return PB_ERR.PARSE_INCOMPLETE
 		return result
 	
+class ReadyLobbyRequest:
+	func _init():
+		var service
+		
+		__is_ready = PBField.new("is_ready", PB_DATA_TYPE.BOOL, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL])
+		service = PBServiceField.new()
+		service.field = __is_ready
+		data[__is_ready.tag] = service
+		
+	var data = {}
+	
+	var __is_ready: PBField
+	func has_is_ready() -> bool:
+		if __is_ready.value != null:
+			return true
+		return false
+	func get_is_ready() -> bool:
+		return __is_ready.value
+	func clear_is_ready() -> void:
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		__is_ready.value = DEFAULT_VALUES_3[PB_DATA_TYPE.BOOL]
+	func set_is_ready(value : bool) -> void:
+		__is_ready.value = value
+	
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
+class UpdatePlayerLobbyStatus:
+	func _init():
+		var service
+		
+		__updated_player = PBField.new("updated_player", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 1, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = __updated_player
+		service.func_ref = Callable(self, "new_updated_player")
+		data[__updated_player.tag] = service
+		
+	var data = {}
+	
+	var __updated_player: PBField
+	func has_updated_player() -> bool:
+		if __updated_player.value != null:
+			return true
+		return false
+	func get_updated_player() -> LobbyPlayerData:
+		return __updated_player.value
+	func clear_updated_player() -> void:
+		data[1].state = PB_SERVICE_STATE.UNFILLED
+		__updated_player.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_updated_player() -> LobbyPlayerData:
+		__updated_player.value = LobbyPlayerData.new()
+		return __updated_player.value
+	
+	func _to_string() -> String:
+		return PBPacker.message_to_string(data)
+		
+	func to_bytes() -> PackedByteArray:
+		return PBPacker.pack_message(data)
+		
+	func from_bytes(bytes : PackedByteArray, offset : int = 0, limit : int = -1) -> int:
+		var cur_limit = bytes.size()
+		if limit != -1:
+			cur_limit = limit
+		var result = PBPacker.unpack_message(data, bytes, offset, cur_limit)
+		if result == cur_limit:
+			if PBPacker.check_required(data):
+				if limit == -1:
+					return PB_ERR.NO_ERRORS
+			else:
+				return PB_ERR.REQUIRED_FIELDS
+		elif limit == -1 && result > 0:
+			return PB_ERR.PARSE_INCOMPLETE
+		return result
+	
 class Packet:
 	func _init():
 		var service
@@ -1850,6 +1942,18 @@ class Packet:
 		service.func_ref = Callable(self, "new_left_lobby_response")
 		data[__left_lobby_response.tag] = service
 		
+		__ready_lobby_request = PBField.new("ready_lobby_request", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 17, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = __ready_lobby_request
+		service.func_ref = Callable(self, "new_ready_lobby_request")
+		data[__ready_lobby_request.tag] = service
+		
+		__update_player_lobby_status = PBField.new("update_player_lobby_status", PB_DATA_TYPE.MESSAGE, PB_RULE.OPTIONAL, 18, true, DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE])
+		service = PBServiceField.new()
+		service.field = __update_player_lobby_status
+		service.func_ref = Callable(self, "new_update_player_lobby_status")
+		data[__update_player_lobby_status.tag] = service
+		
 	var data = {}
 	
 	enum MsgCase {
@@ -1869,6 +1973,8 @@ class Packet:
 		JOINED_LOBBY_RESPONSE = 14,
 		LEAVE_LOBBY_REQUEST = 15,
 		LEFT_LOBBY_RESPONSE = 16,
+		READY_LOBBY_REQUEST = 17,
+		UPDATE_PLAYER_LOBBY_STATUS = 18,
 	}
 	var _msg_case: int = 0
 
@@ -1924,6 +2030,10 @@ class Packet:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__left_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[16].state = PB_SERVICE_STATE.UNFILLED
+		__ready_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[17].state = PB_SERVICE_STATE.UNFILLED
+		__update_player_lobby_status.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[18].state = PB_SERVICE_STATE.UNFILLED
 		__ping.value = PingMessage.new()
 		return __ping.value
 	
@@ -1966,6 +2076,10 @@ class Packet:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__left_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[16].state = PB_SERVICE_STATE.UNFILLED
+		__ready_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[17].state = PB_SERVICE_STATE.UNFILLED
+		__update_player_lobby_status.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[18].state = PB_SERVICE_STATE.UNFILLED
 		__chat.value = ChatMessage.new()
 		return __chat.value
 	
@@ -2008,6 +2122,10 @@ class Packet:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__left_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[16].state = PB_SERVICE_STATE.UNFILLED
+		__ready_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[17].state = PB_SERVICE_STATE.UNFILLED
+		__update_player_lobby_status.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[18].state = PB_SERVICE_STATE.UNFILLED
 		__id.value = IdMessage.new()
 		return __id.value
 	
@@ -2050,6 +2168,10 @@ class Packet:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__left_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[16].state = PB_SERVICE_STATE.UNFILLED
+		__ready_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[17].state = PB_SERVICE_STATE.UNFILLED
+		__update_player_lobby_status.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[18].state = PB_SERVICE_STATE.UNFILLED
 		__login_request.value = LoginRequestMessage.new()
 		return __login_request.value
 	
@@ -2092,6 +2214,10 @@ class Packet:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__left_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[16].state = PB_SERVICE_STATE.UNFILLED
+		__ready_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[17].state = PB_SERVICE_STATE.UNFILLED
+		__update_player_lobby_status.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[18].state = PB_SERVICE_STATE.UNFILLED
 		__register_request.value = RegisterRequestMessage.new()
 		return __register_request.value
 	
@@ -2134,6 +2260,10 @@ class Packet:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__left_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[16].state = PB_SERVICE_STATE.UNFILLED
+		__ready_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[17].state = PB_SERVICE_STATE.UNFILLED
+		__update_player_lobby_status.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[18].state = PB_SERVICE_STATE.UNFILLED
 		__ok_response.value = OkResponseMessage.new()
 		return __ok_response.value
 	
@@ -2176,6 +2306,10 @@ class Packet:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__left_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[16].state = PB_SERVICE_STATE.UNFILLED
+		__ready_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[17].state = PB_SERVICE_STATE.UNFILLED
+		__update_player_lobby_status.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[18].state = PB_SERVICE_STATE.UNFILLED
 		__deny_response.value = DenyResponseMessage.new()
 		return __deny_response.value
 	
@@ -2218,6 +2352,10 @@ class Packet:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__left_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[16].state = PB_SERVICE_STATE.UNFILLED
+		__ready_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[17].state = PB_SERVICE_STATE.UNFILLED
+		__update_player_lobby_status.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[18].state = PB_SERVICE_STATE.UNFILLED
 		__list_lobbies_request.value = ListLobbiesRequest.new()
 		return __list_lobbies_request.value
 	
@@ -2260,6 +2398,10 @@ class Packet:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__left_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[16].state = PB_SERVICE_STATE.UNFILLED
+		__ready_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[17].state = PB_SERVICE_STATE.UNFILLED
+		__update_player_lobby_status.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[18].state = PB_SERVICE_STATE.UNFILLED
 		__list_lobbies_response.value = ListLobbiesResponse.new()
 		return __list_lobbies_response.value
 	
@@ -2302,6 +2444,10 @@ class Packet:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__left_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[16].state = PB_SERVICE_STATE.UNFILLED
+		__ready_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[17].state = PB_SERVICE_STATE.UNFILLED
+		__update_player_lobby_status.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[18].state = PB_SERVICE_STATE.UNFILLED
 		__create_lobby_request.value = CreateLobbyRequest.new()
 		return __create_lobby_request.value
 	
@@ -2344,6 +2490,10 @@ class Packet:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__left_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[16].state = PB_SERVICE_STATE.UNFILLED
+		__ready_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[17].state = PB_SERVICE_STATE.UNFILLED
+		__update_player_lobby_status.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[18].state = PB_SERVICE_STATE.UNFILLED
 		__create_lobby_response.value = CreateLobbyResponse.new()
 		return __create_lobby_response.value
 	
@@ -2386,6 +2536,10 @@ class Packet:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__left_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[16].state = PB_SERVICE_STATE.UNFILLED
+		__ready_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[17].state = PB_SERVICE_STATE.UNFILLED
+		__update_player_lobby_status.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[18].state = PB_SERVICE_STATE.UNFILLED
 		__join_lobby_request.value = JoinLobbyRequest.new()
 		return __join_lobby_request.value
 	
@@ -2428,6 +2582,10 @@ class Packet:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		__left_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[16].state = PB_SERVICE_STATE.UNFILLED
+		__ready_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[17].state = PB_SERVICE_STATE.UNFILLED
+		__update_player_lobby_status.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[18].state = PB_SERVICE_STATE.UNFILLED
 		__joined_lobby_response.value = JoinedLobbyResponse.new()
 		return __joined_lobby_response.value
 	
@@ -2470,6 +2628,10 @@ class Packet:
 		_msg_case = 15
 		__left_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
 		data[16].state = PB_SERVICE_STATE.UNFILLED
+		__ready_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[17].state = PB_SERVICE_STATE.UNFILLED
+		__update_player_lobby_status.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[18].state = PB_SERVICE_STATE.UNFILLED
 		__leave_lobby_request.value = LeaveLobbyRequest.new()
 		return __leave_lobby_request.value
 	
@@ -2512,8 +2674,104 @@ class Packet:
 		data[15].state = PB_SERVICE_STATE.UNFILLED
 		data[16].state = PB_SERVICE_STATE.FILLED
 		_msg_case = 16
+		__ready_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[17].state = PB_SERVICE_STATE.UNFILLED
+		__update_player_lobby_status.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[18].state = PB_SERVICE_STATE.UNFILLED
 		__left_lobby_response.value = LeftLobbyResponse.new()
 		return __left_lobby_response.value
+	
+	var __ready_lobby_request: PBField
+	func has_ready_lobby_request() -> bool:
+		return data[17].state == PB_SERVICE_STATE.FILLED
+	func get_ready_lobby_request() -> ReadyLobbyRequest:
+		return __ready_lobby_request.value
+	func clear_ready_lobby_request() -> void:
+		data[17].state = PB_SERVICE_STATE.UNFILLED
+		__ready_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_ready_lobby_request() -> ReadyLobbyRequest:
+		__ping.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__chat.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__login_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		__register_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__ok_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__deny_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__list_lobbies_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__list_lobbies_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__join_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__leave_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[15].state = PB_SERVICE_STATE.UNFILLED
+		__left_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[16].state = PB_SERVICE_STATE.UNFILLED
+		data[17].state = PB_SERVICE_STATE.FILLED
+		_msg_case = 17
+		__update_player_lobby_status.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[18].state = PB_SERVICE_STATE.UNFILLED
+		__ready_lobby_request.value = ReadyLobbyRequest.new()
+		return __ready_lobby_request.value
+	
+	var __update_player_lobby_status: PBField
+	func has_update_player_lobby_status() -> bool:
+		return data[18].state == PB_SERVICE_STATE.FILLED
+	func get_update_player_lobby_status() -> UpdatePlayerLobbyStatus:
+		return __update_player_lobby_status.value
+	func clear_update_player_lobby_status() -> void:
+		data[18].state = PB_SERVICE_STATE.UNFILLED
+		__update_player_lobby_status.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+	func new_update_player_lobby_status() -> UpdatePlayerLobbyStatus:
+		__ping.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[2].state = PB_SERVICE_STATE.UNFILLED
+		__chat.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[3].state = PB_SERVICE_STATE.UNFILLED
+		__id.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[4].state = PB_SERVICE_STATE.UNFILLED
+		__login_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[5].state = PB_SERVICE_STATE.UNFILLED
+		__register_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[6].state = PB_SERVICE_STATE.UNFILLED
+		__ok_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[7].state = PB_SERVICE_STATE.UNFILLED
+		__deny_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[8].state = PB_SERVICE_STATE.UNFILLED
+		__list_lobbies_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[9].state = PB_SERVICE_STATE.UNFILLED
+		__list_lobbies_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[10].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[11].state = PB_SERVICE_STATE.UNFILLED
+		__create_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[12].state = PB_SERVICE_STATE.UNFILLED
+		__join_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[13].state = PB_SERVICE_STATE.UNFILLED
+		__joined_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[14].state = PB_SERVICE_STATE.UNFILLED
+		__leave_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[15].state = PB_SERVICE_STATE.UNFILLED
+		__left_lobby_response.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[16].state = PB_SERVICE_STATE.UNFILLED
+		__ready_lobby_request.value = DEFAULT_VALUES_3[PB_DATA_TYPE.MESSAGE]
+		data[17].state = PB_SERVICE_STATE.UNFILLED
+		data[18].state = PB_SERVICE_STATE.FILLED
+		_msg_case = 18
+		__update_player_lobby_status.value = UpdatePlayerLobbyStatus.new()
+		return __update_player_lobby_status.value
 	
 	func get_msg_case() -> int:
 		return _msg_case

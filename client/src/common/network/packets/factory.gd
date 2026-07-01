@@ -99,6 +99,16 @@ func new_leave_lobby_request() -> packets.Packet:
 	
 	return packet
 
+func new_ready_lobby_request(is_ready: bool = false) -> packets.Packet:
+	var packet : packets.Packet = packets.Packet.new()
+	var ready_request : packets.ReadyLobbyRequest = packet.new_ready_lobby_request()
+	
+	packet.set_sender_id(Global.client_id)
+	
+	ready_request.set_is_ready(is_ready)
+	
+	return packet
+
 #func new_list_lobbies_response(  ) -> packets.Packet:
 	#var packet : packets.Packet = packets.Packet.new()
 	#var list_lobbies_response : packets.ListLobbiesResponse = packet.new_list_lobbies_response()

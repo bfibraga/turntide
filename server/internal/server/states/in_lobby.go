@@ -84,6 +84,10 @@ func (i *InLobby) HandleMessage(senderId uint64, message packets.Msg) {
 		i.handleLeaveLobbyRequest(senderId, message)
 	case *packets.Packet_LeftLobbyResponse:
 		i.handleLeftLobbyResponse(senderId, message)
+	case *packets.Packet_ReadyLobbyRequest:
+		i.handleReadyLobbyRequest(senderId, message)
+	case *packets.Packet_UpdatePlayerLobbyStatus:
+		i.handleUpdatePlayerLobbyStatus(senderId, message)
 	case *packets.Packet_Chat:
 		i.handleLobbyChat(senderId, message)
 	default:
@@ -125,6 +129,34 @@ func (i *InLobby) handleLeaveLobbyRequest(senderId uint64, message *packets.Pack
 }
 
 func (i *InLobby) handleLeftLobbyResponse(senderId uint64, message *packets.Packet_LeftLobbyResponse) {
+	if senderId == i.client.Id() {
+		i.client.BroadcastToLobby(i.lobbyID, message)
+	} else {
+		i.client.SocketSendAs(senderId, message)
+	}
+}
+
+func (i *InLobby) handleReadyLobbyRequest(senderId uint64, message *packets.Packet_ReadyLobbyRequest) {
+	msg := message.ReadyLobbyRequest
+	isReady := msg.IsReady
+
+	player, err := i.lobbyReg.SetReady(senderId, isReady)
+	if err != nil {
+		i.logger.Error("failed to set ready", "error", err)
+		i.client.SocketSend(packets.NewDenyResponse(err.Error()))
+		return
+	}
+
+	lobbyPlayerData := packets.NewLobbyPlayerData(
+		player.ClientID, player.Username, player.Ready,
+	)
+	updatePlayerPkt := packets.NewUpdatePlayerLobbyStatus(lobbyPlayerData)
+
+	i.client.SocketSend(updatePlayerPkt)
+	i.client.BroadcastToLobby(i.lobbyID, updatePlayerPkt)
+}
+
+func (i *InLobby) handleUpdatePlayerLobbyStatus(senderId uint64, message *packets.Packet_UpdatePlayerLobbyStatus) {
 	if senderId == i.client.Id() {
 		i.client.BroadcastToLobby(i.lobbyID, message)
 	} else {
@@ -191,5 +223,16 @@ func (i *InLobby) handleGameStart() {
 }*/
 
 func (i *InLobby) OnExit() {
+	clientId := i.client.Id()
+
+	if i.lobbyReg != nil {
+		i.lobbyReg.LeaveLobby(clientId)
+	}
+
+	lobbyId := i.lobbyID
+	if i.client != nil {
+		i.client.BroadcastToLobby(lobbyId, packets.NewLeftLobbyResponse(clientId))
+	}
+
 	//i.client.SocketSend(packet)
 }

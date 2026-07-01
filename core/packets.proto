@@ -103,6 +103,16 @@ message LeftLobbyResponse {
   uint64 client_id = 1;
 }
 
+// Ready
+
+message ReadyLobbyRequest {
+  bool is_ready = 1;
+}
+
+message UpdatePlayerLobbyStatus {
+  LobbyPlayerData updated_player = 1;
+}
+
 // Entry
 message Packet {
   uint64 sender_id = 1;
@@ -130,6 +140,9 @@ message Packet {
 
     LeaveLobbyRequest leave_lobby_request = 15;
     LeftLobbyResponse left_lobby_response = 16;
+
+    ReadyLobbyRequest ready_lobby_request = 17;
+    UpdatePlayerLobbyStatus update_player_lobby_status = 18;
 
     // Game messages
   }

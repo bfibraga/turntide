@@ -139,3 +139,13 @@ func NewLeftLobbyResponse(clientId uint64) Msg {
 		},
 	}
 }
+
+// Player Lobby
+
+func NewUpdatePlayerLobbyStatus(updatedPlayer *LobbyPlayerData) Msg {
+	return &Packet_UpdatePlayerLobbyStatus{
+		UpdatePlayerLobbyStatus: &UpdatePlayerLobbyStatus{
+			UpdatedPlayer: updatedPlayer,
+		},
+	}
+}

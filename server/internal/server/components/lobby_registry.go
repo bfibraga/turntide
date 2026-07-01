@@ -453,27 +453,27 @@ func (r *LobbyRegistry) LeaveLobby(clientID uint64) (*Lobby, error) {
 	return lobby, nil
 }
 
-func (r *LobbyRegistry) SetReady(clientID uint64, ready bool) error {
+func (r *LobbyRegistry) SetReady(clientID uint64, ready bool) (*LobbyPlayer, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
 	val, ok := r.clientToLobby.Load(clientID)
 	if !ok {
-		return fmt.Errorf("client not in any lobby")
+		return nil, fmt.Errorf("client not in any lobby")
 	}
 	lobbyID := val.(uint64)
 
 	lobby, ok := r.lobbies.Get(lobbyID)
 	if !ok {
-		return fmt.Errorf("lobby not found")
+		return nil, fmt.Errorf("lobby not found")
 	}
 
 	player, ok := lobby.Players[clientID]
 	if !ok {
-		return fmt.Errorf("player not found in lobby")
+		return nil, fmt.Errorf("player not found in lobby")
 	}
 	player.Ready = ready
-	return nil
+	return player, nil
 }
 
 func (r *LobbyRegistry) StartGame(lobbyID uint64, requestedBy uint64) error {

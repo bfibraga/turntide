@@ -48,7 +48,7 @@ func _ready() -> void:
 	WS.packet_received.connect(_on_ws_packet_received)
 	WS.connection_closed.connect(func() -> void: leave_lobby())
 	
-	#ready_button.pressed.connect(func() -> void: toggle_ready())
+	ready_button.pressed.connect(func() -> void: toggle_ready())
 	#start_button.pressed.connect(func() -> void: start_game())
 	leave_button.pressed.connect(func() -> void: leave_lobby())
 	
@@ -59,12 +59,8 @@ func _on_ws_packet_received(packet: packets.Packet) -> void:
 		_handle_joined_lobby(packet.get_joined_lobby_response())
 	elif packet.has_left_lobby_response():
 		_handle_left_lobby(packet.get_left_lobby_response())
-	#if packet.has_lobby_player_joined():
-		#_handle_player_joined(packet.get_lobby_player_joined())
-	#elif packet.has_lobby_player_left():
-		#_handle_player_left(packet.get_lobby_player_left())
-	#elif packet.has_lobby_player_ready():
-		#_handle_player_ready(packet.get_lobby_player_ready())
+	elif packet.has_update_player_lobby_status():
+		_handle_update_player_lobby_status(packet.get_update_player_lobby_status())
 	#elif packet.has_lobby_game_start():
 		#_handle_game_start()
 
@@ -76,9 +72,22 @@ func _handle_left_lobby(msg: packets.LeftLobbyResponse) -> void:
 		Global.game_controller.gui_transition_to(LobbyBrowserState.Name())
 		return
 	
-	var updated_players: Array[packets.LobbyPlayerData] = data.players.value.filter(
+	var updated_players: Array = data.players.value.filter(
 		func(player: packets.LobbyPlayerData) -> bool:
 			return player.get_client_id() != msg.get_client_id()
+	)
+	
+	data.players.value = updated_players.duplicate()
+
+func _handle_update_player_lobby_status(msg: packets.UpdatePlayerLobbyStatus) -> void:
+	var updated_player: packets.LobbyPlayerData = msg.get_updated_player()
+	
+	var updated_players: Array = data.players.value.map(
+		func(player: packets.LobbyPlayerData) -> packets.LobbyPlayerData:
+			if player.get_client_id() == updated_player.get_client_id():
+				return updated_player
+			
+			return player
 	)
 	
 	data.players.value = updated_players.duplicate()
@@ -123,11 +132,11 @@ func leave_lobby() -> void:
 	var packet: packets.Packet = PacketFactory.new_leave_lobby_request()
 	WS.send(packet)
 	
-#func toggle_ready() -> void:
-	#data.is_ready.value = not data.is_ready.value
-	#
-	#var packet: packets.Packet = PacketFactory.new_lobby_ready_req(data.is_ready.value)
-	#WS.send(packet)
+func toggle_ready() -> void:
+	data.is_ready.value = not data.is_ready.value
+	
+	var packet: packets.Packet = PacketFactory.new_ready_lobby_request(data.is_ready.value)
+	WS.send(packet)
 #
 #func start_game() -> void:
 	#var packet: packets.Packet = PacketFactory.new_lobby_start_req()

@@ -4,6 +4,7 @@ func create_format_dropdown(
 	label_opt: Option,
 	on_item_selected: Callable = func() -> void: pass, 
 	formats: Array[BaseFormat] = [],
+	use_any_option: bool = true,
 ) -> Control:
 	var container: VBoxContainer = VBoxContainer.new()
 	
@@ -16,12 +17,14 @@ func create_format_dropdown(
 	
 	# Dropdown Node
 	var option_button: OptionButton = OptionButton.new()
-	option_button.add_item("Any", 0)
+	var index: int = 0
+	
+	if use_any_option:
+		option_button.add_item("Any", index)
 		
-	var index: int = 1
 	for format: BaseFormat in formats:
-		option_button.add_item(format.display_name(), index)
 		index += 1
+		option_button.add_item(format.display_name(), index)
 
 	option_button.item_selected.connect(on_item_selected.bind(formats))
 	container.add_child(option_button)

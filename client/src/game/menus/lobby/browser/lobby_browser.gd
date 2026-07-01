@@ -10,7 +10,7 @@ class PageData extends Reactive:
 
 class CreateData extends Reactive:
 	var name: ReactiveValue = ReactiveValue.String("", self)
-	var format: ReactiveObject = ReactiveObject.new(null, self)
+	var format: ReactiveObject = ReactiveObject.new(StandardFormat.new(), self)
 	var max_players: ReactiveValue = ReactiveValue.Int(1, self)
 	var is_private: ReactiveValue = ReactiveValue.Boolean(false, self)
 	var password: ReactiveValue = ReactiveValue.String("", self)
@@ -72,12 +72,10 @@ func _ready() -> void:
 		search_data.lobby_name.value = ""
 	)
 	
-	var update_format_data: Callable = func(index: int, formats: Array[BaseFormat], reactive: Reactive) -> void:
-		reactive.value = formats.get(index - 1) if index > 0 else null
-		
 	var search_format_options : Control = NodeFactory.create_format_dropdown(
 		Option.Some("Format"),
-		update_format_data.bind(search_data.format),
+		func(index: int, formats: Array[BaseFormat]) -> void:
+			search_data.format.value = formats.get(index - 1) if index > 0 else null,
 		Global.deck_format_manager.formats
 	)
 	search_options.add_child(search_format_options)
@@ -90,8 +88,10 @@ func _ready() -> void:
 	
 	var create_format_options : Control = NodeFactory.create_format_dropdown(
 		Option.Some("Format"),
-		update_format_data.bind(create_data.format),
-		Global.deck_format_manager.formats
+		func(index: int, formats: Array[BaseFormat]) -> void:
+			create_data.format.value = formats.get(index),
+		Global.deck_format_manager.formats,
+		false
 	)
 	create_options.add_child(create_format_options)
 	create_options.move_child(create_format_options, 1)

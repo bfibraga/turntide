@@ -907,6 +907,94 @@ func (x *LeftLobbyResponse) GetClientId() uint64 {
 	return 0
 }
 
+type ReadyLobbyRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	IsReady       bool                   `protobuf:"varint,1,opt,name=is_ready,json=isReady,proto3" json:"is_ready,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ReadyLobbyRequest) Reset() {
+	*x = ReadyLobbyRequest{}
+	mi := &file_packets_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReadyLobbyRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReadyLobbyRequest) ProtoMessage() {}
+
+func (x *ReadyLobbyRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_packets_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReadyLobbyRequest.ProtoReflect.Descriptor instead.
+func (*ReadyLobbyRequest) Descriptor() ([]byte, []int) {
+	return file_packets_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *ReadyLobbyRequest) GetIsReady() bool {
+	if x != nil {
+		return x.IsReady
+	}
+	return false
+}
+
+type UpdatePlayerLobbyStatus struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UpdatedPlayer *LobbyPlayerData       `protobuf:"bytes,1,opt,name=updated_player,json=updatedPlayer,proto3" json:"updated_player,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdatePlayerLobbyStatus) Reset() {
+	*x = UpdatePlayerLobbyStatus{}
+	mi := &file_packets_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdatePlayerLobbyStatus) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdatePlayerLobbyStatus) ProtoMessage() {}
+
+func (x *UpdatePlayerLobbyStatus) ProtoReflect() protoreflect.Message {
+	mi := &file_packets_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdatePlayerLobbyStatus.ProtoReflect.Descriptor instead.
+func (*UpdatePlayerLobbyStatus) Descriptor() ([]byte, []int) {
+	return file_packets_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *UpdatePlayerLobbyStatus) GetUpdatedPlayer() *LobbyPlayerData {
+	if x != nil {
+		return x.UpdatedPlayer
+	}
+	return nil
+}
+
 // Entry
 type Packet struct {
 	state    protoimpl.MessageState `protogen:"open.v1"`
@@ -928,6 +1016,8 @@ type Packet struct {
 	//	*Packet_JoinedLobbyResponse
 	//	*Packet_LeaveLobbyRequest
 	//	*Packet_LeftLobbyResponse
+	//	*Packet_ReadyLobbyRequest
+	//	*Packet_UpdatePlayerLobbyStatus
 	Msg           isPacket_Msg `protobuf_oneof:"msg"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -935,7 +1025,7 @@ type Packet struct {
 
 func (x *Packet) Reset() {
 	*x = Packet{}
-	mi := &file_packets_proto_msgTypes[17]
+	mi := &file_packets_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -947,7 +1037,7 @@ func (x *Packet) String() string {
 func (*Packet) ProtoMessage() {}
 
 func (x *Packet) ProtoReflect() protoreflect.Message {
-	mi := &file_packets_proto_msgTypes[17]
+	mi := &file_packets_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -960,7 +1050,7 @@ func (x *Packet) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Packet.ProtoReflect.Descriptor instead.
 func (*Packet) Descriptor() ([]byte, []int) {
-	return file_packets_proto_rawDescGZIP(), []int{17}
+	return file_packets_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *Packet) GetSenderId() uint64 {
@@ -1112,6 +1202,24 @@ func (x *Packet) GetLeftLobbyResponse() *LeftLobbyResponse {
 	return nil
 }
 
+func (x *Packet) GetReadyLobbyRequest() *ReadyLobbyRequest {
+	if x != nil {
+		if x, ok := x.Msg.(*Packet_ReadyLobbyRequest); ok {
+			return x.ReadyLobbyRequest
+		}
+	}
+	return nil
+}
+
+func (x *Packet) GetUpdatePlayerLobbyStatus() *UpdatePlayerLobbyStatus {
+	if x != nil {
+		if x, ok := x.Msg.(*Packet_UpdatePlayerLobbyStatus); ok {
+			return x.UpdatePlayerLobbyStatus
+		}
+	}
+	return nil
+}
+
 type isPacket_Msg interface {
 	isPacket_Msg()
 }
@@ -1179,6 +1287,14 @@ type Packet_LeftLobbyResponse struct {
 	LeftLobbyResponse *LeftLobbyResponse `protobuf:"bytes,16,opt,name=left_lobby_response,json=leftLobbyResponse,proto3,oneof"`
 }
 
+type Packet_ReadyLobbyRequest struct {
+	ReadyLobbyRequest *ReadyLobbyRequest `protobuf:"bytes,17,opt,name=ready_lobby_request,json=readyLobbyRequest,proto3,oneof"`
+}
+
+type Packet_UpdatePlayerLobbyStatus struct {
+	UpdatePlayerLobbyStatus *UpdatePlayerLobbyStatus `protobuf:"bytes,18,opt,name=update_player_lobby_status,json=updatePlayerLobbyStatus,proto3,oneof"`
+}
+
 func (*Packet_Ping) isPacket_Msg() {}
 
 func (*Packet_Chat) isPacket_Msg() {}
@@ -1208,6 +1324,10 @@ func (*Packet_JoinedLobbyResponse) isPacket_Msg() {}
 func (*Packet_LeaveLobbyRequest) isPacket_Msg() {}
 
 func (*Packet_LeftLobbyResponse) isPacket_Msg() {}
+
+func (*Packet_ReadyLobbyRequest) isPacket_Msg() {}
+
+func (*Packet_UpdatePlayerLobbyStatus) isPacket_Msg() {}
 
 var File_packets_proto protoreflect.FileDescriptor
 
@@ -1270,7 +1390,11 @@ const file_packets_proto_rawDesc = "" +
 	"\aplayers\x18\x04 \x03(\v2\x18.packets.LobbyPlayerDataR\aplayers\"\x13\n" +
 	"\x11LeaveLobbyRequest\"0\n" +
 	"\x11LeftLobbyResponse\x12\x1b\n" +
-	"\tclient_id\x18\x01 \x01(\x04R\bclientId\"\xc6\b\n" +
+	"\tclient_id\x18\x01 \x01(\x04R\bclientId\".\n" +
+	"\x11ReadyLobbyRequest\x12\x19\n" +
+	"\bis_ready\x18\x01 \x01(\bR\aisReady\"Z\n" +
+	"\x17UpdatePlayerLobbyStatus\x12?\n" +
+	"\x0eupdated_player\x18\x01 \x01(\v2\x18.packets.LobbyPlayerDataR\rupdatedPlayer\"\xf5\t\n" +
 	"\x06Packet\x12\x1b\n" +
 	"\tsender_id\x18\x01 \x01(\x04R\bsenderId\x12*\n" +
 	"\x04ping\x18\x02 \x01(\v2\x14.packets.PingMessageH\x00R\x04ping\x12*\n" +
@@ -1289,7 +1413,9 @@ const file_packets_proto_rawDesc = "" +
 	"\x12join_lobby_request\x18\r \x01(\v2\x19.packets.JoinLobbyRequestH\x00R\x10joinLobbyRequest\x12R\n" +
 	"\x15joined_lobby_response\x18\x0e \x01(\v2\x1c.packets.JoinedLobbyResponseH\x00R\x13joinedLobbyResponse\x12L\n" +
 	"\x13leave_lobby_request\x18\x0f \x01(\v2\x1a.packets.LeaveLobbyRequestH\x00R\x11leaveLobbyRequest\x12L\n" +
-	"\x13left_lobby_response\x18\x10 \x01(\v2\x1a.packets.LeftLobbyResponseH\x00R\x11leftLobbyResponseB\x05\n" +
+	"\x13left_lobby_response\x18\x10 \x01(\v2\x1a.packets.LeftLobbyResponseH\x00R\x11leftLobbyResponse\x12L\n" +
+	"\x13ready_lobby_request\x18\x11 \x01(\v2\x1a.packets.ReadyLobbyRequestH\x00R\x11readyLobbyRequest\x12_\n" +
+	"\x1aupdate_player_lobby_status\x18\x12 \x01(\v2 .packets.UpdatePlayerLobbyStatusH\x00R\x17updatePlayerLobbyStatusB\x05\n" +
 	"\x03msgB\x0eZ\f/pkg/packetsb\x06proto3"
 
 var (
@@ -1304,50 +1430,55 @@ func file_packets_proto_rawDescGZIP() []byte {
 	return file_packets_proto_rawDescData
 }
 
-var file_packets_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
+var file_packets_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
 var file_packets_proto_goTypes = []any{
-	(*PingMessage)(nil),            // 0: packets.PingMessage
-	(*ChatMessage)(nil),            // 1: packets.ChatMessage
-	(*IdMessage)(nil),              // 2: packets.IdMessage
-	(*LoginRequestMessage)(nil),    // 3: packets.LoginRequestMessage
-	(*RegisterRequestMessage)(nil), // 4: packets.RegisterRequestMessage
-	(*OkResponseMessage)(nil),      // 5: packets.OkResponseMessage
-	(*DenyResponseMessage)(nil),    // 6: packets.DenyResponseMessage
-	(*LobbyPlayerData)(nil),        // 7: packets.LobbyPlayerData
-	(*LobbyData)(nil),              // 8: packets.LobbyData
-	(*ListLobbiesRequest)(nil),     // 9: packets.ListLobbiesRequest
-	(*ListLobbiesResponse)(nil),    // 10: packets.ListLobbiesResponse
-	(*CreateLobbyRequest)(nil),     // 11: packets.CreateLobbyRequest
-	(*CreateLobbyResponse)(nil),    // 12: packets.CreateLobbyResponse
-	(*JoinLobbyRequest)(nil),       // 13: packets.JoinLobbyRequest
-	(*JoinedLobbyResponse)(nil),    // 14: packets.JoinedLobbyResponse
-	(*LeaveLobbyRequest)(nil),      // 15: packets.LeaveLobbyRequest
-	(*LeftLobbyResponse)(nil),      // 16: packets.LeftLobbyResponse
-	(*Packet)(nil),                 // 17: packets.Packet
+	(*PingMessage)(nil),             // 0: packets.PingMessage
+	(*ChatMessage)(nil),             // 1: packets.ChatMessage
+	(*IdMessage)(nil),               // 2: packets.IdMessage
+	(*LoginRequestMessage)(nil),     // 3: packets.LoginRequestMessage
+	(*RegisterRequestMessage)(nil),  // 4: packets.RegisterRequestMessage
+	(*OkResponseMessage)(nil),       // 5: packets.OkResponseMessage
+	(*DenyResponseMessage)(nil),     // 6: packets.DenyResponseMessage
+	(*LobbyPlayerData)(nil),         // 7: packets.LobbyPlayerData
+	(*LobbyData)(nil),               // 8: packets.LobbyData
+	(*ListLobbiesRequest)(nil),      // 9: packets.ListLobbiesRequest
+	(*ListLobbiesResponse)(nil),     // 10: packets.ListLobbiesResponse
+	(*CreateLobbyRequest)(nil),      // 11: packets.CreateLobbyRequest
+	(*CreateLobbyResponse)(nil),     // 12: packets.CreateLobbyResponse
+	(*JoinLobbyRequest)(nil),        // 13: packets.JoinLobbyRequest
+	(*JoinedLobbyResponse)(nil),     // 14: packets.JoinedLobbyResponse
+	(*LeaveLobbyRequest)(nil),       // 15: packets.LeaveLobbyRequest
+	(*LeftLobbyResponse)(nil),       // 16: packets.LeftLobbyResponse
+	(*ReadyLobbyRequest)(nil),       // 17: packets.ReadyLobbyRequest
+	(*UpdatePlayerLobbyStatus)(nil), // 18: packets.UpdatePlayerLobbyStatus
+	(*Packet)(nil),                  // 19: packets.Packet
 }
 var file_packets_proto_depIdxs = []int32{
 	8,  // 0: packets.ListLobbiesResponse.lobbies:type_name -> packets.LobbyData
 	7,  // 1: packets.JoinedLobbyResponse.players:type_name -> packets.LobbyPlayerData
-	0,  // 2: packets.Packet.ping:type_name -> packets.PingMessage
-	1,  // 3: packets.Packet.chat:type_name -> packets.ChatMessage
-	2,  // 4: packets.Packet.id:type_name -> packets.IdMessage
-	3,  // 5: packets.Packet.login_request:type_name -> packets.LoginRequestMessage
-	4,  // 6: packets.Packet.register_request:type_name -> packets.RegisterRequestMessage
-	5,  // 7: packets.Packet.ok_response:type_name -> packets.OkResponseMessage
-	6,  // 8: packets.Packet.deny_response:type_name -> packets.DenyResponseMessage
-	9,  // 9: packets.Packet.list_lobbies_request:type_name -> packets.ListLobbiesRequest
-	10, // 10: packets.Packet.list_lobbies_response:type_name -> packets.ListLobbiesResponse
-	11, // 11: packets.Packet.create_lobby_request:type_name -> packets.CreateLobbyRequest
-	12, // 12: packets.Packet.create_lobby_response:type_name -> packets.CreateLobbyResponse
-	13, // 13: packets.Packet.join_lobby_request:type_name -> packets.JoinLobbyRequest
-	14, // 14: packets.Packet.joined_lobby_response:type_name -> packets.JoinedLobbyResponse
-	15, // 15: packets.Packet.leave_lobby_request:type_name -> packets.LeaveLobbyRequest
-	16, // 16: packets.Packet.left_lobby_response:type_name -> packets.LeftLobbyResponse
-	17, // [17:17] is the sub-list for method output_type
-	17, // [17:17] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	7,  // 2: packets.UpdatePlayerLobbyStatus.updated_player:type_name -> packets.LobbyPlayerData
+	0,  // 3: packets.Packet.ping:type_name -> packets.PingMessage
+	1,  // 4: packets.Packet.chat:type_name -> packets.ChatMessage
+	2,  // 5: packets.Packet.id:type_name -> packets.IdMessage
+	3,  // 6: packets.Packet.login_request:type_name -> packets.LoginRequestMessage
+	4,  // 7: packets.Packet.register_request:type_name -> packets.RegisterRequestMessage
+	5,  // 8: packets.Packet.ok_response:type_name -> packets.OkResponseMessage
+	6,  // 9: packets.Packet.deny_response:type_name -> packets.DenyResponseMessage
+	9,  // 10: packets.Packet.list_lobbies_request:type_name -> packets.ListLobbiesRequest
+	10, // 11: packets.Packet.list_lobbies_response:type_name -> packets.ListLobbiesResponse
+	11, // 12: packets.Packet.create_lobby_request:type_name -> packets.CreateLobbyRequest
+	12, // 13: packets.Packet.create_lobby_response:type_name -> packets.CreateLobbyResponse
+	13, // 14: packets.Packet.join_lobby_request:type_name -> packets.JoinLobbyRequest
+	14, // 15: packets.Packet.joined_lobby_response:type_name -> packets.JoinedLobbyResponse
+	15, // 16: packets.Packet.leave_lobby_request:type_name -> packets.LeaveLobbyRequest
+	16, // 17: packets.Packet.left_lobby_response:type_name -> packets.LeftLobbyResponse
+	17, // 18: packets.Packet.ready_lobby_request:type_name -> packets.ReadyLobbyRequest
+	18, // 19: packets.Packet.update_player_lobby_status:type_name -> packets.UpdatePlayerLobbyStatus
+	20, // [20:20] is the sub-list for method output_type
+	20, // [20:20] is the sub-list for method input_type
+	20, // [20:20] is the sub-list for extension type_name
+	20, // [20:20] is the sub-list for extension extendee
+	0,  // [0:20] is the sub-list for field type_name
 }
 
 func init() { file_packets_proto_init() }
@@ -1357,7 +1488,7 @@ func file_packets_proto_init() {
 	}
 	file_packets_proto_msgTypes[11].OneofWrappers = []any{}
 	file_packets_proto_msgTypes[13].OneofWrappers = []any{}
-	file_packets_proto_msgTypes[17].OneofWrappers = []any{
+	file_packets_proto_msgTypes[19].OneofWrappers = []any{
 		(*Packet_Ping)(nil),
 		(*Packet_Chat)(nil),
 		(*Packet_Id)(nil),
@@ -1373,6 +1504,8 @@ func file_packets_proto_init() {
 		(*Packet_JoinedLobbyResponse)(nil),
 		(*Packet_LeaveLobbyRequest)(nil),
 		(*Packet_LeftLobbyResponse)(nil),
+		(*Packet_ReadyLobbyRequest)(nil),
+		(*Packet_UpdatePlayerLobbyStatus)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1380,7 +1513,7 @@ func file_packets_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_packets_proto_rawDesc), len(file_packets_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   18,
+			NumMessages:   20,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
