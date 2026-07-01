@@ -137,10 +137,6 @@ func (a *Authenticated) handleJoinLobby(senderId uint64, message *packets.Packet
 
 	a.logger.Debug("joined lobby", "lobby_id", request.LobbyId)
 
-	playerPkt := packets.NewLobbyPlayerData(senderId, a.username, false)
-	joinPkt := packets.NewPlayerJoinedResponse(playerPkt)
-	a.client.BroadcastToLobby(request.LobbyId, joinPkt)
-
 	// Transition to InLobby state
 	a.client.SetState(NewInLobby(a.logger, a.lobbyReg, a.client, request.LobbyId, a.username))
 }

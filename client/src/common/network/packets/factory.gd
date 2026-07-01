@@ -91,6 +91,14 @@ func new_join_lobby_request(
 
 	return packet
 
+func new_leave_lobby_request() -> packets.Packet:
+	var packet : packets.Packet = packets.Packet.new()
+	var _leave_request : packets.LeaveLobbyRequest = packet.new_leave_lobby_request()
+	
+	packet.set_sender_id(Global.client_id)
+	
+	return packet
+
 #func new_list_lobbies_response(  ) -> packets.Packet:
 	#var packet : packets.Packet = packets.Packet.new()
 	#var list_lobbies_response : packets.ListLobbiesResponse = packet.new_list_lobbies_response()

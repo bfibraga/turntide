@@ -57,6 +57,8 @@ func _ready() -> void:
 func _on_ws_packet_received(packet: packets.Packet) -> void:
 	if packet.has_joined_lobby_response():
 		_handle_joined_lobby(packet.get_joined_lobby_response())
+	elif packet.has_left_lobby_response():
+		_handle_left_lobby(packet.get_left_lobby_response())
 	#if packet.has_lobby_player_joined():
 		#_handle_player_joined(packet.get_lobby_player_joined())
 	#elif packet.has_lobby_player_left():
@@ -68,6 +70,18 @@ func _on_ws_packet_received(packet: packets.Packet) -> void:
 
 func _handle_joined_lobby(msg: packets.JoinedLobbyResponse) -> void:	
 	data.players.value = msg.get_players()
+
+func _handle_left_lobby(msg: packets.LeftLobbyResponse) -> void:
+	if Global.client_id == msg.get_client_id():
+		Global.game_controller.gui_transition_to(LobbyBrowserState.Name())
+		return
+	
+	var updated_players: Array[packets.LobbyPlayerData] = data.players.value.filter(
+		func(player: packets.LobbyPlayerData) -> bool:
+			return player.get_client_id() != msg.get_client_id()
+	)
+	
+	data.players.value = updated_players.duplicate()
 
 #func _handle_player_left(msg: packets.LobbyPlayerLeft) -> void:
 	#Global.logger.info("Player left: %d" % msg.get_client_id())
@@ -95,19 +109,20 @@ func _refresh_player_list(players: Array = data.players.value) -> void:
 	# Add all players to the list
 	for player_data: packets.LobbyPlayerData in players:
 		var player_label: Label = Label.new()
+		
+		var me_prefix: String = " (me)" if player_data.get_client_id() == Global.client_id else ""
+		
 		player_label.text = "{username} | {is_ready}".format({
-			"username": player_data.get_username(),
+			"username": player_data.get_username() + me_prefix,
 			"is_ready": player_data.get_is_ready(),
 		})
 		
 		players_list_container.add_child(player_label)
 #
 func leave_lobby() -> void:
-	var packet: packets.Packet = PacketFactory.new_lobby_leave_req()
+	var packet: packets.Packet = PacketFactory.new_leave_lobby_request()
 	WS.send(packet)
 	
-	Global.game_controller.gui_transition_to(LobbyBrowserState.Name())
-#
 #func toggle_ready() -> void:
 	#data.is_ready.value = not data.is_ready.value
 	#

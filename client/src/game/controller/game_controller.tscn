@@ -18,6 +18,7 @@
 [ext_resource type="Script" uid="uid://djtvn14k7bmpo" path="res://src/debug/debug_menu.gd" id="13_fpu5w"]
 [ext_resource type="PackedScene" uid="uid://b8gd3m7b136nk" path="res://src/main/main.tscn" id="14_py7vm"]
 [ext_resource type="PackedScene" uid="uid://d2wnevtkecij3" path="res://src/game/menus/installation/installation_screen.tscn" id="15_bpupm"]
+[ext_resource type="Animation" uid="uid://chebgpvk7fndh" path="res://assets/animations/transitions/none.res" id="15_ieb8t"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w3ehc"]
 content_margin_left = 4.0
@@ -81,6 +82,7 @@ metadata/_custom_type_script = "uid://c06xj1g5oewu4"
 [node name="Entered" type="Node" parent="GUIStateMachine" unique_id=1344573301 node_paths=PackedStringArray("transition_manager")]
 script = ExtResource("10_shnkw")
 packed_scene = ExtResource("14_py7vm")
+transition_in = ExtResource("15_ieb8t")
 transition_manager = NodePath("../../TransitionManager")
 metadata/_custom_type_script = "uid://dwbc0pee0vhur"
 

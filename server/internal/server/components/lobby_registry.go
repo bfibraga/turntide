@@ -295,7 +295,7 @@ func (r *LobbyRegistry) ListLobbies(options *ListLobbiesOptions) *ListLobbiesRes
 			return false
 		}
 
-		if (options.Format != nil || *options.Format != "") && lobby.Format != *options.Format {
+		if options.Format != nil && *options.Format != "" && lobby.Format != *options.Format {
 			return false
 		}
 

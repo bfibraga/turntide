@@ -53,7 +53,7 @@ func (i *InLobby) OnEnter() {
 
 	playersSlice := objects.FromMapToSharedSlice(lobby.Players).
 		Sort(func(a, b *components.LobbyPlayer) int {
-			return cmp.Compare(a.ClientID, b.ClientID)
+			return cmp.Compare(a.Username, b.Username)
 		})
 	playerLobbySlice := objects.MapSlice(playersSlice, func(i int, p *components.LobbyPlayer) *packets.LobbyPlayerData {
 		return packets.NewLobbyPlayerData(p.ClientID, p.Username, p.Ready)
@@ -66,23 +66,6 @@ func (i *InLobby) OnEnter() {
 
 	i.client.SocketSend(joinPkt)
 	i.client.BroadcastToLobby(lobby.ID, joinPkt)
-
-	/*lobby, ok := i.lobbyReg.FindLobby(i.lobbyID)
-	if !ok {
-		i.logger.Error("lobby not found on enter")
-		return
-	}
-
-	var players []*packets.LobbyPlayerData
-	for _, p := range lobby.Players {
-		players = append(players, &packets.LobbyPlayerData{
-			ClientId: p.ClientID,
-			Username: p.Username,
-			IsReady:  p.Ready,
-		})
-	}
-
-	i.client.SocketSend(NewLobby)*/
 }
 
 func (i *InLobby) HandleMessage(senderId uint64, message packets.Msg) {
@@ -97,6 +80,10 @@ func (i *InLobby) HandleMessage(senderId uint64, message packets.Msg) {
 		i.handleGameStart()*/
 	case *packets.Packet_JoinedLobbyResponse:
 		i.handleJoinedLobbyResponse(senderId, message)
+	case *packets.Packet_LeaveLobbyRequest:
+		i.handleLeaveLobbyRequest(senderId, message)
+	case *packets.Packet_LeftLobbyResponse:
+		i.handleLeftLobbyResponse(senderId, message)
 	case *packets.Packet_Chat:
 		i.handleLobbyChat(senderId, message)
 	default:
@@ -113,6 +100,31 @@ func (i *InLobby) handleLobbyChat(senderId uint64, message *packets.Packet_Chat)
 }
 
 func (i *InLobby) handleJoinedLobbyResponse(senderId uint64, message *packets.Packet_JoinedLobbyResponse) {
+	if senderId == i.client.Id() {
+		i.client.BroadcastToLobby(i.lobbyID, message)
+	} else {
+		i.client.SocketSendAs(senderId, message)
+	}
+}
+
+func (i *InLobby) handleLeaveLobbyRequest(senderId uint64, message *packets.Packet_LeaveLobbyRequest) {
+	clientId := i.client.Id()
+
+	_, err := i.lobbyReg.LeaveLobby(clientId)
+	if err != nil {
+		i.logger.Error("failed to leave lobby", "error", err)
+		i.client.SocketSend(packets.NewDenyResponse(err.Error()))
+		return
+	}
+	leftPkt := packets.NewLeftLobbyResponse(clientId)
+
+	i.client.SocketSend(leftPkt)
+	i.client.BroadcastToLobby(i.lobbyID, leftPkt)
+
+	i.client.SetState(NewAuthenticated(i.logger, i.username, i.lobbyReg))
+}
+
+func (i *InLobby) handleLeftLobbyResponse(senderId uint64, message *packets.Packet_LeftLobbyResponse) {
 	if senderId == i.client.Id() {
 		i.client.BroadcastToLobby(i.lobbyID, message)
 	} else {
@@ -178,26 +190,6 @@ func (i *InLobby) handleGameStart() {
 	i.client.SetState(NewInGame(i.logger, i.lobbyID))
 }*/
 
-func (i *InLobby) broadcastToLobby(msg packets.Msg) {
-	lobby, ok := i.lobbyReg.FindLobby(i.lobbyID)
-	if !ok {
-		return
-	}
-
-	for clientID := range lobby.Players {
-		if clientID == i.client.Id() {
-			continue
-		}
-		i.client.SocketSendAs(i.client.Id(), msg)
-	}
-}
-
 func (i *InLobby) OnExit() {
-	if i.client == nil || i.lobbyReg == nil {
-		return
-	}
-
-	i.lobbyReg.LeaveLobby(i.client.Id())
-
 	//i.client.SocketSend(packet)
 }

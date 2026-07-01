@@ -82,7 +82,7 @@ func sort_custom(callable: Callable) -> void:
 	reactive_changed.emit(self)
 	
 func filter(callable: Callable) -> ReactiveArray:
-	var result: ReactiveArray = ReactiveArray.new(value, owner)
+	var result: ReactiveArray = ReactiveArray.new(value.duplicate(), owner)
 	result.value.filter(callable)
 	
 	result.reactive_changed.emit(result)

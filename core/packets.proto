@@ -81,6 +81,8 @@ message CreateLobbyRequest {
 
 message CreateLobbyResponse {}
 
+// Join
+
 message JoinLobbyRequest {
   uint64 lobby_id = 1;
   optional string password = 2;
@@ -93,8 +95,12 @@ message JoinedLobbyResponse {
   repeated LobbyPlayerData players = 4;
 }
 
-message PlayerJoinedLobbyResponse {
-  LobbyPlayerData player = 1;
+// Leave
+
+message LeaveLobbyRequest {}
+
+message LeftLobbyResponse {
+  uint64 client_id = 1;
 }
 
 // Entry
@@ -121,7 +127,9 @@ message Packet {
 
     JoinLobbyRequest join_lobby_request = 13;
     JoinedLobbyResponse joined_lobby_response = 14;
-    PlayerJoinedLobbyResponse player_joined_lobby_response = 15;
+
+    LeaveLobbyRequest leave_lobby_request = 15;
+    LeftLobbyResponse left_lobby_response = 16;
 
     // Game messages
   }

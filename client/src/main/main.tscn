@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://c06xj1g5oewu4" path="res://src/common/state_machine/scene_state.gd" id="4_eb6dy"]
 [ext_resource type="PackedScene" uid="uid://cvowf7plhqg1l" path="res://src/game/menus/home/home.tscn" id="5_hmxxs"]
 [ext_resource type="PackedScene" uid="uid://cv7y4lfcoaaa8" path="res://src/game/menus/settings/settings.tscn" id="5_trceg"]
+[ext_resource type="Animation" uid="uid://chebgpvk7fndh" path="res://assets/animations/transitions/none.res" id="6_6iek0"]
 [ext_resource type="Script" uid="uid://bv643nch74fxm" path="res://src/common/state_machine/states/gui/lobby/browser.gd" id="6_a8y0u"]
 [ext_resource type="PackedScene" uid="uid://dmybuixer6c68" path="res://src/game/menus/lobby/browser/lobby_browser.tscn" id="7_jkv2x"]
 [ext_resource type="Script" uid="uid://cdm54pqc6k6av" path="res://src/common/state_machine/states/gui/lobby/in_lobby.gd" id="8_jbj1t"]
@@ -43,6 +44,7 @@ metadata/_custom_type_script = "uid://bb50oxlatsq3p"
 [node name="Home" type="Node" parent="StateMachine" unique_id=212386248 node_paths=PackedStringArray("transition_manager")]
 script = ExtResource("4_eb6dy")
 packed_scene = ExtResource("5_hmxxs")
+transition_in = ExtResource("6_6iek0")
 transition_manager = NodePath("../../TransitionManager")
 metadata/_custom_type_script = "uid://c06xj1g5oewu4"
 

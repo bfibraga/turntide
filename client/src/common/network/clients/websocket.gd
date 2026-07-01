@@ -25,7 +25,7 @@ func connect_to_url(url: String, tls_options: TLSOptions = null) -> Result:
 func send(content: Variant) -> Result:
 	var packet : packets.Packet = content as packets.Packet
 	var data : PackedByteArray = packet.to_bytes()
-	return Result.Ok(socket.send(data))
+	return Result.from_gderr(socket.send(data))
 
 func get_packet() -> packets.Packet:
 	if socket.get_available_packet_count() < 1:

@@ -130,10 +130,12 @@ func NewJoinedLobbyResponse(lobbyId uint64, lobbyName, hostname string, players 
 	}
 }
 
-func NewPlayerJoinedResponse(player *LobbyPlayerData) Msg {
-	return &Packet_PlayerJoinedLobbyResponse{
-		PlayerJoinedLobbyResponse: &PlayerJoinedLobbyResponse{
-			Player: player,
+// Leave
+
+func NewLeftLobbyResponse(clientId uint64) Msg {
+	return &Packet_LeftLobbyResponse{
+		LeftLobbyResponse: &LeftLobbyResponse{
+			ClientId: clientId,
 		},
 	}
 }

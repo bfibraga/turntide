@@ -118,7 +118,7 @@ func _on_ws_packet_received(packet: packets.Packet) -> void:
 		#_handle_lobby_joined_response(packet.get_lobby_joined_response())
 		
 func _handle_lobby_list(response: packets.ListLobbiesResponse) -> void:
-	Global.logger.info("Received lobby list %s" % response)
+	#Global.logger.info("Received lobby list %s" % response)
 	
 	var count: int = response.get_count()
 	count_label.text = "Loaded %d" % count
@@ -188,7 +188,7 @@ func send_list_lobbies_request(
 	WS.send(packet)
 
 func join_lobby(lobby_id: int) -> void:
-	Global.logger.info("Joining lobby %d" % lobby_id)
+	#Global.logger.info("Joining lobby %d" % lobby_id)
 	
 	var packet: packets.Packet = PacketFactory.new_join_lobby_request(lobby_id, Option.None())
 	WS.send(packet)

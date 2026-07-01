@@ -86,6 +86,7 @@ rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 viewport/hdr_2d=true
+viewport/transparent_background=true
 
 [shader_globals]
 
